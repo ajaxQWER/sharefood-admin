@@ -1,6 +1,6 @@
 <template>
     <el-form :model="ruleForm" ref="ruleForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-        <h3 class="title">思多客</h3>
+        <h3 class="title">后台管理系统</h3>
         <el-form-item prop="account">
             <el-input type="text" v-model="ruleForm.username" auto-complete="off" placeholder="用户名"></el-input>
         </el-form-item>
@@ -10,7 +10,7 @@
         <el-form-item style="width:100%;">
             <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
         </el-form-item>
-        <p class="copyright">思多客后台管理系统
+        <p class="copyright">鑫圆共享电子商务股份有限公司
             <br>© 2017</p>
     </el-form>
 </template>
