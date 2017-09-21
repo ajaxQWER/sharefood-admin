@@ -19,8 +19,8 @@ Vue.use(VueRouter)
 // Vue.use(VueLazyload)
 
 Object.defineProperty(Vue.prototype, 'moment', {value: moment});
-Object.defineProperty(Vue.prototype, 'DOWNLOADURL', {value: 'http://upload.sharestock.cn'});
-Object.defineProperty(Vue.prototype, 'BASEURL', {value: 'http://api.sharestock.cn'});
+Object.defineProperty(Vue.prototype, 'UPLOADURL', {value: 'http://www.baidu.com'});
+Object.defineProperty(Vue.prototype, 'BASEURL', {value: ''});
 
 const router = new VueRouter({
     mode:"history",

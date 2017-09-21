@@ -2,6 +2,7 @@ import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Index from './views/Index.vue'
+import Banner from './views/Banner/Banner.vue'
 import Coupon from './views/Coupon/Coupon.vue'
 import GoodsList from './views/Goods/GoodsList.vue'
 import GoodsType from './views/Goods/GoodsType.vue'
@@ -14,6 +15,12 @@ let routes = [{
     path: '/404',
     component: NotFound,
     name: '404',
+    hidden: true
+}, {
+    path: '/',
+    component: Home,
+    redirect: '/index',
+    name: '主页',
     hidden: true
 }, {
     path: '/index',
@@ -29,7 +36,16 @@ let routes = [{
     leaf: true, //只有一个节点
     iconCls: 'fa fa-gear',
     children: [
-        { path: '/reward', component: Coupon, name: '优惠券管理' },
+        { path: '/banner', component: Banner, name: 'Banner管理' },
+    ]
+},{
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-gear',
+    children: [
+        { path: '/coupon', component: Coupon, name: '优惠券管理' },
     ]
 }, {
     path: '/',

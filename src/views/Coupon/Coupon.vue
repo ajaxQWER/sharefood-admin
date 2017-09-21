@@ -172,9 +172,6 @@ export default {
         },
         //添加分类
         addCategory: function() {
-            console.log(this.formInline)
-            console.log(this.isAdd)
-            // return
             if (this.isAdd) {
                 addCoupon(this.formInline).then(data => {
                     this.getCategoryLists();

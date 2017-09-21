@@ -3,8 +3,8 @@
         <el-col :span="24" class="header">
             <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
                 <router-link to="/index" class="router-link">
-                    <img src="" alt="" v-if="collapsed">
-                    <span v-else-if="!collapsed">鑫圆共享后台管理系统</span>
+                    <img src="" alt="logo" v-if="collapsed">
+                    <span v-else-if="!collapsed">美食分享后台管理系统</span>
                 </router-link>
             </el-col>
             <el-col :span="10">

@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col>
-                <h1>欢迎来到鑫圆共享后台管理系统</h1>
+                <h1>欢迎来到美食分享后台管理系统</h1>
                 <p>用户：{{username}}</p>
                 <p>注册时间：{{registrationTime}}</p>
                 <p>上次登录时间：{{lastLoginTime}}</p>
