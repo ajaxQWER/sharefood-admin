@@ -9,39 +9,36 @@
                     <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加优惠券</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-input placeholder="请输入优惠券名称" icon="search" v-model="searchContent" :on-icon-click="searchVideoCategoryById">
+                    <el-input placeholder="请输入优惠券名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
                     </el-input>
                 </el-form-item>
             </el-form>
         </el-col>
         <el-col>
-            <el-table :data="videoCategoryLists">
-                <el-table-column label="名称" align="center">
-                    <template scope="scope">{{scope.row.couponName?scope.row.couponName: '-'}}</template>
+            <el-table :data="couponLists">
+                <el-table-column label="名称" width="160px" align="center">
+                    <template scope="scope">{{scope.row.couponName?scope.row.couponName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="数量" align="center">
-                    <template scope="scope">{{scope.row.couponNumber?scope.row.couponNumber: '-'}}</template>
+                    <template scope="scope">{{scope.row.couponNumber?scope.row.couponNumber:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="折扣" align="center">
-                    <template scope="scope">{{scope.row.discount?scope.row.discount: '-'}}</template>
+                <el-table-column label="开始时间" width="180px" align="center">
+                    <template scope="scope">{{scope.row.startTime?moment(scope.row.startTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
                 </el-table-column>
-                <el-table-column label="开始时间" align="center">
-                    <template scope="scope">{{scope.row.startTime?moment(scope.row.startTime).format('YYYY-MM-DD HH:mm:ss'): '-'}}</template>
+                <el-table-column label="结束时间" width="180px" align="center">
+                    <template scope="scope">{{scope.row.endTime?moment(scope.row.endTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
                 </el-table-column>
-                <el-table-column label="结束时间" align="center">
-                    <template scope="scope">{{scope.row.endTime?moment(scope.row.endTime).format('YYYY-MM-DD HH:mm:ss'): '-'}}</template>
-                </el-table-column>
-                <el-table-column label="最低消费额度" align="center">
-                    <template scope="scope">{{scope.row.minimum?scope.row.minimum: '-'}}</template>
-                </el-table-column>
-                <el-table-column label="金额" align="center">
-                    <template scope="scope">{{scope.row.money?scope.row.money: '-'}}</template>
+                <el-table-column label="最低消费额度" width="120px" align="center">
+                    <template scope="scope">{{scope.row.minimum?scope.row.minimum:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="领取方式" align="center">
                     <template scope="scope">{{formatPickUpType(scope.row.pickUpType)}}</template>
                 </el-table-column>
                 <el-table-column label="类型" align="center">
                     <template scope="scope">{{formatType(scope.row.type)}}</template>
+                </el-table-column>
+                <el-table-column label="折扣/金额" align="center">
+                    <template scope="scope">{{scope.row.discount?scope.row.discount+'折':(scope.row.money?scope.row.money+'元':'-')}}</template>
                 </el-table-column>
                 <el-table-column label="使用范围" align="center">
                     <template scope="scope">{{formatUseSocpe(scope.row.useSocpe)}}</template>
@@ -54,10 +51,40 @@
                 </el-table-column>
             </el-table>
         </el-col>
-        <el-dialog :title="isAdd?'新增视频分类':'修改视频分类'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
-            <el-form :model="formInline" ref="formInline">
-                <el-form-item label="分类名称" prop="couponName">
-                    <el-input type="text" v-model="formInline.couponName" auto-complete="off" placeholder="分类名称"></el-input>
+        <el-dialog :title="isAdd?'新增优惠券':'修改优惠券'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
+            <el-form :model="formInline" label-width="120px">
+                <el-form-item label="优惠券名称">
+                    <el-input type="text" v-model="formInline.couponName" auto-complete="off" placeholder="优惠券名称"></el-input>
+                </el-form-item>
+                <el-form-item label="优惠券数量">
+                    <el-input type="text" v-model.number="formInline.couponNumber" auto-complete="off" placeholder="优惠券数量"></el-input>
+                </el-form-item>
+                <el-form-item label="优惠券类型">
+                    <el-radio class="radio" v-model="formInline.type" label="CASH">现金</el-radio>
+                    <el-radio class="radio" v-model="formInline.type" label="DISCOUNT">折扣</el-radio>
+                </el-form-item>
+                <el-form-item v-if="formInline.type==='CASH'" label="金额">
+                    <el-input type="text" v-model.number="formInline.money" auto-complete="off" placeholder="金额"></el-input>
+                </el-form-item>
+                <el-form-item v-else-if="formInline.type==='DISCOUNT'" label="折扣">
+                    <el-input type="text" v-model.number="formInline.discount" auto-complete="off" placeholder="折扣"></el-input>
+                </el-form-item>
+                <el-form-item label="开始时间">
+                    <el-date-picker v-model="formInline.startTime" type="datetime" placeholder="选择开始时间" @change="formatStartTime"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="结束时间">
+                    <el-date-picker v-model="formInline.endTime" type="datetime" placeholder="选择结束时间" @change="formatEndTime"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="最低消费额度">
+                    <el-input type="text" v-model.number="formInline.minimum" auto-complete="off" placeholder="最低消费额度"></el-input>
+                </el-form-item>
+                <el-form-item label="领取方式">
+                    <el-radio class="radio" v-model="formInline.pickUpType" label="CONSUME">消费赠送</el-radio>
+                    <el-radio class="radio" v-model="formInline.pickUpType" label="HAND">手动领取</el-radio>
+                </el-form-item>
+                <el-form-item label="使用范围">
+                    <el-radio class="radio" v-model="formInline.useSocpe" label="SHOP">商家</el-radio>
+                    <el-radio class="radio" v-model="formInline.useSocpe" label="GLOBAL">平台</el-radio>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -76,8 +103,8 @@
 import {
     coiponList,
     addCoupon,
-    deleteBannerById,
-    updateBannerById
+    deleteCouponById,
+    updateCouponById
 } from '@/api/api'
 export default {
     data: function() {
@@ -85,16 +112,24 @@ export default {
             addLoading: false,
             addDialog: false,
             formInline: {
-                categoryName: '',
-                parentId: 0,
-                categoryId: 0
+                couponId: 0,
+                couponName: "",
+                couponNumber: 0,
+                discount: 0,
+                endTime: "",
+                minimum: 0,
+                money: 0,
+                pickUpType: "CONSUME",
+                startTime: "",
+                type: "CASH",
+                useSocpe: "SHOP"
             },
             searchContent: '',
             pageId: 1,
             pageSize: 10,
             counts: 0,
             isAdd: true,
-            videoCategoryLists: null
+            couponLists: null
         }
     },
     created: function() {
@@ -107,11 +142,11 @@ export default {
             coiponList({ params: { pageId: this.pageId, pageSize: this.pageSize, couponNameLike: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
-                this.videoCategoryLists = data.list;
+                this.couponLists = data.list;
             })
         },
         //搜索
-        searchVideoCategoryById: function() {
+        searchCouponById: function() {
             this.getCategoryLists();
         },
         //显示添加弹窗
@@ -120,36 +155,47 @@ export default {
         },
         //关闭添加弹窗
         closeaddDialog: function() {
-            this.formInline.categoryName = '';
             this.isAdd = true;
+            this.formInline = {
+                couponId: 0,
+                couponName: "",
+                couponNumber: 0,
+                discount: 0,
+                endTime: "",
+                minimum: 0,
+                money: 0,
+                pickUpType: "CONSUME",
+                startTime: "",
+                type: "CASH",
+                useSocpe: "SHOP"
+            }
         },
         //添加分类
         addCategory: function() {
-            this.$refs['formInline'].validate((valid) => {
-                if (valid) {
-                    if (this.isAdd) {
-                        addCoupon(this.formInline).then(data => {
-                            this.getCategoryLists();
-                            this.$message({
-                                message: '添加成功',
-                                type: 'success'
-                            })
-                            this.addDialog = false;
-                        })
-                    } else {
-                        updateBannerById(this.formInline).then(data => {
-                            this.getCategoryLists()
-                            this.$message({
-                                message: '修改成功',
-                                type: 'success'
-                            })
-                            this.addDialog = false;
-                        }).catch(err => {
-                            console.error(err)
-                        })
-                    }
-                }
-            })
+            console.log(this.formInline)
+            console.log(this.isAdd)
+            // return
+            if (this.isAdd) {
+                addCoupon(this.formInline).then(data => {
+                    this.getCategoryLists();
+                    this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                    })
+                    this.addDialog = false;
+                })
+            } else {
+                updateCouponById(this.formInline).then(data => {
+                    this.getCategoryLists()
+                    this.$message({
+                        message: '修改成功',
+                        type: 'success'
+                    })
+                    this.addDialog = false;
+                }).catch(err => {
+                    console.error(err)
+                })
+            }
         },
         //取消添加分类
         cancelAddCategory: function() {
@@ -160,11 +206,18 @@ export default {
             this.isAdd = false;
             this.addDialog = true;
             this.formInline = {
-                parentId: row.parentId,
-                categoryId: row.categoryId,
-                categoryName: row.categoryName
+                couponId: row.couponId,
+                couponName: row.couponName,
+                couponNumber: row.couponNumber,
+                discount: row.discount,
+                endTime: row.endTime,
+                minimum: row.minimum,
+                money: row.money,
+                pickUpType: row.pickUpType,
+                startTime: row.startTime,
+                type: row.type,
+                useSocpe: row.useSocpe
             }
-
         },
         //通过id删除分类
         deleteVideoCategory: function(index, row) {
@@ -173,13 +226,8 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                deleteBannerById(row.categoryId).then(data => {
-                    if (this.videoCategoryLists.length <= this.pageSize && this.counts <= this.pageSize) {
-                        this.videoCategoryLists.splice(index, 1);
-                        this.counts -= 1;
-                    } else {
-                        this.getCategoryLists();
-                    }
+                deleteCouponById(row).then(() => {
+                    this.getCategoryLists();
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
@@ -192,24 +240,13 @@ export default {
                 });
             });
         },
-        //格式化分类名称显示
-        formatCategoryName: function(name) {
-            switch (name) {
-                case '1':
-                    return ''
-                    break;
-                default:
-                    // statements_def
-                    break;
-            }
-        },
         //分页
         currentChange: function(val) {
             this.$router.push('?page=' + val)
             this.pageId = val;
             this.getCategoryLists()
         },
-        formatPickUpType: function(val){
+        formatPickUpType: function(val) {
             switch (val) {
                 case 'CONSUME':
                     return '消费赠送'
@@ -221,7 +258,7 @@ export default {
                     break;
             }
         },
-        formatType: function(val){
+        formatType: function(val) {
             switch (val) {
                 case 'CASH':
                     return '现金'
@@ -233,17 +270,23 @@ export default {
                     break;
             }
         },
-        formatUseSocpe: function(val){
+        formatUseSocpe: function(val) {
             switch (val) {
                 case 'SHOP':
                     return '商家'
                     break;
-                case 'DISCOUNT':
+                case 'GLOBAL':
                     return '平台'
                     break;
                 default:
                     break;
             }
+        },
+        formatStartTime: function (val) {
+            this.formInline.startTime = val;
+        },
+        formatEndTime: function (val) {
+            this.formInline.endTime = val;
         }
     }
 }

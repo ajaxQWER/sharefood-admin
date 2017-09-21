@@ -57,9 +57,9 @@ ajax.interceptors.request.use(function(config) {
 ajax.interceptors.response.use(function(res) {
     //在这里对返回的数据进行处理
     if (!res.data.status) {
-        // if(res.data.errorCode==401){
-        //     location.href = '/login'
-        // }
+        if(res.data.errorCode==401){
+            location.href = '/login'
+        }
         ElementUI.Message.error({
             message: res.data.message,
             type: 'error'
@@ -115,14 +115,14 @@ export const coiponList = params => {
 export const addCoupon = params => {
     return ajax.put('admin/coupon', params);
 };
-export const deleteCoupon = params => {
+export const deleteCouponById = params => {
     return ajax.delete('admin/coupon/' + params.couponId, params);
 };
 export const findCouponById = params => {
-    return ajax.get('admin/coupon' + params.couponId, params);
+    return ajax.get('admin/coupon/' + params.couponId, params);
 };
 export const updateCouponById = params => {
-    return ajax.post('admin/coupon' + params.couponId, params);
+    return ajax.post('admin/coupon/' + params.couponId, params);
 };
 
 //商品列表
@@ -155,7 +155,7 @@ export const shopList = params => {
     return ajax.get('admin/shopDetail', params);
 };
 export const addShop = params => {
-    return ajax.put('admin/shopDetail' + params.shopId, params);
+    return ajax.put('admin/shopDetail/' + params.shopId, params);
 };
 export const findShopById = params => {
     return ajax.get('admin/shopDetail/' + params.shopId, params);
