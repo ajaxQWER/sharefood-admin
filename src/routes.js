@@ -6,6 +6,9 @@ import Banner from './views/Banner/Banner.vue'
 import Coupon from './views/Coupon/Coupon.vue'
 import GoodsList from './views/Goods/GoodsList.vue'
 import GoodsType from './views/Goods/GoodsType.vue'
+import ShopList from './views/Shop/ShopList.vue'
+import ShopType from './views/Shop/ShopType.vue'
+import ShopDetail from './views/Shop/ShopDetail.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -20,7 +23,7 @@ let routes = [{
     path: '/',
     component: Home,
     redirect: '/index',
-    name: '主页',
+    name: '',
     hidden: true
 }, {
     path: '/index',
@@ -34,16 +37,16 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-gear',
+    iconCls: 'fa fa-flag',
     children: [
         { path: '/banner', component: Banner, name: 'Banner管理' },
     ]
-},{
+}, {
     path: '/',
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-gear',
+    iconCls: 'fa fa-ticket',
     children: [
         { path: '/coupon', component: Coupon, name: '优惠券管理' },
     ]
@@ -51,16 +54,38 @@ let routes = [{
     path: '/',
     component: Home,
     name: '商品管理',
-    iconCls: 'fa fa-user-o', //图标样式class
+    iconCls: 'fa fa-product-hunt', //图标样式class
     children: [{
-        path: '/GoodsList',
+        path: '/goodsList',
         component: GoodsList,
         name: '商品列表'
     }, {
-        path: '/GoodsType',
+        path: '/goodsType',
         component: GoodsType,
         name: '商品分类'
     }]
+}, {
+    path: '/',
+    component: Home,
+    name: '店铺管理',
+    iconCls: 'fa fa-shopping-bag', //图标样式class
+    children: [{
+        path: '/shopList',
+        component: ShopList,
+        name: '店铺列表'
+    }, {
+        path: '/shopType',
+        component: ShopType,
+        name: '店铺分类'
+    }]
+}, {
+    path: '/',
+    component: Home,
+    name: '',
+    hidden: true,
+    children: [
+        { path: '/shopDetail', component: ShopDetail, name: '新增店铺' },
+    ]
 }, {
     path: '*',
     hidden: true,

@@ -95,11 +95,11 @@ export default {
     },
     created: function() {
         this.pageId = parseInt(this.$route.query.page) || 1;
-        this.getCategoryLists();
+        this.getBannerLists();
     },
     methods: {
         //获取视频分类列表
-        getCategoryLists: function() {
+        getBannerLists: function() {
             bannerList({ params: { pageId: this.pageId, pageSize: this.pageSize, imageUrlLike: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
@@ -108,7 +108,7 @@ export default {
         },
         //搜索
         searchCouponById: function() {
-            // this.getCategoryLists();
+            // this.getBannerLists();
         },
         //显示添加弹窗
         showAddDialog: function() {
@@ -129,7 +129,7 @@ export default {
         addCategory: function() {
             if (this.isAdd) {
                 addBanner(this.formInline).then(data => {
-                    this.getCategoryLists();
+                    this.getBannerLists();
                     this.$message({
                         message: '添加成功',
                         type: 'success'
@@ -138,7 +138,7 @@ export default {
                 })
             } else {
                 updateBannerById(this.formInline).then(data => {
-                    this.getCategoryLists()
+                    this.getBannerLists()
                     this.$message({
                         message: '修改成功',
                         type: 'success'
@@ -173,7 +173,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 deleteBannerById(row).then(() => {
-                    this.getCategoryLists();
+                    this.getBannerLists();
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
@@ -190,7 +190,7 @@ export default {
         currentChange: function(val) {
             this.$router.push('?page=' + val)
             this.pageId = val;
-            this.getCategoryLists()
+            this.getBannerLists()
         },
         formatImageUrl: function(url) {
             return this.UPLOADURL + url;

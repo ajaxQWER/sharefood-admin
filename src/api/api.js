@@ -160,6 +160,12 @@ export const addShop = params => {
 export const findShopById = params => {
     return ajax.get('admin/shopDetail/' + params.shopId, params);
 };
+export const deleteShopById = params => {
+    return ajax.delete('admin/shopDetail/' + params.shopId, params);
+};
+export const updateShopById = params => {
+    return ajax.post('admin/shopDetail/' + params.shopId, params);
+};
 
 //店铺分类
 export const shopCategoryList = params => {
