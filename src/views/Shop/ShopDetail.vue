@@ -26,7 +26,7 @@
                     <div class="amap-page-container">
                         <el-amap-search-box class="search-box" :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
                         <el-amap vid="amapDemo" :plugin="plugin" class="amap-demo" :zoom="zoom" :center="mapCenter" :events="events">
-                            <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker" :title="marker.title"></el-amap-marker>
+                            <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker"></el-amap-marker>
                         </el-amap>
                     </div>
                 </el-form-item>
@@ -42,11 +42,32 @@
                 <el-form-item label="介绍">
                     <el-input type="textarea" v-model="shopModel.introduce" auto-complete="off" placeholder="介绍"></el-input>
                 </el-form-item>
+                <el-form-item label="轮播图">
+                    <el-upload ref="uploadCarousel" action="" :http-request="uploadCarousel" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :auto-upload="false">
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+                    <el-dialog v-model="dialogVisible" size="tiny">
+                        <img width="100%" :src="dialogImageUrl" alt="">
+                    </el-dialog>
+                </el-form-item>
+                <el-form-item label="缩略图">
+                    <el-upload ref="uploadImage" action="" :http-request="uploadImage" :show-file-list="false">
+                        <el-button size="small" type="primary">上传缩略图</el-button>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item>
+                    <img :src="UPLOADURL+shopModel.image" alt="" class="banner-thumb">
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="hadnleSaveShop">保存</el-button>
+                    <el-button @click="back">返回</el-button>
+                </el-form-item>
             </el-form>
         </el-col>
     </el-row>
 </template>
 <script>
+import { addShop, uploadFiles } from '@/api/api'
 export default {
     data: function() {
         var that = this;
@@ -59,11 +80,12 @@ export default {
                 introduce: '',
                 longitude: 0,
                 latitude: 0,
-                address: ''
+                address: '',
+                carousel: [],
+                image: ''
             },
             zoom: 14,
             mapCenter: [0, 0],
-            address: '',
             searchOption: {
                 city: '全国',
                 citylimit: false
@@ -90,31 +112,27 @@ export default {
             }],
             events: {
                 click: function(e) {
-                    console.log(e)
                     var lnglat = e.lnglat;
                     that.shopModel.longitude = lnglat.lng;
                     that.shopModel.latitude = lnglat.lat;
-                    // 这里通过高德 SDK 完成。
+                    that.markers = [
+                        [e.lnglat.lng, e.lnglat.lat]
+                    ];
                     var geocoder = new AMap.Geocoder({
                         radius: 1000,
                         extensions: "all"
                     });
-                    geocoder.getAddress([lnglat.lng, lnglat.lat], function(status, result) {
+                    geocoder.getAddress([e.lnglat.lng, e.lnglat.lat], function(status, result) {
                         if (status === 'complete' && result.info === 'OK') {
                             if (result && result.regeocode) {
-                                console.log(result)
-                                var marker = {
-                                    position: [e.lnglat.lng, e.lnglat.lat],
-                                    title: result.regeocode.formattedAddress
-                                }
-                                that.markers = [marker]
-                                that.shopModel.address = result.regeocode.formattedAddress;
-                                that.$nextTick();
+                                that.shopModel.address = result.regeocode.formattedAddress
                             }
                         }
                     });
                 }
             },
+            dialogImageUrl: '',
+            dialogVisible: false
         }
     },
     methods: {
@@ -122,29 +140,19 @@ export default {
             this.$router.back()
         },
         onSearchResult: function(pois) {
-            var latSum = 0;
-            var lngSum = 0;
             if (pois.length > 0) {
-                pois.forEach(poi => {
-                    console.log(poi)
-                    var { lng, lat } = poi;
-                    lngSum += lng;
-                    latSum += lat;
-                    this.markers.push([poi.lng, poi.lat]);
-                    var marker = {
-                        position: [poi.lng,poi.lat],
-                        title: poi.name
-                    }
-                    this.markers.push(marker)
-                });
-                var center = {
-                    lng: lngSum / pois.length,
-                    lat: latSum / pois.length
-                };
-                this.mapCenter = [center.lng, center.lat];
+                console.log(pois[0])
+                this.markers = [
+                    [pois[0].lng, pois[0].lat]
+                ];
+                this.shopModel.longitude = pois[0].lng;
+                this.shopModel.latitude = pois[0].lat;
+                this.shopModel.address = pois[0].name;
+                this.mapCenter = [pois[0].lng, pois[0].lat];
             }
         },
         keyUpSearch: function() {
+            return
             var that = this;
             var txt = this.shopModel.address;
             AMap.service(["AMap.PlaceSearch"], function() {
@@ -154,27 +162,65 @@ export default {
                     if (status == 'complete' && result.info == 'OK') {
                         var latSum = 0;
                         var lngSum = 0;
-                        if(result.poiList.pois.length > 0){
+                        if (result.poiList.pois.length > 0) {
                             result.poiList.pois.forEach((poi) => {
                                 console.log(poi)
                                 var { lng, lat } = poi.location;
                                 lngSum += lng;
                                 latSum += lat;
-                                var marker = {
-                                    position: [poi.location.lng,poi.location.lat],
-                                    title: poi.name
-                                }
-                                that.markers.push(marker)
+                                that.markers.push([poi.location.lng, poi.location.lat])
                                 var center = {
                                     lng: lngSum / result.poiList.pois.length,
                                     lat: latSum / result.poiList.pois.length
                                 };
                                 that.mapCenter = [center.lng, center.lat];
                             })
-                            
+
                         }
                     }
                 })
+            })
+        },
+        uploadCarousel: function() {
+            var file = this.$refs.uploadCarousel.uploadFiles[0].raw;
+            var fd = new FormData();
+            fd.append('file', file);
+            fd.path = '/shopCarousel';
+            uploadFiles(fd).then(data => {
+                this.shopModel.carousel.push(data.originalUrl);
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        handlePictureCardPreview: function(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        handleRemove: function(file, fileList) {
+            this.shopModel.carousel = [];
+        },
+        hadnleSaveShop: function() {
+            this.$refs.uploadCarousel.submit()
+            addShop(this.shopModel).then(data => {
+                console.log(data)
+            })
+            console.log(this.shopModel)
+
+        },
+        //上传缩略图
+        uploadImage: function() {
+            var file = this.$refs.uploadImage.uploadFiles[0].raw;
+            var fd = new FormData();
+            fd.append('file', file);
+            fd.path = '/shopImage';
+            uploadFiles(fd).then(data => {
+                this.$message({
+                    message: ' 上传缩略图成功',
+                    type: 'success'
+                })
+                this.shopModel.image = data.originalUrl;
+            }).catch(err => {
+                console.log(err)
             })
         }
     }
@@ -194,6 +240,10 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    }
+    .banner-thumb {
+        height: 320px;
+        vertical-align: middle;
     }
     .amap-demo {
         height: 500px;

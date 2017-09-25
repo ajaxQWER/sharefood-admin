@@ -141,7 +141,7 @@ export const addGoodsCateGory = params => {
     return ajax.put('admin/goodsCategory', params);
 };
 export const deleteGoodsCateGory = params => {
-    return ajax.put('admin/goodsCategory/' + params.goodsCategoryId, params);
+    return ajax.delete('admin/goodsCategory/' + params.goodsCategoryId, params);
 };
 export const findGoodsCateGoryById = params => {
     return ajax.get('admin/goodsCategory/' + params.goodsCategoryId, params);
@@ -155,7 +155,7 @@ export const shopList = params => {
     return ajax.get('admin/shopDetail', params);
 };
 export const addShop = params => {
-    return ajax.put('admin/shopDetail/' + params.shopId, params);
+    return ajax.put('admin/shopDetail', params);
 };
 export const findShopById = params => {
     return ajax.get('admin/shopDetail/' + params.shopId, params);
@@ -175,7 +175,7 @@ export const addShopCateGory = params => {
     return ajax.put('admin/ShopCateGory', params);
 };
 export const deleteShopCateGory = params => {
-    return ajax.put('admin/ShopCateGory/' + params.ShopCateGoryId, params);
+    return ajax.delete('admin/ShopCateGory/' + params.ShopCateGoryId, params);
 };
 export const findShopCateGoryById = params => {
     return ajax.get('admin/ShopCateGory/' + params.ShopCateGoryId, params);

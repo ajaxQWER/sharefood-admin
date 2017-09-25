@@ -6,7 +6,7 @@
         <el-col>
             <el-form :inline="true">
                 <el-form-item>
-                    <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加店铺</el-button>
+                    <el-button type="primary" @click="goToAddShop"><i class="el-icon-plus el-icon--left"></i>添加店铺</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
@@ -178,6 +178,9 @@ export default {
                 type: "CASH",
                 useSocpe: "SHOP"
             }
+        },
+        goToAddShop: function(){
+            this.$router.push('shopDetail')
         },
         //添加分类
         addCategory: function() {
