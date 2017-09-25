@@ -168,17 +168,17 @@ export const putAway = params => {
 export const shopCategoryList = params => {
     return ajax.get('admin/shopCategory', params);
 };
-export const addShopCateGory = params => {
-    return ajax.put('admin/ShopCateGory', params);
+export const addShopCategory = params => {
+    return ajax.put('admin/shopCategory', params);
 };
-export const deleteShopCateGory = params => {
-    return ajax.delete('admin/ShopCateGory/' + params.ShopCateGoryId, params);
+export const deleteShopCategoryById = params => {
+    return ajax.delete('admin/shopCategory/' + params.shopCategoryId, params);
 };
-export const findShopCateGoryById = params => {
-    return ajax.get('admin/ShopCateGory/' + params.ShopCateGoryId, params);
+export const findShopCategoryById = params => {
+    return ajax.get('admin/shopCategory/' + params.shopCategoryId, params);
 };
-export const updateShopCateGoryById = params => {
-    return ajax.post('admin/ShopCateGory/' + params.ShopCateGoryId, params);
+export const updateShopCategoryById = params => {
+    return ajax.post('admin/shopCategory/' + params.shopCategoryId, params);
 };
 
 //文件上传 前台文件需要设置一个path属性

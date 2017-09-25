@@ -1,7 +1,7 @@
 <template>
     <el-row class="lives-news">
         <el-col class="title">
-            <h3>视频分类管理</h3>
+            <h3>店铺分类管理</h3>
         </el-col>
         <el-col>
             <el-form :inline="true">
@@ -16,23 +16,36 @@
         </el-col>
         <el-col>
             <el-table :data="videoCategoryLists">
-                <el-table-column prop="categoryId" label="分类ID" align="center">
-                </el-table-column>
-                <el-table-column prop="categoryName" label="分类名称" align="center"></el-table-column>
-                <el-table-column prop="parentId" label="父级ID" align="center">
+                <el-table-column prop="shopCategoryName" label="分类名称" align="center"></el-table-column>
+                <el-table-column prop="sortOrder" label="排序值" align="center"></el-table-column>
+                <el-table-column label="图标" align="center">
+                    <template scope="scope">
+                        <img :src="UPLOADURL + scope.row.icon" :alt="scope.row.shopCategoryName">
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
                     <template scope="scope">
-                        <el-button size="small" @click="updateVideoCategory(scope.$index, scope.row)">修改</el-button>
-                        <el-button size="small" type="danger" @click="deleteVideoCategory(scope.$index, scope.row)">删除</el-button>
+                        <el-button size="small" @click="updateShopCategory(scope.$index, scope.row)">修改</el-button>
+                        <el-button size="small" type="danger" @click="deleteShopCategory(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </el-col>
-        <el-dialog :title="isAdd?'新增视频分类':'修改视频分类'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
-            <el-form :model="formInline" :rules="rules" ref="formInline">
+        <el-dialog :title="isAdd?'新增店铺分类':'修改店铺分类'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
+            <el-form :model="formInline" ref="formInline" label-width="120px">
                 <el-form-item label="分类名称" prop="categoryName">
-                    <el-input type="text" v-model="formInline.categoryName" auto-complete="off" placeholder="分类名称"></el-input>
+                    <el-input type="text" v-model="formInline.shopCategoryName" auto-complete="off" placeholder="分类名称"></el-input>
+                </el-form-item>
+                <el-form-item label="排序值" prop="categoryName">
+                    <el-input-number v-model="formInline.sortOrder" :min="1"></el-input-number>
+                </el-form-item>
+                <el-form-item label="分类图标">
+                    <el-upload ref="uploadImage" action="" :http-request="uploadImage" :show-file-list="false">
+                        <el-button size="small" type="primary">上传图标</el-button>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item>
+                    <img :src="UPLOADURL+formInline.icon" alt="" class="banner-thumb">
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -49,41 +62,27 @@
 </template>
 <script>
 import {
-    getVideoCategoryLists,
-    addVideoCategory,
-    deleteVideoCategoryById,
-    updateVideoCategoryById
+    shopCategoryList,
+    addShopCategory,
+    deleteShopCategoryById,
+    updateShopCategoryById,
+    uploadFiles
 } from '@/api/api'
 export default {
     data: function() {
-        var checkCategoryName = (rule, value, callback) => {
-            if (!value) {
-                return callback(new Error('分类名称不能为空'));
-            } else {
-                if (this.formInline.categoryName !== '') {
-                    callback();
-                }
-            }
-        };
         return {
             addLoading: false,
             addDialog: false,
             formInline: {
-                categoryName: '',
-                parentId: 0,
-                categoryId: 0
+                shopCategoryName: '',
+                sortOrder: 0,
+                icon: ''
             },
             searchContent: '',
             pageId: 1,
             pageSize: 10,
             counts: 0,
             isAdd: true,
-            rules: {
-                name: [{
-                    validator: checkCategoryName,
-                    trigger: 'blur'
-                }]
-            },
             videoCategoryLists: null
         }
     },
@@ -94,7 +93,7 @@ export default {
     methods: {
         //获取视频分类列表
         getCategoryLists: function() {
-            getVideoCategoryLists({ params: { pageId: this.pageId, pageSize: this.pageSize, categoryNameLike: this.searchContent } }).then(data => {
+            shopCategoryList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopCategoryName: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.videoCategoryLists = data.list;
@@ -110,70 +109,65 @@ export default {
         },
         //关闭添加弹窗
         closeaddDialog: function() {
-            this.formInline.categoryName = '';
             this.isAdd = true;
+            this.formInline = {
+                shopCategoryName: '',
+                sortOrder: 0,
+                icon: ''
+            };
         },
         //添加分类
         addCategory: function() {
-            this.$refs['formInline'].validate((valid) => {
-                if (valid) {
-                    if (this.isAdd) {
-                        addVideoCategory(this.formInline).then(data => {
-                            // if (this.videoCategoryLists.length < this.pageSize) {
-                            //     this.videoCategoryLists.push(data);
-                            // }
-                            // this.counts += 1;
-                            this.getCategoryLists();
-                            this.$message({
-                                message: '添加成功',
-                                type: 'success'
-                            })
-                            this.addDialog = false;
-                        })
-                    } else {
-                        updateVideoCategoryById(this.formInline).then(data => {
-                            this.getCategoryLists()
-                            this.$message({
-                                message: '修改成功',
-                                type: 'success'
-                            })
-                            this.addDialog = false;
-                        }).catch(err => {
-                            console.error(err)
-                        })
-                    }
-                }
-            })
+            console.log(this.isAdd)
+            console.log(this.formInline)
+            if (this.isAdd) {
+                addShopCateGory(this.formInline).then(data => {
+                    this.getCategoryLists();
+                    this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                    })
+                    this.addDialog = false;
+                })
+            } else {
+                updateShopCategoryById(this.formInline).then(data => {
+                    this.getCategoryLists()
+                    this.$message({
+                        message: '修改成功',
+                        type: 'success'
+                    })
+                    this.addDialog = false;
+                }).catch(err => {
+                    console.error(err)
+                })
+            }
         },
         //取消添加分类
         cancelAddCategory: function() {
             this.addDialog = false;
         },
         //通过id修改分类的名称
-        updateVideoCategory: function(index, row) {
+        updateShopCategory: function(index, row) {
             this.isAdd = false;
             this.addDialog = true;
             this.formInline = {
-                parentId: row.parentId,
-                categoryId: row.categoryId,
-                categoryName: row.categoryName
+                shopCategoryId: row.shopCategoryId,
+                shopCategoryName: row.shopCategoryName,
+                sortOrder: row.sortOrder,
+                icon: row.icon
             }
 
         },
         //通过id删除分类
-        deleteVideoCategory: function(index, row) {
+        deleteShopCategory: function(index, row) {
             this.$confirm('是否删除该分类?', '删除分类', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                deleteVideoCategoryById(row.categoryId).then(data => {
-                    if (this.videoCategoryLists.length <= this.pageSize && this.counts <= this.pageSize) {
-                        this.videoCategoryLists.splice(index, 1);
-                        this.counts -= 1;
-                    } else {
-                        this.getCategoryLists();
-                    }
+                console.log(123)
+                deleteShopCategoryById(row).then(() => {
+                    this.getCategoryLists();
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
@@ -186,16 +180,20 @@ export default {
                 });
             });
         },
-        //格式化分类名称显示
-        formatCategoryName: function(name){
-            switch (name) {
-                case '1':
-                    return ''
-                    break;
-                default:
-                    // statements_def
-                    break;
-            }
+        uploadImage: function() {
+            var file = this.$refs.uploadImage.uploadFiles[0].raw;
+            var fd = new FormData();
+            fd.append('file', file);
+            fd.path = '/shopType';
+            uploadFiles(fd).then(data => {
+                this.$message({
+                    message: ' 上传图标成功',
+                    type: 'success'
+                })
+                this.formInline.icon = data.originalUrl;
+            }).catch(err => {
+                console.log(err)
+            })
         },
         //分页
         currentChange: function(val) {
