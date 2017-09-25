@@ -67,7 +67,7 @@
     </el-row>
 </template>
 <script>
-import { addShop, uploadFiles } from '@/api/api'
+import { addShop, findShopById, uploadFiles } from '@/api/api'
 export default {
     data: function() {
         var that = this;
@@ -133,6 +133,30 @@ export default {
             },
             dialogImageUrl: '',
             dialogVisible: false
+        }
+    },
+    created: function() {
+        var shopId = this.$route.query.shopId;
+        if(shopId){
+            var params = {
+                shopId: shopId
+            }
+            findShopById(params).then(data => {
+                console.log(data)
+                this.shopModel.name = data.name;
+                this.shopModel.number = data.number;
+                this.shopModel.beginTime = data.beginTime;
+                this.shopModel.endTime = data.endTime;
+                this.shopModel.introduce = data.introduce;
+                this.shopModel.longitude = data.longitude;
+                this.shopModel.latitude = data.latitude;
+                this.shopModel.address = data.address;
+                this.shopModel.carousel = data.carousel;
+                this.shopModel.image = data.image;
+                this.markers = [
+                    [data.longitude, data.latitude]
+                ];
+            })
         }
     },
     methods: {

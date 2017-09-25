@@ -9,7 +9,7 @@
                     <el-button type="primary" @click="goToAddShop"><i class="el-icon-plus el-icon--left"></i>添加店铺</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShopById">
                     </el-input>
                 </el-form-item>
             </el-form>
@@ -60,47 +60,6 @@
                 </el-table-column>
             </el-table>
         </el-col>
-        <el-dialog :title="isAdd?'新增店铺':'修改店铺'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
-            <el-form :model="formInline" label-width="120px">
-                <el-form-item label="店铺名称">
-                    <el-input type="text" v-model="formInline.couponName" auto-complete="off" placeholder="店铺名称"></el-input>
-                </el-form-item>
-                <el-form-item label="店铺数量">
-                    <el-input type="text" v-model.number="formInline.couponNumber" auto-complete="off" placeholder="优惠券数量"></el-input>
-                </el-form-item>
-                <el-form-item label="优惠券类型">
-                    <el-radio class="radio" v-model="formInline.type" label="CASH">现金</el-radio>
-                    <el-radio class="radio" v-model="formInline.type" label="DISCOUNT">折扣</el-radio>
-                </el-form-item>
-                <el-form-item v-if="formInline.type==='CASH'" label="金额">
-                    <el-input type="text" v-model.number="formInline.money" auto-complete="off" placeholder="金额"></el-input>
-                </el-form-item>
-                <el-form-item v-else-if="formInline.type==='DISCOUNT'" label="折扣">
-                    <el-input type="text" v-model.number="formInline.discount" auto-complete="off" placeholder="折扣"></el-input>
-                </el-form-item>
-                <el-form-item label="开始时间">
-                    <el-date-picker v-model="formInline.startTime" type="datetime" placeholder="选择开始时间" @change="formatStartTime"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="结束时间">
-                    <el-date-picker v-model="formInline.endTime" type="datetime" placeholder="选择结束时间" @change="formatEndTime"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="最低消费额度">
-                    <el-input type="text" v-model.number="formInline.minimum" auto-complete="off" placeholder="最低消费额度"></el-input>
-                </el-form-item>
-                <el-form-item label="领取方式">
-                    <el-radio class="radio" v-model="formInline.pickUpType" label="CONSUME">消费赠送</el-radio>
-                    <el-radio class="radio" v-model="formInline.pickUpType" label="HAND">手动领取</el-radio>
-                </el-form-item>
-                <el-form-item label="使用范围">
-                    <el-radio class="radio" v-model="formInline.useSocpe" label="SHOP">商家</el-radio>
-                    <el-radio class="radio" v-model="formInline.useSocpe" label="GLOBAL">平台</el-radio>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="cancelAddCategory">取 消</el-button>
-                <el-button type="primary" @click="addCategory" :loading="addLoading">确 定</el-button>
-            </div>
-        </el-dialog>
         <!-- 分页 -->
         <el-col class="pagination">
             <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
@@ -120,19 +79,6 @@ export default {
         return {
             addLoading: false,
             addDialog: false,
-            formInline: {
-                couponId: 0,
-                couponName: "",
-                couponNumber: 0,
-                discount: 0,
-                endTime: "",
-                minimum: 0,
-                money: 0,
-                pickUpType: "CONSUME",
-                startTime: "",
-                type: "CASH",
-                useSocpe: "SHOP"
-            },
             searchContent: '',
             pageId: 1,
             pageSize: 10,
@@ -155,78 +101,17 @@ export default {
             })
         },
         //搜索
-        searchCouponById: function() {
+        searchShopById: function() {
             this.getShopLists();
-        },
-        //显示添加弹窗
-        showAddDialog: function() {
-            this.addDialog = true;
-        },
-        //关闭添加弹窗
-        closeaddDialog: function() {
-            this.isAdd = true;
-            this.formInline = {
-                couponId: 0,
-                couponName: "",
-                couponNumber: 0,
-                discount: 0,
-                endTime: "",
-                minimum: 0,
-                money: 0,
-                pickUpType: "CONSUME",
-                startTime: "",
-                type: "CASH",
-                useSocpe: "SHOP"
-            }
         },
         goToAddShop: function(){
             this.$router.push('shopDetail')
-        },
-        //添加分类
-        addCategory: function() {
-            if (this.isAdd) {
-                addShop(this.formInline).then(data => {
-                    this.getShopLists();
-                    this.$message({
-                        message: '添加成功',
-                        type: 'success'
-                    })
-                    this.addDialog = false;
-                })
-            } else {
-                updateShopById(this.formInline).then(data => {
-                    this.getShopLists()
-                    this.$message({
-                        message: '修改成功',
-                        type: 'success'
-                    })
-                    this.addDialog = false;
-                }).catch(err => {
-                    console.error(err)
-                })
-            }
-        },
-        //取消添加分类
-        cancelAddCategory: function() {
-            this.addDialog = false;
         },
         //通过id修改分类的名称
         updateVideoCategory: function(index, row) {
             this.isAdd = false;
             this.addDialog = true;
-            this.formInline = {
-                couponId: row.couponId,
-                couponName: row.couponName,
-                couponNumber: row.couponNumber,
-                discount: row.discount,
-                endTime: row.endTime,
-                minimum: row.minimum,
-                money: row.money,
-                pickUpType: row.pickUpType,
-                startTime: row.startTime,
-                type: row.type,
-                useSocpe: row.useSocpe
-            }
+            this.$router.push('/shopDetail?shopId='+row.shopId)
         },
         //通过id删除分类
         deleteVideoCategory: function(index, row) {
@@ -254,48 +139,6 @@ export default {
             this.$router.push('?page=' + val)
             this.pageId = val;
             this.getShopLists()
-        },
-        formatPickUpType: function(val) {
-            switch (val) {
-                case 'CONSUME':
-                    return '消费赠送'
-                    break;
-                case 'HAND':
-                    return '手动领取'
-                    break;
-                default:
-                    break;
-            }
-        },
-        formatType: function(val) {
-            switch (val) {
-                case 'CASH':
-                    return '现金'
-                    break;
-                case 'DISCOUNT':
-                    return '折扣'
-                    break;
-                default:
-                    break;
-            }
-        },
-        formatUseSocpe: function(val) {
-            switch (val) {
-                case 'SHOP':
-                    return '商家'
-                    break;
-                case 'GLOBAL':
-                    return '平台'
-                    break;
-                default:
-                    break;
-            }
-        },
-        formatStartTime: function(val) {
-            this.formInline.startTime = val;
-        },
-        formatEndTime: function(val) {
-            this.formInline.endTime = val;
         }
     }
 }
