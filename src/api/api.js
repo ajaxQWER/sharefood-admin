@@ -154,16 +154,13 @@ export const updateGoodsCategoryById = params => {
 export const shopList = params => {
     return ajax.get('admin/shopDetail', params);
 };
-export const addShop = params => {
-    return ajax.put('admin/shopDetail', params);
-};
 export const findShopById = params => {
     return ajax.get('admin/shopDetail/' + params.shopId, params);
 };
-export const deleteShopById = params => {
+export const soldOut = params => {
     return ajax.delete('admin/shopDetail/' + params.shopId, params);
 };
-export const updateShopById = params => {
+export const putAway = params => {
     return ajax.post('admin/shopDetail/' + params.shopId, params);
 };
 

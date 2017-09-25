@@ -5,11 +5,11 @@
         </el-col>
         <el-col>
             <el-form :inline="true">
-                <el-form-item>
+                <!-- <el-form-item>
                     <el-button type="primary" @click="goToAddShop"><i class="el-icon-plus el-icon--left"></i>添加店铺</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShopById">
+                </el-form-item> -->
+                <el-form-item label="搜索店铺">
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShop">
                     </el-input>
                 </el-form-item>
             </el-form>
@@ -52,10 +52,13 @@
                 <el-table-column label="纬度" align="center">
                     <template scope="scope">{{scope.row.latitude?scope.row.latitude:'-'}}</template>
                 </el-table-column>
+                <el-table-column label="状态" align="center">
+                    <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
+                </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
                     <template scope="scope">
-                        <el-button size="small" @click="updateVideoCategory(scope.$index, scope.row)">修改</el-button>
-                        <el-button size="small" type="danger" @click="deleteVideoCategory(scope.$index, scope.row)">删除</el-button>
+                        <el-button size="small" type="primary" @click="putAwayShop(scope.$index, scope.row)">上架</el-button>
+                        <el-button size="small" type="danger" @click="soldOutShop(scope.$index, scope.row)">下架</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -70,9 +73,9 @@
 <script>
 import {
     shopList,
-    addShop,
-    deleteShopById,
-    updateShopById
+    putAway,
+    soldOut,
+    findShopById
 } from '@/api/api'
 export default {
     data: function() {
@@ -92,7 +95,7 @@ export default {
         this.getShopLists();
     },
     methods: {
-        //获取视频分类列表
+        //获取列表
         getShopLists: function() {
             shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopDetailNameLike: this.searchContent } }).then(data => {
                 console.log(data)
@@ -101,36 +104,36 @@ export default {
             })
         },
         //搜索
-        searchShopById: function() {
+        searchShop: function() {
             this.getShopLists();
         },
-        goToAddShop: function(){
+        goToAddShop: function() {
             this.$router.push('shopDetail')
         },
-        //通过id修改分类的名称
-        updateVideoCategory: function(index, row) {
-            this.isAdd = false;
-            this.addDialog = true;
-            this.$router.push('/shopDetail?shopId='+row.shopId)
+        //上架
+        putAwayShop: function(index, row) {
+            putAway(row).then(() => {
+                this.getShopLists();
+            })
         },
-        //通过id删除分类
-        deleteVideoCategory: function(index, row) {
-            this.$confirm('是否删除该分类?', '删除分类', {
+        //下架
+        soldOutShop: function(index, row) {
+            this.$confirm('是否下架该店铺?', '下架店铺', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                deleteShopById(row).then(() => {
+                soldOut(row).then(() => {
                     this.getShopLists();
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: '操作成功!'
                     });
                 })
             }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '已取消删除'
+                    message: '已取消操作'
                 });
             });
         },
