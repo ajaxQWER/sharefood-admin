@@ -112,9 +112,24 @@ export default {
         },
         //上架
         putAwayShop: function(index, row) {
-            putAway(row).then(() => {
-                this.getShopLists();
-            })
+            this.$confirm('是否上架该店铺?', '上架店铺', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                putAway(row).then(() => {
+                    this.getShopLists();
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消操作'
+                });
+            });
         },
         //下架
         soldOutShop: function(index, row) {

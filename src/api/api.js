@@ -125,30 +125,20 @@ export const updateCouponById = params => {
     return ajax.post('admin/coupon/' + params.couponId, params);
 };
 
-//商品列表
+//商品管理
 export const goodsList = params => {
     return ajax.get('admin/goods', params);
+};
+export const soldOutGoodsById = params => {
+    return ajax.delete('admin/goods/' + params.goodsId, params);
+};
+export const putAwayGoodsById = params => {
+    return ajax.post('admin/goods/' + params.goodsId, params);
 };
 export const findGoodsById = params => {
     return ajax.get('admin/goods/' + params.goodsId, params);
 };
 
-//商品分类
-export const goodsCateGoryList = params => {
-    return ajax.get('admin/goodsCategory', params);
-};
-export const addGoodsCateGory = params => {
-    return ajax.put('admin/goodsCategory', params);
-};
-export const deleteGoodsCateGory = params => {
-    return ajax.delete('admin/goodsCategory/' + params.goodsCategoryId, params);
-};
-export const findGoodsCateGoryById = params => {
-    return ajax.get('admin/goodsCategory/' + params.goodsCategoryId, params);
-};
-export const updateGoodsCategoryById = params => {
-    return ajax.post('admin/goodsCategory/' + params.goodsCategoryId, params);
-};
 
 //店铺
 export const shopList = params => {
@@ -187,6 +177,14 @@ export const userList = params => {
 };
 export const findUserById = params => {
     return ajax.get('admin/user/' + params.userId, params);
+};
+
+//订单管理
+export const orderList = params => {
+    return ajax.get('admin/order', params);
+};
+export const findOrderById = params => {
+    return ajax.get('admin/order/' + params.orderId, params);
 };
 
 

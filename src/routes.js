@@ -4,12 +4,12 @@ import Home from './views/Home.vue'
 import Index from './views/Index.vue'
 import Banner from './views/Banner/Banner.vue'
 import Coupon from './views/Coupon/Coupon.vue'
-import GoodsList from './views/Goods/GoodsList.vue'
-import GoodsType from './views/Goods/GoodsType.vue'
+import Goods from './views/Goods/Goods.vue'
 import ShopList from './views/Shop/ShopList.vue'
 import ShopType from './views/Shop/ShopType.vue'
 import ShopDetail from './views/Shop/ShopDetail.vue'
 import User from './views/User/User.vue'
+import Order from './views/Order/Order.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -54,17 +54,12 @@ let routes = [{
 }, {
     path: '/',
     component: Home,
-    name: '商品管理',
+    name: '',
+    leaf: true, //只有一个节点
     iconCls: 'fa fa-product-hunt', //图标样式class
-    children: [{
-        path: '/goodsList',
-        component: GoodsList,
-        name: '商品列表'
-    }, {
-        path: '/goodsType',
-        component: GoodsType,
-        name: '商品分类'
-    }]
+    children: [
+        { path: '/goods', component: Goods, name: '商品管理' }
+    ]
 }, {
     path: '/',
     component: Home,
@@ -84,9 +79,18 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-flag',
+    iconCls: 'fa fa-user-o',
     children: [
         { path: '/user', component: User, name: '用户管理' },
+    ]
+}, {
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-file-text',
+    children: [
+        { path: '/order', component: Order, name: '订单管理' },
     ]
 }, {
     path: '/',
