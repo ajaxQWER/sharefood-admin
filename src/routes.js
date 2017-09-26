@@ -9,6 +9,7 @@ import GoodsType from './views/Goods/GoodsType.vue'
 import ShopList from './views/Shop/ShopList.vue'
 import ShopType from './views/Shop/ShopType.vue'
 import ShopDetail from './views/Shop/ShopDetail.vue'
+import User from './views/User/User.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -78,6 +79,15 @@ let routes = [{
         component: ShopType,
         name: '店铺分类'
     }]
+}, {
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-flag',
+    children: [
+        { path: '/user', component: User, name: '用户管理' },
+    ]
 }, {
     path: '/',
     component: Home,

@@ -181,6 +181,15 @@ export const updateShopCategoryById = params => {
     return ajax.post('admin/shopCategory/' + params.shopCategoryId, params);
 };
 
+//用户管理
+export const userList = params => {
+    return ajax.get('admin/user', params);
+};
+export const findUserById = params => {
+    return ajax.get('admin/user/' + params.userId, params);
+};
+
+
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
     return ajax.post('commons/upload' + params.path, params);
