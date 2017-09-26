@@ -16,28 +16,34 @@
                 <li>订单名称：{{orderLists.orderName}}</li>
                 <li>订单价格：{{orderLists.orderPrice?formatMoney(orderLists.orderPrice):'0.00'}}元</li>
                 <li>订单状态：{{formatOrderStatus(orderLists.orderStatus)}}</li>
-                <li>订单支付SN号：{{orderLists.paymentSN}}</li>
+                <!-- <li>订单支付SN号：{{orderLists.paymentSN}}</li> -->
                 <li>订单备注：{{orderLists.orderContent}}</li>
                 <li>订单添加时间：{{moment(orderLists.addTime).format('YYYY-MM-DD HH:mm:ss')}}</li>
-                <li>用户信息详情：{{orderLists.contact}}</li>
-                <li>优惠券详情：{{orderLists.coupon}}</li>
-                <li>可使用优惠券数量：{{orderLists.couponNum}}</li>
+                <li>联系人：{{orderLists.contactName?orderLists.contactName:'-'}}</li>
+                <li>联系电话：{{orderLists.contactPhone?orderLists.contactPhone:'-'}}</li>
+                <li>地址：{{orderLists.address?orderLists.address:'-'}}</li>
+                <!-- <li>优惠券详情：{{orderLists.coupon}}</li> -->
+                <!-- <li>可使用优惠券数量：{{orderLists.couponNum}}</li> -->
                 <li>优惠券序列号：{{orderLists.couponSNId}}</li>
-                <li>订单完成时间：{{orderLists.finishTime}}</li>
-                <li>是否支付完成：{{orderLists.isFinishPay}}</li>
-                <li>是否包房：{{orderLists.isPrivateRoom}}</li>
-                <li>订单商品：
+                <li>订单完成时间：{{orderLists.finishTime?moment(orderLists.finishTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
+                <li>是否支付完成：{{orderLists.isFinishPay?'是':'否'}}</li>
+                <li>是否包房：{{orderLists.isPrivateRoom?'是':'否'}}</li>
+                <li v-if="orderLists.orderGoods.length">订单商品：
                     <el-table :data="orderLists.orderGoods" style="width: 500px; margin-left: 20px;">
                         <el-table-column label="序号" type="index" width="100" align="center"></el-table-column>
                         <el-table-column property="goodsName" label="商品名称" align="center"></el-table-column>
                         <el-table-column property="goodsCount" label="商品数量" align="center"></el-table-column>
-                        <el-table-column property="goodsPrice" label="商品价格" align="center"></el-table-column>
+                        <el-table-column property="goodsPrice" label="商品价格" align="center">
+                            <template scope="scope">
+                                {{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice):'0.00'}}元
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </li>
-                <li>订单支付时间：{{orderLists.payTime}}</li>
-                <li>支付方式：{{orderLists.payment}}</li>
-                <li>就餐人数：{{orderLists.repastNum}}</li>
-                <li>就餐时间：{{orderLists.repastTime}}</li>
+                <li>订单支付时间：{{orderLists.payTime?moment(orderLists.payTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
+                <li>支付方式：{{formatPayType(orderLists.payment)}}</li>
+                <li>就餐人数：{{orderLists.repastNum}}人</li>
+                <li>就餐时间：{{moment(orderLists.repastTime).format('YYYY-MM-DD HH:mm:ss')}}</li>
             </ul>
         </el-col>
     </el-row>
@@ -86,6 +92,16 @@ export default {
                     return '交易完成';
                 default:
                     break;
+            }
+        },
+        formatPayType: function(type){
+            switch(type){
+                case 'wx':
+                    return '微信支付';
+                case 'alipay':
+                    return '支付宝支付';
+                default:
+                    return '-'
             }
         }
     }
