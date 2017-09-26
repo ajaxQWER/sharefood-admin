@@ -36,8 +36,8 @@
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
                     <template scope="scope">
-                        <el-button size="small" type="primary" @click="putAwayGoods(scope.$index, scope.row)">上架</el-button>
-                        <el-button size="small" type="danger" @click="soldOutGoods(scope.$index, scope.row)">下架</el-button>
+                        <el-button size="small" type="primary" @click="putAwayGoods(scope.$index, scope.row)" v-if="scope.row.goodsStatus==='SOLD_OUT'">上架</el-button>
+                        <el-button size="small" type="danger" @click="soldOutGoods(scope.$index, scope.row)" v-else>下架</el-button>
                     </template>
                 </el-table-column>
             </el-table>
