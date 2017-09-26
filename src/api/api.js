@@ -4,29 +4,7 @@ import Qs from 'Qs'
 
 var ajax = axios.create({
     baseURL: 'http://47.92.68.45:18080',
-    // baseURL: 'http://sdk.guerlab.net',
-    // baseURL: 'http://192.168.31.10:8080',
-    headers: {
-        // 'TOKEN': sessionStorage.getItem('jwt')
-        // 'Accept': '*/*',
-        // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
-    // transformRequest: [function(data) {
-    //     return Qs.stringify(data);
-    // }],
-    // `transformResponse`选项允许我们在数据传送到`then/catch`方法之前对数据进行改动
-    // transformResponse: [function(res) {
-    //     //在这里根据自己的需求改变数据
-    //     var data = JSON.parse(res)
-    //     if(data.status){
-    //         return data.data;
-    //     }else{
-    //         ElementUI.Message.error({
-    //           message: data.message,
-    //           type: 'error'
-    //         });
-    //     }
-    // }],
+    headers: {},
     withCredentials: true, //cookie
     crossDomain: true //跨域
 });
@@ -37,12 +15,6 @@ ajax.interceptors.request.use(function(config) {
     if (sessionStorage.getItem('jwt')) {
         config.headers.TOKEN = sessionStorage.getItem('jwt');
     }
-    // if (config.method === 'post') {
-    //     config.transformRequest = [function(data) {
-    //         return Qs.stringify(data)
-    //     }]
-    // }
-
     return config;
 }, function(err) {
     console.error(err);
@@ -78,7 +50,6 @@ ajax.interceptors.response.use(function(res) {
     return Promise.reject(err);
 })
 
-//网站后台admin
 
 //管理员
 export const adminLogin = params => {
@@ -192,3 +163,4 @@ export const findOrderById = params => {
 export const uploadFiles = params => {
     return ajax.post('commons/upload' + params.path, params);
 };
+

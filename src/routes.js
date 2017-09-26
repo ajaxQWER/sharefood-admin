@@ -10,6 +10,7 @@ import ShopType from './views/Shop/ShopType.vue'
 import ShopDetail from './views/Shop/ShopDetail.vue'
 import User from './views/User/User.vue'
 import Order from './views/Order/Order.vue'
+import OrderDetail from './views/Order/OrderDetail.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -91,6 +92,7 @@ let routes = [{
     iconCls: 'fa fa-file-text',
     children: [
         { path: '/order', component: Order, name: '订单管理' },
+        { path: '/orderDetail', component: OrderDetail, hidden: true, name: '订单详情' },
     ]
 }, {
     path: '/',

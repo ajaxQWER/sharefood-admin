@@ -4,9 +4,34 @@
             <h3>订单管理</h3>
         </el-col>
         <el-col>
+            <el-form :inline="true">
+                <el-form-item label="搜索订单">
+                    <el-input placeholder="请输入订单号" icon="search" v-model="searchContent" :on-icon-click="searchOrder">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+        </el-col>
+        <el-col>
             <el-table :data="orderLists">
-                <el-table-column label="用户名" width="160px" align="center">
-                    <template scope="scope">{{scope.row.username?scope.row.username:'-'}}</template>
+                <el-table-column label="订单号" align="center">
+                    <template scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
+                </el-table-column>
+                <el-table-column label="订单名称" align="center">
+                    <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
+                </el-table-column>
+                <el-table-column label="订单价格" align="center">
+                    <template scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
+                </el-table-column>
+                <el-table-column label="订单状态" align="center">
+                    <template scope="scope">{{formatOrderStatus(scope.row.orderStatus)}}</template>
+                </el-table-column>
+                <el-table-column label="店铺名称" align="center">
+                    <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
+                </el-table-column>
+                <el-table-column label="操作" width="160px" align="center">
+                    <template scope="scope">
+                        <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">查看详情</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
         </el-col>
@@ -39,14 +64,14 @@ export default {
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
-            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize } }).then(data => {
+            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.orderLists = data.list;
             })
         },
         //搜索
-        searchCouponById: function() {
+        searchOrder: function() {
             this.getOrderLists();
         },
         //分页
@@ -54,6 +79,26 @@ export default {
             this.$router.push('?page=' + val)
             this.pageId = val;
             this.getOrderLists()
+        },
+        formatOrderStatus: function(status){
+            switch(status){
+                case 'WAIT_PAY':
+                    return '等待支付';
+                case 'PAYED':
+                    return '支付完成,等待发货';
+                case 'SHIPPING':
+                    return '';
+                case 'CONFIRM_RECEIVE_GOODS':
+                    return '配送中';
+                case 'TRANSACT_FINISHED':
+                    return '交易完成';
+                default:
+                    break;
+            }
+        },
+        showOrderInfo: function(index, row){
+            var orderId = row.orderId;
+            this.$router.push('/orderDetail?orderId=' + orderId)
         }
     }
 }

@@ -17,7 +17,7 @@
                     <template scope="scope">{{scope.row.goodsName?scope.row.goodsName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="商品价格" align="center">
-                    <template scope="scope">{{scope.row.goodsPrice?scope.row.goodsPrice:'-'}}</template>
+                    <template scope="scope">{{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice)+'元':'0.00元'}}</template>
                 </el-table-column>
                 <el-table-column label="商品图片" align="center">
                     <template scope="scope">{{scope.row.goodsImgUrl?scope.row.goodsImgUrl:'-'}}</template>

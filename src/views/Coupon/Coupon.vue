@@ -22,26 +22,29 @@
                 <el-table-column label="数量" align="center">
                     <template scope="scope">{{scope.row.couponNumber?scope.row.couponNumber:'-'}}</template>
                 </el-table-column>
+                <el-table-column label="金额" align="center" width="120px">
+                    <template scope="scope">{{scope.row.money?formatMoney(scope.row.money)+'元':'0.00元'}}</template>
+                </el-table-column>
+                <el-table-column label="最低消费额度" width="120px" align="center">
+                    <template scope="scope">{{scope.row.minimum?formatMoney(scope.row.minimum)+'元':'0.00元'}}</template>
+                </el-table-column>
+                <el-table-column label="领取方式" align="center">
+                    <template scope="scope">{{formatPickUpType(scope.row.pickUpType)}}</template>
+                </el-table-column>
+                <el-table-column label="使用范围" align="center">
+                    <template scope="scope">{{formatUseSocpe(scope.row.useSocpe)}}</template>
+                </el-table-column>
+                <el-table-column label="是否可领取" width="180px" align="center">
+                    <template scope="scope">{{scope.row.canPickUp?'是':'否'}}</template>
+                </el-table-column>
+                <el-table-column label="最大领取数量" width="180px" align="center">
+                    <template scope="scope">{{scope.row.maxPickUpNumber?scope.row.maxPickUpNumber:'0'}}</template>
+                </el-table-column>
                 <el-table-column label="开始时间" width="180px" align="center">
                     <template scope="scope">{{scope.row.startTime?moment(scope.row.startTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
                 </el-table-column>
                 <el-table-column label="结束时间" width="180px" align="center">
                     <template scope="scope">{{scope.row.endTime?moment(scope.row.endTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
-                </el-table-column>
-                <el-table-column label="最低消费额度" width="120px" align="center">
-                    <template scope="scope">{{scope.row.minimum?scope.row.minimum:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="领取方式" align="center">
-                    <template scope="scope">{{formatPickUpType(scope.row.pickUpType)}}</template>
-                </el-table-column>
-                <el-table-column label="类型" align="center">
-                    <template scope="scope">{{formatType(scope.row.type)}}</template>
-                </el-table-column>
-                <el-table-column label="折扣/金额" align="center">
-                    <template scope="scope">{{scope.row.discount?scope.row.discount+'折':(scope.row.money?scope.row.money+'元':'-')}}</template>
-                </el-table-column>
-                <el-table-column label="使用范围" align="center">
-                    <template scope="scope">{{formatUseSocpe(scope.row.useSocpe)}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
                     <template scope="scope">
@@ -59,15 +62,8 @@
                 <el-form-item label="优惠券数量">
                     <el-input type="text" v-model.number="formInline.couponNumber" auto-complete="off" placeholder="优惠券数量"></el-input>
                 </el-form-item>
-                <el-form-item label="优惠券类型">
-                    <el-radio class="radio" v-model="formInline.type" label="CASH">现金</el-radio>
-                    <el-radio class="radio" v-model="formInline.type" label="DISCOUNT">折扣</el-radio>
-                </el-form-item>
-                <el-form-item v-if="formInline.type==='CASH'" label="金额">
+                <el-form-item label="金额">
                     <el-input type="text" v-model.number="formInline.money" auto-complete="off" placeholder="金额"></el-input>
-                </el-form-item>
-                <el-form-item v-else-if="formInline.type==='DISCOUNT'" label="折扣">
-                    <el-input type="text" v-model.number="formInline.discount" auto-complete="off" placeholder="折扣"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间">
                     <el-date-picker v-model="formInline.startTime" type="datetime" placeholder="选择开始时间" @change="formatStartTime"></el-date-picker>
@@ -115,13 +111,11 @@ export default {
                 couponId: 0,
                 couponName: "",
                 couponNumber: 0,
-                discount: 0,
                 endTime: "",
                 minimum: 0,
                 money: 0,
                 pickUpType: "CONSUME",
                 startTime: "",
-                type: "CASH",
                 useSocpe: "SHOP"
             },
             searchContent: '',
@@ -160,13 +154,11 @@ export default {
                 couponId: 0,
                 couponName: "",
                 couponNumber: 0,
-                discount: 0,
                 endTime: "",
                 minimum: 0,
                 money: 0,
                 pickUpType: "CONSUME",
                 startTime: "",
-                type: "CASH",
                 useSocpe: "SHOP"
             }
         },
@@ -206,13 +198,11 @@ export default {
                 couponId: row.couponId,
                 couponName: row.couponName,
                 couponNumber: row.couponNumber,
-                discount: row.discount,
                 endTime: row.endTime,
                 minimum: row.minimum,
                 money: row.money,
                 pickUpType: row.pickUpType,
                 startTime: row.startTime,
-                type: row.type,
                 useSocpe: row.useSocpe
             }
         },

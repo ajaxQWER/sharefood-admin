@@ -16,6 +16,12 @@
         </el-col>
         <el-col>
             <el-table :data="shopList">
+                <el-table-column label="店铺ID" align="center">
+                    <template scope="scope">{{scope.row.shopId}}</template>
+                </el-table-column>
+                <el-table-column label="缩略图" align="center">
+                    <template scope="scope">{{scope.row.image?scope.row.image:'-'}}</template>
+                </el-table-column>
                 <el-table-column label="名称" width="160px" align="center">
                     <template scope="scope">{{scope.row.name?scope.row.name:'-'}}</template>
                 </el-table-column>
@@ -28,37 +34,13 @@
                 <el-table-column label="联系电话" width="120px" align="center">
                     <template scope="scope">{{scope.row.number?scope.row.number:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="销量" align="center">
-                    <template scope="scope">{{scope.row.sales?scope.row.sales:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="介绍" align="center">
-                    <template scope="scope">{{scope.row.introduce?scope.row.introduce:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="评分" align="center">
-                    <template scope="scope">{{scope.row.score?scope.row.score:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="轮播图" align="center">
-                    <template scope="scope">{{scope.row.carousel?scope.row.carousel:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="缩略图" align="center">
-                    <template scope="scope">{{scope.row.image?scope.row.image:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="距离" align="center">
-                    <template scope="scope">{{scope.row.instance?scope.row.instance:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="经度" align="center">
-                    <template scope="scope">{{scope.row.longitude?scope.row.longitude:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="纬度" align="center">
-                    <template scope="scope">{{scope.row.latitude?scope.row.latitude:'-'}}</template>
-                </el-table-column>
                 <el-table-column label="状态" align="center">
                     <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
                     <template scope="scope">
-                        <el-button size="small" type="primary" @click="putAwayShop(scope.$index, scope.row)">上架</el-button>
-                        <el-button size="small" type="danger" @click="soldOutShop(scope.$index, scope.row)">下架</el-button>
+                        <el-button size="small" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
+                        <el-button size="small" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
                     </template>
                 </el-table-column>
             </el-table>

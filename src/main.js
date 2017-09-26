@@ -26,9 +26,29 @@ Vue.use(VueRouter)
 //   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','AMap.Geolocation']
 // });
 
+//金额格式化
+var toDecimal2 = function(num) {
+    var parseFloatNum = parseFloat(num);
+    if (isNaN(parseFloatNum)) {
+        return false;
+    }
+    var float = Math.round(num * 100) / 100;
+    var floatString = float.toString();
+    var index = floatString.indexOf('.');
+    if (index < 0) {
+        index = floatString.length;
+        floatString += '.';
+    }
+    while (floatString.length <= index + 2) {
+        floatString += '0';
+    }
+    return floatString;
+}
+
 Object.defineProperty(Vue.prototype, 'moment', {value: moment});
 Object.defineProperty(Vue.prototype, 'UPLOADURL', {value: 'http://www.baidu.com'});
 Object.defineProperty(Vue.prototype, 'BASEURL', {value: ''});
+Object.defineProperty(Vue.prototype, 'formatMoney', {value: toDecimal2});
 
 const router = new VueRouter({
     mode:"history",
