@@ -6,7 +6,7 @@
         <el-col>
             <el-form :inline="true">
                 <el-form-item label="搜索商品">
-                    <el-input placeholder="请输入商品名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
+                    <el-input placeholder="请输入商品名称" icon="search" v-model="searchContent" :on-icon-click="searchGoodsById">
                     </el-input>
                 </el-form-item>
             </el-form>
@@ -80,7 +80,7 @@ export default {
             })
         },
         //搜索
-        searchCouponById: function() {
+        searchGoodsById: function() {
             this.getGoodsLists();
         },
         //分页

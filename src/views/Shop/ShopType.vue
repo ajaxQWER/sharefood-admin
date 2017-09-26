@@ -9,13 +9,13 @@
                     <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加分类</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-input placeholder="请输入分类名称" icon="search" v-model="searchContent" :on-icon-click="searchVideoCategoryById">
+                    <el-input placeholder="请输入分类名称" icon="search" v-model="searchContent" :on-icon-click="searchShopCategory">
                     </el-input>
                 </el-form-item>
             </el-form>
         </el-col>
         <el-col>
-            <el-table :data="videoCategoryLists">
+            <el-table :data="shopCategoryLists">
                 <el-table-column prop="shopCategoryName" label="分类名称" align="center"></el-table-column>
                 <el-table-column prop="sortOrder" label="排序值" align="center"></el-table-column>
                 <el-table-column label="图标" align="center">
@@ -83,7 +83,7 @@ export default {
             pageSize: 10,
             counts: 0,
             isAdd: true,
-            videoCategoryLists: null
+            shopCategoryLists: null
         }
     },
     created: function() {
@@ -96,11 +96,11 @@ export default {
             shopCategoryList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopCategoryName: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
-                this.videoCategoryLists = data.list;
+                this.shopCategoryLists = data.list;
             })
         },
         //搜索
-        searchVideoCategoryById: function() {
+        searchShopCategory: function() {
             this.getCategoryLists();
         },
         //显示添加弹窗
