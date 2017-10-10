@@ -8,6 +8,7 @@ import Goods from './views/Goods/Goods.vue'
 import ShopList from './views/Shop/ShopList.vue'
 import ShopType from './views/Shop/ShopType.vue'
 import ShopDetail from './views/Shop/ShopDetail.vue'
+import ShopAppraise from './views/Shop/ShopAppraise.vue'
 import User from './views/User/User.vue'
 import Order from './views/Order/Order.vue'
 import OrderDetail from './views/Order/OrderDetail.vue'
@@ -74,6 +75,10 @@ let routes = [{
         path: '/shopType',
         component: ShopType,
         name: '店铺分类'
+    }, {
+        path: '/shopAppraise',
+        component: ShopAppraise,
+        name: '店铺评价'
     }]
 }, {
     path: '/',

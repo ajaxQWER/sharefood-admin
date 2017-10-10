@@ -158,6 +158,14 @@ export const findOrderById = params => {
     return ajax.get('admin/order/' + params.orderId, params);
 };
 
+//订单管理
+export const shopAppraiseList = params => {
+    return ajax.get('damin/shopAppraise', params);
+};
+export const findShopAppraiseById = params => {
+    return ajax.get('damin/shopAppraise/' + params.shopAppraiseId, params);
+};
+
 
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
