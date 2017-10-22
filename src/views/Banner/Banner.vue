@@ -16,11 +16,11 @@
         </el-col>
         <el-col>
             <el-table :data="bannerList">
-                <el-table-column prop="sortOrder" label="排序值" width="160px" align="center"></el-table-column>
-                <el-table-column label="是否显示" align="center">
+                <el-table-column prop="sortOrder" label="排序值" width="120px" align="center"></el-table-column>
+                <el-table-column label="是否显示" align="center" width="100px">
                     <template scope="scope">{{scope.row.show?'是':'否'}}</template>
                 </el-table-column>
-                <el-table-column label="缩略图" width="180px" align="center">
+                <el-table-column label="缩略图" align="center">
                     <template scope="scope"><img :src="formatImageUrl(scope.row.imageUrl)" alt=""></template>
                 </el-table-column>
                 <el-table-column prop="url" label="链接地址" width="180px" align="center"></el-table-column>

@@ -14,13 +14,10 @@
         <el-col>
             <el-table :data="shopAppraise">
                 <el-table-column label="用户名" width="160px" align="center">
-                    <template scope="scope">{{scope.row.username?scope.row.username:'-'}}</template>
+                    <template scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="订单id" width="160px" align="center">
                     <template scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="店铺id" width="160px" align="center">
-                    <template scope="scope">{{scope.row.shopId?scope.row.shopId:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="环境评价星级" width="160px" align="center">
                     <template scope="scope">{{scope.row.environmentShopAppraise?scope.row.environmentShopAppraise:'-'}}</template>
@@ -36,6 +33,15 @@
                 </el-table-column>
                 <el-table-column label="评价内容" width="160px" align="center">
                     <template scope="scope">{{scope.row.contentShopAppraise?scope.row.contentShopAppraise:'-'}}</template>
+                </el-table-column>
+                <el-table-column label="评价时间" width="160px" align="center">
+                    <template scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                </el-table-column>
+                <el-table-column label="评价浏览量" width="160px" align="center">
+                    <template scope="scope">{{scope.row.appraisePageView?scope.row.appraisePageView:'-'}}</template>
+                </el-table-column>
+                <el-table-column label="评价点赞数" width="160px" align="center">
+                    <template scope="scope">{{scope.row.appraisePraiseCount?scope.row.appraisePraiseCount:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="评价时间" align="center">
                     <template scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>

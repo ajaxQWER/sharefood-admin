@@ -9,9 +9,12 @@ import ShopList from './views/Shop/ShopList.vue'
 import ShopType from './views/Shop/ShopType.vue'
 import ShopDetail from './views/Shop/ShopDetail.vue'
 import ShopAppraise from './views/Shop/ShopAppraise.vue'
+import ShopAudit from './views/Shop/ShopAudit.vue'
+import ShopAuditDetail from './views/Shop/ShopAuditDetail.vue'
 import User from './views/User/User.vue'
 import Order from './views/Order/Order.vue'
 import OrderDetail from './views/Order/OrderDetail.vue'
+import AdminLogs from './views/AdminLogs/AdminLogs.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -79,6 +82,15 @@ let routes = [{
         path: '/shopAppraise',
         component: ShopAppraise,
         name: '店铺评价'
+    }, {
+        path: '/shopAudit',
+        component: ShopAudit,
+        name: '店铺审核'
+    }, {
+        path: '/shopAuditDetail',
+        component: ShopAuditDetail,
+        name: '店铺详情',
+        hidden: true
     }]
 }, {
     path: '/',
@@ -106,6 +118,15 @@ let routes = [{
     hidden: true,
     children: [
         { path: '/shopDetail', component: ShopDetail, name: '新增店铺' },
+    ]
+}, {
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-list-alt',
+    children: [
+        { path: '/adminLogs', component: AdminLogs, name: '日志管理' },
     ]
 }, {
     path: '*',

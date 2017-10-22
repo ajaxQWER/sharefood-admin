@@ -34,7 +34,7 @@ body {
 	top: 0px;
 	bottom: 0px;
 	width: 100%;
-	background-color: #8bc0de;
+	background-color: #8391a5;
 }
 
 .el-submenu [class^=fa] {

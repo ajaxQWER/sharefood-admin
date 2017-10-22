@@ -39,7 +39,7 @@ ajax.interceptors.response.use(function(res) {
         throw new Error(res.data.message);
     }
 
-    return res.data.data;
+    return (res.data.data?res.data.data:res.data.status);
 }, function(err) {
     console.error(err);
     ElementUI.Message.error({
@@ -60,6 +60,9 @@ export const updatePwd = params => {
 };
 export const getAdminInfo = params => {
     return ajax.get('admin/admin', params);
+};
+export const getAdminLogs = params => {
+    return ajax.get('admin/adminLogging', params);
 };
 
 //banner
@@ -158,12 +161,34 @@ export const findOrderById = params => {
     return ajax.get('admin/order/' + params.orderId, params);
 };
 
-//订单管理
+//店铺评价
 export const shopAppraiseList = params => {
     return ajax.get('damin/shopAppraise', params);
 };
 export const findShopAppraiseById = params => {
     return ajax.get('damin/shopAppraise/' + params.shopAppraiseId, params);
+};
+
+//店铺审核
+export const getShopAuditList = params => {
+    return ajax.get('admin/shopAudit', params);
+};
+export const passShopAudit = shopId => {
+    return ajax.post('admin/shopAudit/oncheck/' + shopId);
+};
+export const findShopAuditById = shopId => {
+    return ajax.get('admin/shopAudit/' + shopId);
+};
+export const rejectShopAudit = params => {
+    return ajax.delete('admin/shopAudit/' + params.shopId + '/' + params.unauditReason);
+};
+
+//地区
+export const getProvinceById = provinceId => {
+    return ajax.get('commons/region/area/province/' + provinceId);
+};
+export const getCityById = cityId => {
+    return ajax.get('commons/region/area/city/' + cityId);
 };
 
 

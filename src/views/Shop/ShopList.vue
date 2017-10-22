@@ -29,7 +29,7 @@
                     <template scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="营业时间" width="180px" align="center">
-                    <template scope="scope">{{scope.row.beginTime?scope.row.beginTime:'00:00:00'}} - {{scope.row.endTime?scope.row.endTime:'00:00:00'}}</template>
+                    <template scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00:00'}}</template>
                 </el-table-column>
                 <el-table-column label="联系电话" width="120px" align="center">
                     <template scope="scope">{{scope.row.number?scope.row.number:'-'}}</template>
