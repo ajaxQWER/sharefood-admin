@@ -20,7 +20,7 @@
                 <el-table-column prop="sortOrder" label="排序值" align="center"></el-table-column>
                 <el-table-column label="图标" align="center">
                     <template scope="scope">
-                        <img :src="UPLOADURL + scope.row.icon" :alt="scope.row.shopCategoryName">
+                        <img :src="UPLOADURL + scope.row.icon" :alt="scope.row.shopCategoryName" class="icon-img">
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
@@ -121,7 +121,7 @@ export default {
             console.log(this.isAdd)
             console.log(this.formInline)
             if (this.isAdd) {
-                addShopCateGory(this.formInline).then(data => {
+                addShopCategory(this.formInline).then(data => {
                     this.getCategoryLists();
                     this.$message({
                         message: '添加成功',
@@ -184,7 +184,7 @@ export default {
             var file = this.$refs.uploadImage.uploadFiles[0].raw;
             var fd = new FormData();
             fd.append('file', file);
-            fd.path = '/shopType';
+            fd.path = '/categorylogo';
             uploadFiles(fd).then(data => {
                 this.$message({
                     message: ' 上传图标成功',
@@ -218,6 +218,12 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    }
+    .icon-img{
+        width: 60px;
+    }
+    .banner-thumb{
+        width: 100%;
     }
 }
 </style>

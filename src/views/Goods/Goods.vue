@@ -20,7 +20,7 @@
                     <template scope="scope">{{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice)+'元':'0.00元'}}</template>
                 </el-table-column>
                 <el-table-column label="商品图片" align="center">
-                    <template scope="scope">{{scope.row.goodsImgUrl?scope.row.goodsImgUrl:'-'}}</template>
+                    <template scope="scope"><img :src="UPLOADURL + scope.row.goodsImgUrl" alt="" class="goods-img"></template>
                 </el-table-column>
                 <el-table-column label="商品状态" align="center">
                     <template scope="scope">{{formatGoodsStatus(scope.row.goodsStatus)}}</template>
@@ -152,6 +152,9 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    }
+    .goods-img{
+        width: 120px;
     }
 }
 </style>

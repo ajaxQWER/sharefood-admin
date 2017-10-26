@@ -16,7 +16,7 @@
                 <el-table-column label="用户名" width="160px" align="center">
                     <template scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="订单id" width="160px" align="center">
+                <el-table-column label="订单id" width="100px" align="center">
                     <template scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="环境评价星级" width="160px" align="center">
@@ -25,25 +25,25 @@
                 <el-table-column label="商品评价信息" width="160px" align="center">
                     <template scope="scope">{{scope.row.goodsAppraiseList?scope.row.goodsAppraiseList:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="服务评价星级" width="160px" align="center">
+                <el-table-column label="服务评价星级" width="120px" align="center">
                     <template scope="scope">{{scope.row.serviceShopAppraise?scope.row.serviceShopAppraise:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="味道评价星级" width="160px" align="center">
+                <el-table-column label="味道评价星级" width="120px" align="center">
                     <template scope="scope">{{scope.row.tasteShopAppraise?scope.row.tasteShopAppraise:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="评价内容" width="160px" align="center">
+                <el-table-column label="评价内容" align="center">
                     <template scope="scope">{{scope.row.contentShopAppraise?scope.row.contentShopAppraise:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="评价时间" width="160px" align="center">
+                <el-table-column label="评价时间" width="200px" align="center">
                     <template scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
-                <el-table-column label="评价浏览量" width="160px" align="center">
+                <el-table-column label="评价浏览量" width="120px" align="center">
                     <template scope="scope">{{scope.row.appraisePageView?scope.row.appraisePageView:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="评价点赞数" width="160px" align="center">
+                <el-table-column label="评价点赞数" width="120px" align="center">
                     <template scope="scope">{{scope.row.appraisePraiseCount?scope.row.appraisePraiseCount:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="评价时间" align="center">
+                <el-table-column label="评价时间" width="200px" align="center">
                     <template scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
             </el-table>

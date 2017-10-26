@@ -1,9 +1,8 @@
 {
-  "name": "vueadmin",
-  "version": "1.0.5",
-  "description": "vue admin project",
-  "author": "taylor <709161610@qq.com>",
-  "license": "MIT",
+  "name": "共享点餐后台管理系统",
+  "version": "1.0.0",
+  "description": "共享点餐后台管理系统",
+  "author": "薛将军 <449590828@qq.com>",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",

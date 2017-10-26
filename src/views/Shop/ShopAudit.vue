@@ -15,8 +15,12 @@
             <el-table :data="shopAuditLists">
                 <el-table-column prop="shopId" label="店铺ID" align="center"></el-table-column>
                 <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
-                <el-table-column prop="shopType" label="店铺类型" align="center"></el-table-column>
-                <el-table-column prop="audit" label="审核状态" align="center"></el-table-column>
+                <el-table-column label="店铺类型" align="center">
+                    <template scope="scope">{{formatShopType(scope.row.shopType)}}</template>
+                </el-table-column>
+                <el-table-column label="审核状态" align="center">
+                    <template scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
+                </el-table-column>
                 <el-table-column label="操作" width="200px" align="center">
                     <template scope="scope">
                         <el-button size="small" type="primary" @click="getAuditbyId(scope.$index, scope.row)">审核</el-button>
@@ -64,6 +68,26 @@ export default {
         },
         getAuditbyId: function(inde,row){
             this.$router.push({path: '/shopAuditDetail',query: {shopId:row.shopId}})
+        },
+        formatShopType: function(type){
+            switch(type){
+                case 'TAKEOUT':
+                    return '外卖';
+                case 'RESERVE':
+                    return '预定';
+                case 'RESERVE_TAKEOUT':
+                    return '预定加外卖';
+            }
+        },
+        formatAuditStatus: function(auditType){
+            switch(auditType){
+                case 'WAIT_AUDIT':
+                    return '等待审核';
+                case 'AUDIT_ADOPT':
+                    return '审核通过';
+                case 'AUDIT_UNADOPT':
+                    return '审核不通过';
+            }
         },
         //分页
         currentChange: function(val) {

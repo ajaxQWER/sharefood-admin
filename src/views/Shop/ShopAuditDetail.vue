@@ -30,16 +30,16 @@
                 <li>店铺门脸照：<img :src="shopDetail.shopFaceUrl" alt=""></li>
             </ul>
             <h3>资质信息</h3>
-            <h4>证件信息</h4>
-            <ul>
+            <h4 v-if="shopDetail.document">证件信息</h4>
+            <ul v-if="shopDetail.document">
                 <li>证件类型：{{formatDocumentType(shopDetail.document.documentType)}}</li>
                 <li>证件号码：{{shopDetail.document.documentNum}}</li>
                 <li>证件正面照：<img :src="formatImage(shopDetail.document.fullFacePhotoUrl)" alt=""></li>
                 <li>证件手持正面照：<img :src="formatImage(shopDetail.document.handFullFacePhotoUrl)" alt=""></li>
                 <li>证件反面照：<img :src="formatImage(shopDetail.document.reverseSideAsUrl)" alt=""></li>
             </ul>
-            <h4>主体资质</h4>
-            <ul>
+            <h4 v-if="shopDetail.subject">主体资质</h4>
+            <ul v-if="shopDetail.subject">
                 <li>主体资质类型：{{formatSubjectDocument(shopDetail.subject.subjectDocument)}}</li>
                 <li>主体资质有效期：{{shopDetail.subject.longTerm ? '长期' : (moment(shopDetail.subject.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.subject.endTime).format("YYYY-MM-DD"))}}</li>
                 <li>资质照片：<img :src="formatImage(shopDetail.subject.businessUrl)" alt=""></li>
@@ -49,8 +49,8 @@
                 <li>注册号：{{shopDetail.subject.regNumber}}</li>
                 <li>单位名称：{{shopDetail.subject.unitName}}</li>
             </ul>
-            <h4>行业资质</h4>
-            <ul>
+            <h4 v-if="shopDetail.industry">行业资质</h4>
+            <ul v-if="shopDetail.industry">
                 <li>资质类型：{{formatIntelligence(shopDetail.industry.intelligence)}}</li>
                 <li>许可证有效期：{{shopDetail.industry.longTerm ? '长期' : (moment(shopDetail.industry.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.industry.endTime).format("YYYY-MM-DD"))}}</li>
                 <li>许可证照片：<img :src="formatImage(shopDetail.industry.foodUrl)" alt=""></li>
@@ -59,8 +59,8 @@
                 <li>许可证编号：{{shopDetail.industry.licenseNumber}}</li>
                 <li>证件单位名称：{{shopDetail.industry.unitName}}</li>
             </ul>
-            <h3>结算信息</h3>
-            <ul>
+            <h3 v-if="shopDetail.settle">结算信息</h3>
+            <ul v-if="shopDetail.settle">
                 <li>银行卡号：{{shopDetail.settle.bankNumber}}</li>
                 <li>所属银行：{{shopDetail.settle.bankHouse}}</li>
                 <li>银行所在地：{{provinceName}}{{cityName}}</li>
@@ -105,7 +105,6 @@ export default {
             return;
         }
         this.getShopAuditDetail(shopId);
-
         
     },
     methods: {
@@ -204,7 +203,7 @@ export default {
         },
         getProvinceName: function(){
             try{
-                getProvinceById(this.shopDetail.settle.provinceId).then(res=>{
+                getProvinceById(this.shopDetail.provinceId).then(res=>{
                     this.provinceName = res.provinceName;
                 })
             } catch(e){
@@ -213,7 +212,7 @@ export default {
         },
         geCityName: function(){
             try{
-                getCityById(this.shopDetail.settle.cityId).then(res=>{
+                getCityById(this.shopDetail.cityId).then(res=>{
                     this.cityName = res.cityName;
                 })
             } catch(e){

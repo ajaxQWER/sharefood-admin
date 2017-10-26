@@ -1,9 +1,8 @@
 import ElementUI from 'element-ui'
 import axios from 'axios';
-import Qs from 'Qs'
 
 var ajax = axios.create({
-    baseURL: 'http://47.92.68.45:18080',
+    baseURL: 'http://api.sf.chinagjgx.com',
     headers: {},
     withCredentials: true, //cookie
     crossDomain: true //跨域
@@ -189,6 +188,40 @@ export const getProvinceById = provinceId => {
 };
 export const getCityById = cityId => {
     return ajax.get('commons/region/area/city/' + cityId);
+};
+
+//文章管理
+//文章分类
+export const getArticleCategoryList = parms => {
+    return ajax.get('admin/articleCategory', parms);
+};
+export const addArticleCategory = params => {
+    return ajax.put('admin/articleCategory', params);
+};
+export const deleteArticleCategoryById = id => {
+    return ajax.delete('admin/articleCategory/' + id);
+};
+export const getArticleCategoryById = id => {
+    return ajax.get('admin/articleCategory/' + id);
+};
+export const updateArticleCategoryById = params => {
+    return ajax.post('admin/articleCategory/' + params.articleCategoryId, params);
+};
+//文章详情
+export const getArticleList = parms => {
+    return ajax.get('admin/article', parms);
+};
+export const addArticle = params => {
+    return ajax.put('admin/article', params);
+};
+export const deleteArticleById = id => {
+    return ajax.delete('admin/article/' + id);
+};
+export const getArticleById = id => {
+    return ajax.get('admin/article/' + id);
+};
+export const updateArticleById = params => {
+    return ajax.post('admin/article/' + params.articleId, params);
 };
 
 

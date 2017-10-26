@@ -19,8 +19,8 @@
                 <el-table-column label="店铺ID" align="center">
                     <template scope="scope">{{scope.row.shopId}}</template>
                 </el-table-column>
-                <el-table-column label="缩略图" align="center">
-                    <template scope="scope">{{scope.row.image?scope.row.image:'-'}}</template>
+                <el-table-column label="LOGO" align="center" width="140px">
+                    <template scope="scope"><img :src="UPLOADURL + scope.row.logoUrl" alt="" class="logo-img"></template>
                 </el-table-column>
                 <el-table-column label="名称" width="160px" align="center">
                     <template scope="scope">{{scope.row.name?scope.row.name:'-'}}</template>
@@ -31,8 +31,8 @@
                 <el-table-column label="营业时间" width="180px" align="center">
                     <template scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00:00'}}</template>
                 </el-table-column>
-                <el-table-column label="联系电话" width="120px" align="center">
-                    <template scope="scope">{{scope.row.number?scope.row.number:'-'}}</template>
+                <el-table-column label="联系电话" width="160px" align="center">
+                    <template scope="scope">{{scope.row.phoneNum?scope.row.phoneNum:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="状态" align="center">
                     <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
@@ -157,6 +157,9 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    }
+    .logo-img{
+        width: 120px;
     }
     .amap-demo {
         height: 500px;

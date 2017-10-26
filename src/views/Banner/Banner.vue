@@ -21,7 +21,7 @@
                     <template scope="scope">{{scope.row.show?'是':'否'}}</template>
                 </el-table-column>
                 <el-table-column label="缩略图" align="center">
-                    <template scope="scope"><img :src="formatImageUrl(scope.row.imageUrl)" alt=""></template>
+                    <template scope="scope"><img :src="formatImageUrl(scope.row.imageUrl)" alt="" class="thumb-img"></template>
                 </el-table-column>
                 <el-table-column prop="url" label="链接地址" width="180px" align="center"></el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
@@ -231,6 +231,9 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    }
+    .thumb-img{
+        width: 320px;
     }
     .banner-thumb {
         width: 100%;

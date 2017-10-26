@@ -15,6 +15,8 @@ import User from './views/User/User.vue'
 import Order from './views/Order/Order.vue'
 import OrderDetail from './views/Order/OrderDetail.vue'
 import AdminLogs from './views/AdminLogs/AdminLogs.vue'
+import ArticleList from './views/Article/ArticleList.vue'
+import ArticleType from './views/Article/ArticleType.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -91,6 +93,20 @@ let routes = [{
         component: ShopAuditDetail,
         name: '店铺详情',
         hidden: true
+    }]
+}, {
+    path: '/',
+    component: Home,
+    name: '文章管理',
+    iconCls: 'fa fa-shopping-bag', //图标样式class
+    children: [{
+        path: '/articleType',
+        component: ArticleType,
+        name: '文章分类'
+    }, {
+        path: '/articleList',
+        component: ArticleList,
+        name: '文章列表'
     }]
 }, {
     path: '/',
