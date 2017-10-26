@@ -15,6 +15,7 @@
             <el-table :data="shopAuditLists">
                 <el-table-column prop="shopId" label="店铺ID" align="center"></el-table-column>
                 <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
+                <el-table-column prop="phoneNum" label="注册手机号" align="center"></el-table-column>
                 <el-table-column label="店铺类型" align="center">
                     <template scope="scope">{{formatShopType(scope.row.shopType)}}</template>
                 </el-table-column>

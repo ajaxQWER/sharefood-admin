@@ -3,8 +3,8 @@
         <el-col :span="24" class="header">
             <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
                 <router-link to="/index" class="router-link">
-                    <img src="" alt="logo" v-if="collapsed">
-                    <span v-else-if="!collapsed">美食分享后台管理系统</span>
+                    <img src="../assets/images/logo.png" alt="logo" v-if="collapsed">
+                    <span v-else-if="!collapsed">共享点餐后台管理系统</span>
                 </router-link>
             </el-col>
             <el-col :span="10">
@@ -186,7 +186,7 @@ export default {
                 text-decoration: none;
             }
             img {
-                width: 40px;
+                width: 100%;
                 vertical-align: middle;
             }
             .txt {
