@@ -5,9 +5,6 @@
         </el-col>
         <el-col>
             <el-form :inline="true">
-                <!-- <el-form-item>
-                    <el-button type="primary" @click="goToAddShop"><i class="el-icon-plus el-icon--left"></i>添加店铺</el-button>
-                </el-form-item> -->
                 <el-form-item label="搜索店铺">
                     <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShop">
                     </el-input>
@@ -22,10 +19,10 @@
                 <el-table-column label="LOGO" align="center" width="140px">
                     <template scope="scope"><img :src="UPLOADURL + scope.row.logoUrl" alt="" class="logo-img"></template>
                 </el-table-column>
-                <el-table-column label="名称" width="160px" align="center">
+                <el-table-column label="名称" width="240px" align="center">
                     <template scope="scope">{{scope.row.name?scope.row.name:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="地址" width="160px" align="center">
+                <el-table-column label="地址" width="280px" align="center">
                     <template scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="营业时间" width="180px" align="center">

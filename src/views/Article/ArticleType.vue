@@ -23,7 +23,7 @@
                     <template scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="排序值" align="center">
-                    <template scope="scope">{{scope.row.sortOrder?scope.row.sortOrder:'-'}}</template>
+                    <template scope="scope">{{scope.row.sortOrder}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
                     <template scope="scope">

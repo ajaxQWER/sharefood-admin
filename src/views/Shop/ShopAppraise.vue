@@ -1,7 +1,7 @@
 <template>
     <el-row class="lives-news">
         <el-col class="title">
-            <h3>用户管理</h3>
+            <h3>店铺评价</h3>
         </el-col>
         <el-col>
             <el-form :inline="true">

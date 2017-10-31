@@ -19,11 +19,20 @@
                 <el-table-column label="订单名称" align="center">
                     <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                 </el-table-column>
+                <el-table-column label="下单人" align="center">
+                    <template scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
+                </el-table-column>
+                <el-table-column label="下单时间" align="center">
+                    <template scope="scope">{{moment(scope.row.addTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                </el-table-column>
                 <el-table-column label="订单价格" align="center">
                     <template scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
                 </el-table-column>
                 <el-table-column label="订单状态" align="center">
-                    <template scope="scope">{{formatOrderStatus(scope.row.orderStatus)}}</template>
+                    <template scope="scope">
+                        <span v-if="scope.row.orderStatus=='CANCELLATION'" style="color:red;">{{formatOrderStatus(scope.row.orderStatus)}}</span>
+                        <span v-else>{{formatOrderStatus(scope.row.orderStatus)}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="店铺名称" align="center">
                     <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
@@ -52,7 +61,7 @@ export default {
         return {
             searchContent: '',
             pageId: 1,
-            pageSize: 10,
+            pageSize: 20,
             counts: 0,
             orderLists: null
         }
@@ -87,9 +96,9 @@ export default {
                 case 'PAYED':
                     return '支付完成,等待发货';
                 case 'SHIPPING':
-                    return '';
-                case 'CONFIRM_RECEIVE_GOODS':
                     return '配送中';
+                case 'CANCELLATION':
+                    return '已取消';
                 case 'TRANSACT_FINISHED':
                     return '交易完成';
                 default:

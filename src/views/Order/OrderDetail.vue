@@ -16,12 +16,13 @@
                 <li>订单名称：{{orderLists.orderName}}</li>
                 <li>订单价格：{{orderLists.orderPrice?formatMoney(orderLists.orderPrice):'0.00'}}元</li>
                 <li>订单状态：{{formatOrderStatus(orderLists.orderStatus)}}</li>
+                <li>订单类型：{{formatOrderType(orderLists.orderType)}}</li>
                 <!-- <li>订单支付SN号：{{orderLists.paymentSN}}</li> -->
-                <li>订单备注：{{orderLists.orderContent}}</li>
+                <li>订单备注：{{orderLists.orderContent?orderLists.orderContent:'-'}}</li>
                 <li>订单添加时间：{{moment(orderLists.addTime).format('YYYY-MM-DD HH:mm:ss')}}</li>
-                <li>联系人：{{orderLists.contactName?orderLists.contactName:'-'}}</li>
-                <li>联系电话：{{orderLists.contactPhone?orderLists.contactPhone:'-'}}</li>
-                <li>地址：{{orderLists.address?orderLists.address:'-'}}</li>
+                <li>联系人：{{orderLists.orderContact.contactName?orderLists.orderContact.contactName:'-'}}</li>
+                <li>联系电话：{{orderLists.orderContact.contactPhone?orderLists.orderContact.contactPhone:'-'}}</li>
+                <li>地址：{{orderLists.orderContact.address?orderLists.orderContact.address:'-'}}</li>
                 <!-- <li>优惠券详情：{{orderLists.coupon}}</li> -->
                 <!-- <li>可使用优惠券数量：{{orderLists.couponNum}}</li> -->
                 <li>优惠券序列号：{{orderLists.couponSNId}}</li>
@@ -29,7 +30,7 @@
                 <li>是否支付完成：{{orderLists.isFinishPay?'是':'否'}}</li>
                 <li>是否包房：{{orderLists.isPrivateRoom?'是':'否'}}</li>
                 <li v-if="orderLists.orderGoods.length">订单商品：
-                    <el-table :data="orderLists.orderGoods" style="width: 500px; margin-left: 20px;">
+                    <el-table :data="orderLists.orderGoods" style="width: 800px; margin-left: 20px;">
                         <el-table-column label="序号" type="index" width="100" align="center"></el-table-column>
                         <el-table-column property="goodsName" label="商品名称" align="center"></el-table-column>
                         <el-table-column property="goodsCount" label="商品数量" align="center"></el-table-column>
@@ -85,9 +86,9 @@ export default {
                 case 'PAYED':
                     return '支付完成,等待发货';
                 case 'SHIPPING':
-                    return '';
-                case 'CONFIRM_RECEIVE_GOODS':
                     return '配送中';
+                case 'CANCELLATION':
+                    return '已取消';
                 case 'TRANSACT_FINISHED':
                     return '交易完成';
                 default:
@@ -96,10 +97,20 @@ export default {
         },
         formatPayType: function(type){
             switch(type){
-                case 'wx':
-                    return '微信支付';
-                case 'alipay':
-                    return '支付宝支付';
+                case 'WX':
+                    return '微信';
+                case 'ALIPAY':
+                    return '支付宝';
+                default:
+                    return '-'
+            }
+        },
+        formatOrderType: function(type){
+            switch(type){
+                case 'TAKEOUT':
+                    return '外卖';
+                case 'RESERVE':
+                    return '预定';
                 default:
                     return '-'
             }

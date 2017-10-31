@@ -22,7 +22,7 @@
                 <el-table-column label="商品图片" align="center">
                     <template scope="scope"><img :src="UPLOADURL + scope.row.goodsImgUrl" alt="" class="goods-img"></template>
                 </el-table-column>
-                <el-table-column label="商品状态" align="center">
+                <el-table-column label="商品状态" width="100px" align="center">
                     <template scope="scope">{{formatGoodsStatus(scope.row.goodsStatus)}}</template>
                 </el-table-column>
                 <el-table-column label="商品备注" align="center">
@@ -31,7 +31,7 @@
                 <el-table-column label="添加时间" width="180px" align="center">
                     <template scope="scope">{{moment(scope.row.goodsAddTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
-                <el-table-column label="店铺名称" width="120px" align="center">
+                <el-table-column label="店铺名称" width="200px" align="center">
                     <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">

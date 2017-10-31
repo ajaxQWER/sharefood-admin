@@ -19,9 +19,6 @@
                 <el-table-column label="名称" width="160px" align="center">
                     <template scope="scope">{{scope.row.couponName?scope.row.couponName:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="数量" align="center">
-                    <template scope="scope">{{scope.row.couponNumber?scope.row.couponNumber:'-'}}</template>
-                </el-table-column>
                 <el-table-column label="金额" align="center" width="120px">
                     <template scope="scope">{{scope.row.money?formatMoney(scope.row.money)+'元':'0.00元'}}</template>
                 </el-table-column>
@@ -39,6 +36,9 @@
                 </el-table-column>
                 <el-table-column label="最大领取数量" width="180px" align="center">
                     <template scope="scope">{{scope.row.maxPickUpNumber?scope.row.maxPickUpNumber:'0'}}</template>
+                </el-table-column>
+                <el-table-column label="已领数量" align="center">
+                    <template scope="scope">{{scope.row.pickUped?scope.row.pickUped:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="开始时间" width="180px" align="center">
                     <template scope="scope">{{scope.row.startTime?moment(scope.row.startTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
