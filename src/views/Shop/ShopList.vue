@@ -20,7 +20,7 @@
                     <template scope="scope"><img :src="UPLOADURL + scope.row.logoUrl" alt="" class="logo-img"></template>
                 </el-table-column>
                 <el-table-column label="名称" width="240px" align="center">
-                    <template scope="scope">{{scope.row.name?scope.row.name:'-'}}</template>
+                    <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="地址" width="280px" align="center">
                     <template scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
