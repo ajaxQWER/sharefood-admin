@@ -1,33 +1,33 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
+        <el-row class="title">
             <h3>店铺详情</h3>
-        </el-col>
-        <el-col>
+        </el-row>
+        <el-row>
             <el-form :inline="true">
                 <el-form-item>
                     <el-button type="primary" icon="arrow-left" @click="back">返回审核列表</el-button>
                 </el-form-item>
             </el-form>
-        </el-col>
-        <el-col v-if="shopDetail">
+        </el-row>
+        <el-row v-if="shopDetail">
             <h3>店铺基本信息</h3>
             <ul>
-                <li>店铺ID：{{shopDetail.shopId}}</li>
-                <li>店铺名称：{{shopDetail.shopName}}</li>
-                <li>店铺类型：{{formatShopType(shopDetail.shopType)}}</li>
-                <li>审核状态：{{formatAuditStaus(shopDetail.audit)}}</li>
-                <li>店铺地址：{{shopDetail.address}}</li>
-                <li>营业时间：{{shopDetail.busBeginTime}}-{{shopDetail.busEndTime}}</li>
-                <li>配送费：{{shopDetail.fee}}</li>
-                <li>送餐电话：{{shopDetail.takeOutPhone}}</li>
-                <li>店铺上架状态：{{shopDetail.shelves?'上架':'下架'}}</li>
-                <li>店铺注册手机号：{{shopDetail.phoneNum}}</li>
-                <li>店铺联系人：{{shopDetail.name}}</li>
-                <li>店铺分类：{{shopDetail.shopCategoryName}}</li>
-                <li>店铺logo：<img :src="formatImage(shopDetail.logoUrl)" alt=""></li>
-                <li>店内照：<img :src="formatImage(shopDetail.shopInnerUrl)" alt=""></li>
-                <li>店铺门脸照：<img :src="shopDetail.shopFaceUrl" alt=""></li>
+                <li>店铺ID：{{shopDetail.detail.shopId}}</li>
+                <li>店铺名称：{{shopDetail.detail.shopName}}</li>
+                <li>店铺类型：{{formatShopType(shopDetail.detail.shopType)}}</li>
+                <li>审核状态：{{formatAuditStaus(shopDetail.detail.audit)}}</li>
+                <li>店铺地址：{{shopDetail.detail.address}}</li>
+                <li>营业时间：{{shopDetail.detail.busBeginTime}}-{{shopDetail.detail.busEndTime}}</li>
+                <li>配送费：{{shopDetail.detail.fee}}</li>
+                <li>送餐电话：{{shopDetail.detail.takeOutPhone}}</li>
+                <li>店铺上架状态：{{shopDetail.detail.shelves?'上架':'下架'}}</li>
+                <li>店铺注册手机号：{{shopDetail.detail.phoneNum}}</li>
+                <li>店铺联系人：{{shopDetail.detail.name}}</li>
+                <li>店铺分类：{{shopDetail.detail.shopCategoryName}}</li>
+                <li>店铺logo：<img :src="UPLOADURL +'/'+ shopDetail.detail.logoUrl" alt=""></li>
+                <li>店内照：<img :src="formatImage(shopDetail.detail.shopInnerUrl)" alt=""></li>
+                <li>店铺门脸照：<img :src="shopDetail.detail.shopFaceUrl" alt=""></li>
             </ul>
             <h3>资质信息</h3>
             <h4 v-if="shopDetail.document">证件信息</h4>
@@ -44,7 +44,6 @@
                 <li>主体资质有效期：{{shopDetail.subject.longTerm ? '长期' : (moment(shopDetail.subject.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.subject.endTime).format("YYYY-MM-DD"))}}</li>
                 <li>资质照片：<img :src="formatImage(shopDetail.subject.businessUrl)" alt=""></li>
                 <li>法定代表人 ：{{shopDetail.subject.legal}}</li>
-                <li>长期：{{shopDetail.subject.longTerm}}</li>
                 <li>注册地址：{{shopDetail.subject.regAddress}}</li>
                 <li>注册号：{{shopDetail.subject.regNumber}}</li>
                 <li>单位名称：{{shopDetail.subject.unitName}}</li>
@@ -59,20 +58,18 @@
                 <li>许可证编号：{{shopDetail.industry.licenseNumber}}</li>
                 <li>证件单位名称：{{shopDetail.industry.unitName}}</li>
             </ul>
-            <h3 v-if="shopDetail.settle">结算信息</h3>
-            <ul v-if="shopDetail.settle">
-                <li>银行卡号：{{shopDetail.settle.bankNumber}}</li>
-                <li>所属银行：{{shopDetail.settle.bankHouse}}</li>
+            <h3 v-if="shopDetail.settlement">结算信息</h3>
+            <ul v-if="shopDetail.settlement">
+                <li>银行卡号：{{shopDetail.settlement.bankNumber}}</li>
+                <li>所属银行：{{shopDetail.settlement.bankHouse}}</li>
                 <li>银行所在地：{{provinceName}}{{cityName}}</li>
-                <li>开户支行：{{shopDetail.settle.openBank}}</li>
+                <li>开户支行：{{shopDetail.settlement.openBank}}</li>
             </ul>
-        </el-col>
+        </el-row>
         <el-row>
-            <el-col>
-                <span>审核操作：</span>
-                <el-button type="primary" @click="pass">通过</el-button>
-                <el-button type="danger" @click="reject">拒绝</el-button>
-            </el-col>
+            <span>审核操作：</span>
+            <el-button type="primary" @click="pass">通过</el-button>
+            <el-button type="danger" @click="reject">拒绝</el-button>
         </el-row>
     </el-row>
 </template>
@@ -203,19 +200,23 @@ export default {
         },
         getProvinceName: function(){
             try{
-                getProvinceById(this.shopDetail.provinceId).then(res=>{
+                getProvinceById(this.shopDetail.settlement.provinceId).then(res=>{
                     this.provinceName = res.provinceName;
+                }).catch(err=>{
+                    console.log(err)
                 })
-            } catch(e){
+            } catch(e) {
                 console.log(e)
             }
         },
         geCityName: function(){
             try{
-                getCityById(this.shopDetail.cityId).then(res=>{
+                getCityById(this.shopDetail.settlement.cityId).then(res=>{
                     this.cityName = res.cityName;
+                }).catch(err=>{
+                    console.log(err)
                 })
-            } catch(e){
+            } catch(e) {
                 console.log(e)
             }
         },
