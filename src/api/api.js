@@ -2,7 +2,8 @@ import ElementUI from 'element-ui'
 import axios from 'axios';
 
 var ajax = axios.create({
-    baseURL: 'http://api.sf.chinagjgx.com',
+    baseURL: process.env.BASE_URL, //测试
+    // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
     withCredentials: true, //cookie
     crossDomain: true //跨域
