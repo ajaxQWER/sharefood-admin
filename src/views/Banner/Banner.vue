@@ -44,13 +44,13 @@
                     <el-input type="text" v-model="formInline.url" auto-complete="off" placeholder="链接地址"></el-input>
                 </el-form-item>
                 <el-form-item label="缩略图">
-                    <el-upload ref="uploadBanner" action="" :http-request="uploadBanner" :show-file-list="false">
+                    <el-upload class="avatar-uploader" :headers="uploadHeader" :action="BASEURL+'/commons/upload/banner'" :show-file-list="false" :on-success="handleAvatarSuccess">
                         <el-button size="small" type="primary" :loading="uploadLoading">点击上传banner</el-button>
                     </el-upload>
                 </el-form-item>
             </el-form>
             <div>
-                <img :src="UPLOADURL+formInline.imageUrl" alt="" class="banner-thumb">
+                <img v-if="formInline.imageUrl" :src="UPLOADURL+formInline.imageUrl" alt="" class="banner-thumb">
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancelAddCategory">取 消</el-button>
@@ -90,7 +90,10 @@ export default {
             counts: 0,
             isAdd: true,
             uploadLoading: false,
-            bannerList: null
+            bannerList: null,
+            uploadHeader: {
+                token: sessionStorage.getItem('jwt')
+            }
         }
     },
     created: function() {
@@ -195,19 +198,38 @@ export default {
         formatImageUrl: function(url) {
             return this.UPLOADURL + url;
         },
+        handleAvatarSuccess: function(res){
+            console.log(res)
+            if(res.status){
+                this.$message({
+                    message: '上传banner成功',
+                    type: 'success'
+                })
+                this.formInline.imageUrl = res.data.originalUrl;
+            }else{
+                this.$message({
+                    message: '上传banner失败',
+                    type: 'error'
+                })
+            }
+        },
         //banner上传
         uploadBanner: function() {
+            console.log(this.$refs.uploadBanner)
             var file = this.$refs.uploadBanner.uploadFiles[0].raw;
             var fd = new FormData();
             fd.append('file', file);
             fd.path = '/banner';
             this.uploadLoading = true;
             uploadFiles(fd).then(data => {
+                // console.log(data)
                 this.$message({
                     message: ' 上传banner成功',
                     type: 'success'
                 })
                 this.formInline.imageUrl = data.originalUrl;
+                console.log(file)
+                this.tempUrl = URL.createObjectURL(file);
                 this.uploadLoading = false;
             }).catch(err=>{
                 console.log(err)
