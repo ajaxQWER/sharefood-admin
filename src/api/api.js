@@ -196,6 +196,9 @@ export const getCityById = cityId => {
 export const getArticleCategoryList = parms => {
     return ajax.get('admin/articleCategory', parms);
 };
+export const getArticleCategoryAll = parms => {
+    return ajax.get('admin/articleCategory/all', {});
+};
 export const addArticleCategory = params => {
     return ajax.put('admin/articleCategory', params);
 };

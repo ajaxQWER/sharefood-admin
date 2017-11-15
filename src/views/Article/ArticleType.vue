@@ -22,6 +22,9 @@
                 <el-table-column label="分类名称" align="center">
                     <template scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
                 </el-table-column>
+                <el-table-column label="上级分类ID" align="center">
+                    <template scope="scope">{{scope.row.parentId}}</template>
+                </el-table-column>
                 <el-table-column label="排序值" align="center">
                     <template scope="scope">{{scope.row.sortOrder}}</template>
                 </el-table-column>
@@ -33,10 +36,17 @@
                 </el-table-column>
             </el-table>
         </el-col>
-        <el-dialog :title="isAdd?'新增分类':'修改分类'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
+        <el-dialog :title="isAdd ? '新增分类' : '修改分类'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
             <el-form :model="formInline" label-width="120px">
                 <el-form-item label="分类名称">
                     <el-input type="text" v-model="formInline.articleCategoryName" auto-complete="off" placeholder="分类名称"></el-input>
+                </el-form-item>
+                <el-form-item label="上级分类">
+		            <el-select v-model="formInline.parentId" @change="handleChange" placeholder="请选择">
+		            	<el-option label="无" value="0"></el-option>
+    					<el-option v-for="item in AllArticleType" :label="item.articleCategoryName" :value="item.articleCategoryId">
+    					</el-option>
+					</el-select>
                 </el-form-item>
                 <el-form-item label="排序值">
                     <el-input-number v-model="formInline.sortOrder" @change="handleChange" :min="0"></el-input-number>
@@ -57,6 +67,7 @@
 <script>
 import {
     getArticleCategoryList,
+    getArticleCategoryAll,
     addArticleCategory,
     deleteArticleCategoryById,
     updateArticleCategoryById
@@ -69,6 +80,7 @@ export default {
             formInline: {
                 articleCategoryId: 0,
                 articleCategoryName: "",
+                parentId: '',
                 sortOrder: 0
             },
             searchContent: '',
@@ -76,25 +88,31 @@ export default {
             pageSize: 10,
             counts: 0,
             isAdd: true,
-            ArticleType: null
+            ArticleType: null,
+            AllArticleType: null
         }
     },
     created: function() {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getArticleType();
+        this.getArticleTypeAll();
     },
     methods: {
         //获取视频分类列表
         getArticleType: function() {
             getArticleCategoryList({ params: { pageId: this.pageId, pageSize: this.pageSize, articleCategoryName: this.searchContent } }).then(data => {
-                console.log(data)
                 this.counts = data.count;
                 this.ArticleType = data.list;
             })
         },
+        getArticleTypeAll : function() {
+        	getArticleCategoryAll({}).then(data => {
+        	console.log(data)
+                this.AllArticleType = data;
+        	})
+        },
         //搜索
         searchArticleTypeByName: function() {
-            console.log(this.searchContent)
             this.getArticleType();
         },
         //显示添加弹窗
@@ -107,6 +125,7 @@ export default {
             this.formInline = {
                 articleCategoryId: 0,
                 articleCategoryName: "",
+                parentId: '',
                 sortOrder: 0
             }
         },
@@ -120,6 +139,8 @@ export default {
                         type: 'success'
                     })
                     this.addDialog = false;
+                }).catch(err => {
+                    console.error(err)
                 })
             } else {
                 updateArticleCategoryById(this.formInline).then(data => {
@@ -145,6 +166,7 @@ export default {
             this.formInline = {
                 articleCategoryId: row.articleCategoryId,
                 articleCategoryName: row.articleCategoryName,
+                parentId: row.parentId,
                 sortOrder: row.sortOrder
             }
         },
