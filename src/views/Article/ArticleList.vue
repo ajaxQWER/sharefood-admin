@@ -8,9 +8,16 @@
                 <el-form-item>
                     <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加文章</el-button>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item label="文章标题">
                     <el-input placeholder="请输入文章标题" icon="search" v-model="searchContent" :on-icon-click="searchArticleByName">
                     </el-input>
+                </el-form-item>
+                <el-form-item label="文章分类">
+		            <el-select v-model="articleCategoryId" @change="searchArticleByName" placeholder="请选择">
+		            	<el-option label="不限制" value=""></el-option>
+    					<el-option v-for="item in articleCategoryList" :label="item.articleCategoryName" :value="item.articleCategoryId">
+    					</el-option>
+					</el-select>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -66,6 +73,7 @@
 <script>
 import {
     getArticleCategoryList,
+    getArticleCategoryAll,
     getArticleList,
     addArticle,
     deleteArticleById,
@@ -88,29 +96,44 @@ export default {
             pageSize: 10,
             counts: 0,
             articleLists: null,
-            articleCategoryList: []
+            articleCategoryList: [],
+            articleCategoryId: null
         }
     },
     created: function() {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getArticleLists();
+        this.getArticleTypeAll();
     },
     methods: {
         //获取视频分类列表
         getArticleLists: function() {
-            getArticleList({ params: { pageId: this.pageId, pageSize: this.pageSize, articleTitle: this.searchContent } }).then(data => {
-                console.log(data)
+        	var params = {
+        		pageId : this.pageId,
+        		pageSize : this.pageSize
+        	}
+        	
+        	if (this.searchContent.length){
+        		params.articleTitle = this.searchContent;
+        	}
+        	
+        	if (!isNaN(parseInt(this.articleCategoryId))) {
+        		params.articleCategoryId = this.articleCategoryId;
+        	}
+        	
+            getArticleList({ params: params }).then(data => {
                 this.counts = data.count;
                 this.articleLists = data.list;
             })
         },
+        getArticleTypeAll: function(){
+        	getArticleCategoryAll({}).then(data => {
+                this.articleCategoryList = data;
+        	})
+        },
         showAddDialog: function() {
             this.addDialog = true;
             this.isAdd = true;
-            getArticleCategoryList().then(res => {
-                console.log(res)
-                this.articleCategoryList = res.list;
-            })
         },
         //搜索
         searchArticleByName: function() {
@@ -123,10 +146,6 @@ export default {
             this.getArticleLists()
         },
         updateArticle: function(index, row){
-            getArticleCategoryList().then(res => {
-                console.log(res)
-                this.articleCategoryList = res.list;
-            })
             this.isAdd = false;
             this.addDialog = true;
             this.formInline = {
@@ -193,6 +212,9 @@ export default {
                     this.addLoading = false;
                 })
             }
+        },
+        handleChange: function(){
+
         }
     }
 }
@@ -211,9 +233,6 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
-    }
-    .goods-img{
-        width: 120px;
     }
 }
 </style>

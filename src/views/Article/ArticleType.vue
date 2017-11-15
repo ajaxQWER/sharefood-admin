@@ -107,7 +107,6 @@ export default {
         },
         getArticleTypeAll : function() {
         	getArticleCategoryAll({}).then(data => {
-        	console.log(data)
                 this.AllArticleType = data;
         	})
         },
