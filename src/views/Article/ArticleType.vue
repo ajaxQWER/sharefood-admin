@@ -72,6 +72,7 @@ import {
     deleteArticleCategoryById,
     updateArticleCategoryById
 } from '@/api/api'
+import VueQuillEditor from 'vue-quill-editor'
 export default {
     data: function() {
         return {
@@ -96,6 +97,8 @@ export default {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getArticleType();
         this.getArticleTypeAll();
+        console.log("VueQuillEditor is ")
+        console.log(VueQuillEditor)
     },
     methods: {
         //获取视频分类列表
