@@ -15,7 +15,7 @@
                 <el-form-item label="文章分类">
 		            <el-select v-model="articleCategoryId" @change="searchArticleByName" placeholder="请选择">
 		            	<el-option label="不限制" value=""></el-option>
-    					<el-option v-for="item in articleCategoryList" :label="item.articleCategoryName" :value="item.articleCategoryId">
+    					<el-option v-for="item in articleCategoryList" :label="item.articleCategoryName" :value="item.articleCategoryId" :key="item.articleCategoryId">
     					</el-option>
 					</el-select>
                 </el-form-item>
