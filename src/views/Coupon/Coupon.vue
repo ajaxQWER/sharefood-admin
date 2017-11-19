@@ -20,35 +20,35 @@
         <el-row>
             <el-col>
                 <el-table :data="couponLists">
-                    <el-table-column label="名称" width="160px" align="center">
-                        <template scope="scope">{{scope.row.couponName?scope.row.couponName:'-'}}</template>
+                    <el-table-column label="名称" align="center">
+                        <template scope="scope">{{scope.row.couponName ? scope.row.couponName : '-'}}</template>
                     </el-table-column>
-                    <el-table-column label="金额" align="center" width="120px">
-                        <template scope="scope">{{scope.row.money?formatMoney(scope.row.money)+'元':'0.00元'}}</template>
+                    <el-table-column label="金额类型" align="center" width="120px">
+                    	<template scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? '固定金额' : '随机金额'}}</template>
+                    </el-table-column>
+                    <el-table-column label="金额" align="center" width="160px">
+                    	<template scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? formatMoney(scope.row.money) + '元' : formatMoney(scope.row.minMoney) + '~' + formatMoney(scope.row.maxMoney) + '元'}}</template>
                     </el-table-column>
                     <el-table-column label="最低消费额度" width="120px" align="center">
-                        <template scope="scope">{{scope.row.minimum?formatMoney(scope.row.minimum)+'元':'0.00元'}}</template>
+                        <template scope="scope">{{scope.row.minimum ? formatMoney(scope.row.minimum) + '元' : '0.00元'}}</template>
                     </el-table-column>
-                    <el-table-column label="领取方式" align="center">
+                    <el-table-column label="领取方式" width="160px" align="center">
                         <template scope="scope">{{formatPickUpType(scope.row.pickUpType)}}</template>
                     </el-table-column>
-                    <el-table-column label="使用范围" align="center">
+                    <el-table-column label="使用范围" width="160px" align="center">
                         <template scope="scope">{{formatUseSocpe(scope.row.useSocpe)}}</template>
                     </el-table-column>
-                    <el-table-column label="是否可领取" width="180px" align="center">
-                        <template scope="scope">{{scope.row.canPickUp?'是':'否'}}</template>
+                    <el-table-column label="可领取" width="80px" align="center">
+                        <template scope="scope">{{scope.row.canPickUp ? '是' : '否'}}</template>
                     </el-table-column>
-                    <el-table-column label="最大领取数量" width="180px" align="center">
-                        <template scope="scope">{{scope.row.maxPickUpNumber?scope.row.maxPickUpNumber:'0'}}</template>
+                    <el-table-column label="最大领取数量" width="120px" align="center">
+                        <template scope="scope">{{scope.row.maxPickUpNumber ? scope.row.maxPickUpNumber : '0'}}</template>
                     </el-table-column>
-                    <el-table-column label="已领数量" align="center">
-                        <template scope="scope">{{scope.row.pickUped?scope.row.pickUped:'-'}}</template>
+                    <el-table-column label="已领数量" width="100px" align="center">
+                        <template scope="scope">{{scope.row.pickUped ? scope.row.pickUped : '-'}}</template>
                     </el-table-column>
-                    <el-table-column label="开始时间" width="180px" align="center">
-                        <template scope="scope">{{scope.row.startTime?moment(scope.row.startTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
-                    </el-table-column>
-                    <el-table-column label="结束时间" width="180px" align="center">
-                        <template scope="scope">{{scope.row.endTime?moment(scope.row.endTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
+                    <el-table-column label="有效期" width="200px" align="center">
+                        <template scope="scope">{{showTime(scope.row.startTime, scope.row.endTime)}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
                         <template scope="scope">
@@ -63,16 +63,20 @@
                     <el-form-item label="优惠券名称">
                         <el-input type="text" v-model="formInline.couponName" auto-complete="off" placeholder="优惠券名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="优惠券数量">
-                        <el-input type="text" v-model.number="formInline.couponNumber" auto-complete="off" placeholder="优惠券数量"></el-input>
+                    <el-form-item label="金额类型">
+                    	<el-radio v-model="formInline.couponMoneyType" label="FIXED">固定金额</el-radio>
+                    	<el-radio v-model="formInline.couponMoneyType" label="RANDOM">随机金额</el-radio>
                     </el-form-item>
-                    <el-form-item label="金额">
+                    <el-form-item label="金额" v-if="formInline.couponMoneyType == 'FIXED'">
                         <el-input type="text" v-model.number="formInline.money" auto-complete="off" placeholder="金额"></el-input>
                     </el-form-item>
-                    <el-form-item label="开始时间">
-                        <el-date-picker v-model="formInline.startTime" type="datetime" placeholder="选择开始时间" @change="formatStartTime"></el-date-picker>
+                    <el-form-item label="金额范围" v-else>
+                        <el-input type="text" v-model.number="formInline.minMoney" auto-complete="off" placeholder="最小金额" class="money-range" ></el-input> - 
+                        <el-input type="text" v-model.number="formInline.maxMoney" auto-complete="off" placeholder="最大金额" class="money-range" ></el-input>
                     </el-form-item>
-                    <el-form-item label="结束时间">
+                    <el-form-item label="有效期">
+                        <el-date-picker v-model="formInline.startTime" type="datetime" placeholder="选择开始时间" @change="formatStartTime"></el-date-picker>
+                        -
                         <el-date-picker v-model="formInline.endTime" type="datetime" placeholder="选择结束时间" @change="formatEndTime"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="最低消费额度">
@@ -81,10 +85,6 @@
                     <el-form-item label="领取方式">
                         <el-radio class="radio" v-model="formInline.pickUpType" label="CONSUME">消费赠送</el-radio>
                         <el-radio class="radio" v-model="formInline.pickUpType" label="HAND">手动领取</el-radio>
-                    </el-form-item>
-                    <el-form-item label="使用范围">
-                        <el-radio class="radio" v-model="formInline.useSocpe" label="SHOP">商家</el-radio>
-                        <el-radio class="radio" v-model="formInline.useSocpe" label="GLOBAL">平台</el-radio>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -124,7 +124,10 @@ export default {
                 money: 0,
                 pickUpType: "CONSUME",
                 startTime: "",
-                useSocpe: "SHOP"
+                useSocpe: "SHOP",
+                couponMoneyType : "FIXED",
+                minMoney: null,
+                maxMoney: null
             },
             searchContent: '',
             pageId: 1,
@@ -139,6 +142,19 @@ export default {
         this.getCouponLists();
     },
     methods: {
+    	showTime : function(start, end){
+    		if (start && end){
+    			return this.moment(start).format('YYYY-MM-DD HH:mm:ss') + "\n至\n" + this.moment(end).format('YYYY-MM-DD HH:mm:ss');
+    		} else if (start && !end){
+    			return this.moment(start).format('YYYY-MM-DD HH:mm:ss') + "之后有效";
+    		} else if (!start && end){
+    			return this.moment(end).format('YYYY-MM-DD HH:mm:ss') + "前有效";
+    		} else if (!start && !end){
+    			return "永久";
+    		} else {
+    			return "未知错误"
+    		}
+    	},
         //获取视频分类列表
         getCouponLists: function() {
             coiponList({ params: { pageId: this.pageId, pageSize: this.pageSize, couponNameLike: this.searchContent } }).then(data => {
@@ -167,7 +183,10 @@ export default {
                 money: 0,
                 pickUpType: "CONSUME",
                 startTime: "",
-                useSocpe: "SHOP"
+                useSocpe: "SHOP",
+                couponMoneyType : "FIXED",
+                minMoney: null,
+                maxMoney: null
             }
         },
         //添加分类
@@ -211,7 +230,10 @@ export default {
                 money: row.money,
                 pickUpType: row.pickUpType,
                 startTime: row.startTime,
-                useSocpe: row.useSocpe
+                useSocpe: row.useSocpe,
+                couponMoneyType : row.couponMoneyType,
+                minMoney: row.minMoney,
+                maxMoney: row.maxMoney
             }
         },
         //通过id删除分类
@@ -303,6 +325,9 @@ export default {
     }
     .search-row {
         margin: 15px 0;
+    }
+    .money-range {
+    	width: 200px;
     }
 }
 </style>
