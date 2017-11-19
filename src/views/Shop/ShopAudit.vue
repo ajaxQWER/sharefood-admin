@@ -5,7 +5,10 @@
                 <h3>店铺审核</h3>
             </el-col>
         </el-row>
-        <el-row class="search-row">
+        <el-row>
+            <el-form class="inline-form">
+                <el-form-item label="搜索店铺"></el-form-item>
+            </el-form>
             <el-col :span="4">
                 <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShopCategory">
                 </el-input>
@@ -64,7 +67,7 @@ export default {
     methods: {
         //获取视频分类列表
         getAuditLists: function() {
-            getShopAuditList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopDetailNameLike: this.searchContent } }).then(data => {
+            getShopAuditList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.shopAuditLists = data.list;
@@ -123,9 +126,6 @@ export default {
     }
     .label-color{
         color: red;
-    }
-    .search-row {
-        margin: 15px 0;
     }
 }
 </style>

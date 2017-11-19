@@ -91,11 +91,8 @@ export default {
         getArticleLists: function() {
         	var params = {
         		pageId : this.pageId,
-        		pageSize : this.pageSize
-        	}
-        	
-        	if (this.searchContent.length){
-        		params.articleTitle = this.searchContent;
+        		pageSize : this.pageSize,
+                articleTitleLike: this.searchContent
         	}
         	
         	if (!isNaN(parseInt(this.articleCategoryId))) {
@@ -147,9 +144,6 @@ export default {
                     message: '已取消删除'
                 });
             });
-        },
-        handleChange: function(){
-
         }
     }
 }

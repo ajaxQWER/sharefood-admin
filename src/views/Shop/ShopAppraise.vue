@@ -5,19 +5,19 @@
                 <h3>店铺评价</h3>
             </el-col>
         </el-row>
-        <el-row class="search-row">
+       <!--  <el-row class="search-row">
             <el-col :span="4">
                 <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
                 </el-input>
             </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
             <el-table :data="shopAppraise">
                 <el-table-column label="用户名" width="160px" align="center">
                     <template scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="订单ID" width="100px" align="center">
-                    <template scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
+                <el-table-column label="订单Id" align="center">
+                    <template scope="scope">{{scope.row.orderId}}</template>
                 </el-table-column>
                 <el-table-column label="订单名称" width="160px" align="center">
                     <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>

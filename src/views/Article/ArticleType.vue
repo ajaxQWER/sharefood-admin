@@ -4,9 +4,12 @@
             <h3>文章分类</h3>
         </el-col>
         <el-row class="search-row">
-            <el-col :span="3">
-                <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加文章分类</el-button>
-            </el-col>
+            <el-form class="inline-form" :inline="true">
+                <el-form-item>
+                    <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加文章分类</el-button>
+                </el-form-item>
+                <el-form-item label="搜索文章分类"></el-form-item>
+            </el-form>
             <el-col :span="4">
                 <el-input placeholder="请输入文章分类名称" icon="search" v-model="searchContent" :on-icon-click="searchArticleTypeByName">
                 </el-input>

@@ -102,7 +102,7 @@ export default {
     methods: {
         //获取列表
         getShopLists: function() {
-            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopDetailNameLike: this.searchContent } }).then(data => {
+            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.shopList = data.list;

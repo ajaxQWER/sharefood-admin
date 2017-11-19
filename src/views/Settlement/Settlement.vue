@@ -6,9 +6,12 @@
             </el-col>
         </el-row>
         <el-row class="btn">
-            <el-col :span="4">
-                <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加结算模板</el-button>
-            </el-col>
+            <el-form class="inline-form" :inline="true">
+                <el-form-item>
+                    <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加结算模板</el-button>
+                </el-form-item>
+                <el-form-item label="搜索结算模板"></el-form-item>
+            </el-form>
             <el-col :span="4">
                 <el-input placeholder="请输入结算模板名称" icon="search" v-model="searchContent" :on-icon-click.self="searchCouponById">
                 </el-input>
