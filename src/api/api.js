@@ -177,8 +177,8 @@ export const findShopAppraiseById = params => {
 export const getShopAuditList = params => {
     return ajax.get('admin/shopAudit', params);
 };
-export const passShopAudit = shopId => {
-    return ajax.post('admin/shopAudit/oncheck/' + shopId);
+export const passShopAudit = params => {
+    return ajax.post('admin/shopAudit/', params);
 };
 export const findShopAuditById = shopId => {
     return ajax.get('admin/shopAudit/' + shopId);
