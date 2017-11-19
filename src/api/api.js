@@ -2,7 +2,8 @@ import ElementUI from 'element-ui'
 import axios from 'axios';
 
 var ajax = axios.create({
-    baseURL: 'http://api.sf.chinagjgx.com',
+    baseURL: process.env.BASE_URL, //测试
+    // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
     withCredentials: true, //cookie
     crossDomain: true //跨域
@@ -126,6 +127,10 @@ export const soldOut = params => {
 export const putAway = params => {
     return ajax.post('admin/shopDetail/' + params.shopId, params);
 };
+//设置店铺置顶
+export const setToperClass = (shopId, toperClass) => {
+    return ajax.post('admin/shopDetail/topper/' + shopId + '/' + toperClass);
+};
 
 //店铺分类
 export const shopCategoryList = params => {
@@ -195,6 +200,9 @@ export const getCityById = cityId => {
 export const getArticleCategoryList = parms => {
     return ajax.get('admin/articleCategory', parms);
 };
+export const getArticleCategoryAll = parms => {
+    return ajax.get('admin/articleCategory/all', {});
+};
 export const addArticleCategory = params => {
     return ajax.put('admin/articleCategory', params);
 };
@@ -224,6 +232,22 @@ export const updateArticleById = params => {
     return ajax.post('admin/article/' + params.articleId, params);
 };
 
+//结算模板
+export const getSettlementTemplateLists = params => {
+    return ajax.get('admin/settlementTemplate', params);
+};
+export const addSettlementTemplate = params => {
+    return ajax.put('admin/settlementTemplate', params);
+};
+export const deleteSettlementTemplateById = id => {
+    return ajax.delete('admin/settlementTemplate/' + id);
+};
+export const findOneBySettlementTemplateId = id => {
+    return ajax.get('admin/settlementTemplate/' + id);
+};
+export const updateSettlementTemplateId = params => {
+    return ajax.post('admin/settlementTemplate/' + params.settlementTemplateId, params);
+};
 
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {

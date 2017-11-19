@@ -17,6 +17,8 @@ import OrderDetail from './views/Order/OrderDetail.vue'
 import AdminLogs from './views/AdminLogs/AdminLogs.vue'
 import ArticleList from './views/Article/ArticleList.vue'
 import ArticleType from './views/Article/ArticleType.vue'
+import ArticleEdit from './views/Article/ArticleEdit.vue'
+import Settlement from './views/Settlement/Settlement.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -107,6 +109,16 @@ let routes = [{
         path: '/articleList',
         component: ArticleList,
         name: '文章列表'
+    }, {
+        path: '/articleUpdate',
+        component: ArticleEdit,
+        name: '文章编辑',
+        hidden: true
+    }, {
+        path: '/articleAdd',
+        component: ArticleEdit,
+        name: '文章新增',
+        hidden: true
     }]
 }, {
     path: '/',
@@ -143,6 +155,15 @@ let routes = [{
     iconCls: 'fa fa-list-alt',
     children: [
         { path: '/adminLogs', component: AdminLogs, name: '日志管理' },
+    ]
+}, {
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-money',
+    children: [
+        { path: '/settlement', component: Settlement, name: '结算模板' },
     ]
 }, {
     path: '*',
