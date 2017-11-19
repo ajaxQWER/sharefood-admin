@@ -1,49 +1,58 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
-            <h3>用户管理</h3>
-        </el-col>
-        <el-col>
-            <el-form :inline="true">
-                <el-form-item label="搜索用户">
-                    <el-input placeholder="请输入用户名" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
-                    </el-input>
-                </el-form-item>
+        <el-row>
+            <el-col class="title">
+                <h3>用户管理</h3>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-form class="inline-form">
+                <el-form-item label="搜索用户"></el-form-item>
             </el-form>
-        </el-col>
-        <el-col>
-            <el-table :data="userLists">
-                <el-table-column label="用户名" width="160px" align="center">
-                    <template scope="scope">{{scope.row.username?scope.row.username:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="是否设置昵称" align="center">
-                    <template scope="scope">{{scope.row.initNicknameed?'是':'否'}}</template>
-                </el-table-column>
-                <el-table-column label="昵称" align="center">
-                    <template scope="scope">{{scope.row.nickname?scope.row.nickname:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="余额" align="center">
-                    <template scope="scope">{{scope.row.balance?formatMoney(scope.row.balance)+'元':'0.00元'}}</template>
-                </el-table-column>
-                <el-table-column label="积分" align="center">
-                    <template scope="scope">{{scope.row.integral}}</template>
-                </el-table-column>
-                <el-table-column label="优惠券数量" align="center">
-                    <template scope="scope">{{scope.row.couponNumber?scope.row.couponNumber:'0'}}</template>
-                </el-table-column>
-                <el-table-column label="注册时间" align="center">
-                    <template scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
-                </el-table-column>
-                <el-table-column label="上次登录" align="center">
-                    <template scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
-                </el-table-column>
-            </el-table>
-        </el-col>
+            <el-col :span="4">
+                <el-input placeholder="请输入用户名" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
+                </el-input>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-table :data="userLists">
+                    <el-table-column label="用户名" width="160px" align="center">
+                        <template scope="scope">{{scope.row.username?scope.row.username:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="是否设置昵称" align="center">
+                        <template scope="scope">{{scope.row.initNicknameed?'是':'否'}}</template>
+                    </el-table-column>
+                    <el-table-column label="昵称" align="center">
+                        <template scope="scope">{{scope.row.nickname?scope.row.nickname:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="余额" align="center">
+                        <template scope="scope">{{scope.row.balance?formatMoney(scope.row.balance)+'元':'0.00元'}}</template>
+                    </el-table-column>
+                    <el-table-column label="积分" align="center">
+                        <template scope="scope">{{scope.row.integral}}</template>
+                    </el-table-column>
+                    <el-table-column label="优惠券数量" align="center">
+                        <template scope="scope">{{scope.row.couponNumber?scope.row.couponNumber:'0'}}</template>
+                    </el-table-column>
+                    <el-table-column label="注册时间" align="center">
+                        <template scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    </el-table-column>
+                    <el-table-column label="上次登录" align="center">
+                        <template scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
+
         <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
+        <el-row>
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
     </el-row>
 </template>
 <script>

@@ -1,63 +1,68 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
-            <h3>店铺分类管理</h3>
-        </el-col>
-        <el-col>
-            <el-form :inline="true">
-                <el-form-item>
-                    <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加分类</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-input placeholder="请输入分类名称" icon="search" v-model="searchContent" :on-icon-click="searchShopCategory">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-        </el-col>
-        <el-col>
-            <el-table :data="shopCategoryLists">
-                <el-table-column prop="shopCategoryName" label="分类名称" align="center"></el-table-column>
-                <el-table-column prop="sortOrder" label="排序值" align="center"></el-table-column>
-                <el-table-column label="图标" align="center">
-                    <template scope="scope">
-                        <img :src="UPLOADURL + scope.row.icon" :alt="scope.row.shopCategoryName" class="icon-img">
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" width="160px" align="center">
-                    <template scope="scope">
-                        <el-button size="small" @click="updateShopCategory(scope.$index, scope.row)">修改</el-button>
-                        <el-button size="small" type="danger" @click="deleteShopCategory(scope.$index, scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-col>
-        <el-dialog :title="isAdd?'新增店铺分类':'修改店铺分类'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
-            <el-form :model="formInline" ref="formInline" label-width="120px">
-                <el-form-item label="分类名称" prop="categoryName">
-                    <el-input type="text" v-model="formInline.shopCategoryName" auto-complete="off" placeholder="分类名称"></el-input>
-                </el-form-item>
-                <el-form-item label="排序值" prop="categoryName">
-                    <el-input-number v-model="formInline.sortOrder" :min="1"></el-input-number>
-                </el-form-item>
-                <el-form-item label="分类图标">
-                    <el-upload ref="uploadImage" action="" :http-request="uploadImage" :show-file-list="false">
-                        <el-button size="small" type="primary">上传图标</el-button>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item>
-                    <img :src="UPLOADURL+formInline.icon" alt="" class="banner-thumb">
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="cancelAddCategory">取 消</el-button>
-                <el-button type="primary" @click="addCategory" :loading="addLoading">确 定</el-button>
-            </div>
-        </el-dialog>
-        <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
+        <el-row>
+            <el-col class="title">
+                <h3>店铺分类管理</h3>
+            </el-col>
+        </el-row>
+        <el-row class="search-row">
+            <el-col :span="3">
+                <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加分类</el-button>
+            </el-col>
+            <el-col :span="4">
+                <el-input placeholder="请输入分类名称" icon="search" v-model="searchContent" :on-icon-click="searchShopCategory">
+                </el-input>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-table :data="shopCategoryLists">
+                    <el-table-column prop="shopCategoryName" label="分类名称" align="center"></el-table-column>
+                    <el-table-column prop="sortOrder" label="排序值" align="center"></el-table-column>
+                    <el-table-column label="图标" align="center">
+                        <template scope="scope">
+                            <img :src="UPLOADURL + scope.row.icon" :alt="scope.row.shopCategoryName" class="icon-img">
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="160px" align="center">
+                        <template scope="scope">
+                            <el-button size="small" @click="updateShopCategory(scope.$index, scope.row)">修改</el-button>
+                            <el-button size="small" type="danger" @click="deleteShopCategory(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+            <el-dialog :title="isAdd?'新增店铺分类':'修改店铺分类'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
+                <el-form :model="formInline" ref="formInline" label-width="120px">
+                    <el-form-item label="分类名称" prop="categoryName">
+                        <el-input type="text" v-model="formInline.shopCategoryName" auto-complete="off" placeholder="分类名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="排序值" prop="categoryName">
+                        <el-input-number v-model="formInline.sortOrder" :min="1"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="分类图标">
+                        <el-upload ref="uploadImage" action="" :http-request="uploadImage" :show-file-list="false">
+                            <el-button size="small" type="primary">上传图标</el-button>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item>
+                        <img :src="UPLOADURL+formInline.icon" alt="" class="banner-thumb">
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="cancelAddCategory">取 消</el-button>
+                    <el-button type="primary" @click="addCategory" :loading="addLoading">确 定</el-button>
+                </div>
+            </el-dialog>
+        </el-row>
+        <el-row>
+            <!-- 分页 -->
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
     </el-row>
 </template>
 <script>
@@ -224,6 +229,9 @@ export default {
     }
     .banner-thumb{
         width: 100%;
+    }
+    .search-row {
+        margin: 15px 0;
     }
 }
 </style>

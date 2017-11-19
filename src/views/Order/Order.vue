@@ -1,54 +1,63 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
-            <h3>订单管理</h3>
-        </el-col>
-        <el-col>
-            <el-form :inline="true">
-                <el-form-item label="搜索订单">
-                    <el-input placeholder="请输入订单号" icon="search" v-model="searchContent" :on-icon-click="searchOrder">
-                    </el-input>
-                </el-form-item>
+        <el-row>
+            <el-col class="title">
+                <h3>订单管理</h3>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-form class="inline-form">
+                <el-form-item label="搜索订单"></el-form-item>
             </el-form>
-        </el-col>
-        <el-col>
-            <el-table :data="orderLists">
-                <el-table-column label="订单号" align="center">
-                    <template scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="订单名称" align="center">
-                    <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="下单人" align="center">
-                    <template scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="下单时间" align="center">
-                    <template scope="scope">{{moment(scope.row.addTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
-                </el-table-column>
-                <el-table-column label="订单价格" align="center">
-                    <template scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
-                </el-table-column>
-                <el-table-column label="订单状态" align="center">
-                    <template scope="scope">
-                        <span v-if="scope.row.orderStatus=='CANCELLATION'" style="color:red;">{{formatOrderStatus(scope.row.orderStatus)}}</span>
-                        <span v-else>{{formatOrderStatus(scope.row.orderStatus)}}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="店铺名称" align="center">
-                    <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="操作" width="160px" align="center">
-                    <template scope="scope">
-                        <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">查看详情</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-col>
+            <el-col :span="4">
+                <el-input placeholder="请输入订单号" icon="search" v-model="searchContent" :on-icon-click="searchOrder">
+                </el-input>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-table :data="orderLists">
+                    <el-table-column label="订单号" align="center">
+                        <template scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="订单名称" align="center">
+                        <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="下单人" align="center">
+                        <template scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="下单时间" align="center">
+                        <template scope="scope">{{moment(scope.row.addTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    </el-table-column>
+                    <el-table-column label="订单价格" align="center">
+                        <template scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
+                    </el-table-column>
+                    <el-table-column label="订单状态" align="center">
+                        <template scope="scope">
+                            <span v-if="scope.row.orderStatus=='CANCELLATION'" style="color:red;">{{formatOrderStatus(scope.row.orderStatus)}}</span>
+                            <span v-else>{{formatOrderStatus(scope.row.orderStatus)}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="店铺名称" align="center">
+                        <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="160px" align="center">
+                        <template scope="scope">
+                            <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">查看详情</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
+
         <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
+        <el-row>
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
     </el-row>
 </template>
 <script>

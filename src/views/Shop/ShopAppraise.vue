@@ -1,17 +1,17 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
-            <h3>店铺评价</h3>
-        </el-col>
-        <el-col>
-            <el-form :inline="true">
-                <el-form-item label="搜索用户">
-                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-        </el-col>
-        <el-col>
+        <el-row>
+            <el-col class="title">
+                <h3>店铺评价</h3>
+            </el-col>
+        </el-row>
+        <el-row class="search-row">
+            <el-col :span="4">
+                <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
+                </el-input>
+            </el-col>
+        </el-row>
+        <el-row>
             <el-table :data="shopAppraise">
                 <el-table-column label="用户名" width="160px" align="center">
                     <template scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
@@ -50,12 +50,14 @@
                     <template scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
             </el-table>
-        </el-col>
-        <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
+        </el-row>
+        <el-row>
+            <!-- 分页 -->
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
     </el-row>
 </template>
 <script>
@@ -113,6 +115,9 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    }
+    .search-row {
+        margin: 15px 0;
     }
 }
 </style>

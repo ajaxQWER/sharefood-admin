@@ -73,4 +73,8 @@ img.thumb[lazy=loading] {
     background: url(assets/images/loading.svg) no-repeat center center #eaeaea;
     background-size: cover;
 }
+.inline-form{
+	display: inline-block;
+	float: left;
+}
 </style>

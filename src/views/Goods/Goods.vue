@@ -1,52 +1,61 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
-            <h3>商品管理</h3>
-        </el-col>
-        <el-col>
-            <el-form :inline="true">
-                <el-form-item label="搜索商品">
-                    <el-input placeholder="请输入商品名称" icon="search" v-model="searchContent" :on-icon-click="searchGoodsById">
-                    </el-input>
-                </el-form-item>
+        <el-row>
+            <el-col class="title">
+                <h3>商品管理</h3>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-form class="inline-form">
+                <el-form-item label="商品名称"></el-form-item>
             </el-form>
-        </el-col>
-        <el-col>
-            <el-table :data="goodsLists">
-                <el-table-column label="商品名称" width="160px" align="center">
-                    <template scope="scope">{{scope.row.goodsName?scope.row.goodsName:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="商品价格" align="center">
-                    <template scope="scope">{{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice)+'元':'0.00元'}}</template>
-                </el-table-column>
-                <el-table-column label="商品图片" align="center">
-                    <template scope="scope"><img :src="UPLOADURL + scope.row.goodsImgUrl" alt="" class="goods-img"></template>
-                </el-table-column>
-                <el-table-column label="商品状态" width="100px" align="center">
-                    <template scope="scope">{{formatGoodsStatus(scope.row.goodsStatus)}}</template>
-                </el-table-column>
-                <el-table-column label="商品备注" align="center">
-                    <template scope="scope">{{scope.row.goodsContent?scope.row.goodsContent:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="添加时间" width="180px" align="center">
-                    <template scope="scope">{{moment(scope.row.goodsAddTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
-                </el-table-column>
-                <el-table-column label="店铺名称" width="200px" align="center">
-                    <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="操作" width="160px" align="center">
-                    <template scope="scope">
-                        <el-button size="small" type="primary" @click="putAwayGoods(scope.$index, scope.row)" v-if="scope.row.goodsStatus==='SOLD_OUT'">上架</el-button>
-                        <el-button size="small" type="danger" @click="soldOutGoods(scope.$index, scope.row)" v-else>下架</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-col>
+            <el-col :span="4">
+                <el-input placeholder="请输入商品名称" icon="search" v-model="searchContent" :on-icon-click="searchGoodsById">
+                        </el-input>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-table :data="goodsLists">
+                    <el-table-column label="商品名称" width="160px" align="center">
+                        <template scope="scope">{{scope.row.goodsName?scope.row.goodsName:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="商品价格" align="center">
+                        <template scope="scope">{{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice)+'元':'0.00元'}}</template>
+                    </el-table-column>
+                    <el-table-column label="商品图片" align="center">
+                        <template scope="scope"><img :src="UPLOADURL + scope.row.goodsImgUrl" alt="" class="goods-img"></template>
+                    </el-table-column>
+                    <el-table-column label="商品状态" width="100px" align="center">
+                        <template scope="scope">{{formatGoodsStatus(scope.row.goodsStatus)}}</template>
+                    </el-table-column>
+                    <el-table-column label="商品备注" align="center">
+                        <template scope="scope">{{scope.row.goodsContent?scope.row.goodsContent:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="添加时间" width="180px" align="center">
+                        <template scope="scope">{{moment(scope.row.goodsAddTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    </el-table-column>
+                    <el-table-column label="店铺名称" width="200px" align="center">
+                        <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="160px" align="center">
+                        <template scope="scope">
+                            <el-button size="small" type="primary" @click="putAwayGoods(scope.$index, scope.row)" v-if="scope.row.goodsStatus==='SOLD_OUT'">上架</el-button>
+                            <el-button size="small" type="danger" @click="soldOutGoods(scope.$index, scope.row)" v-else>下架</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
+
         <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
+        <el-row>
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
     </el-row>
 </template>
 <script>
@@ -153,6 +162,7 @@ export default {
             border-bottom: 1px solid #23b7e5;
         }
     }
+
     .goods-img{
         width: 120px;
     }

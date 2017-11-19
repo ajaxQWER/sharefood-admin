@@ -1,10 +1,13 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
-            <h3>文章列表</h3>
-        </el-col>
-        <el-col>
-            <el-form :inline="true">
+        <el-row>
+            <el-col class="title">
+                <h3>文章列表</h3>
+            </el-col>
+        </el-row>
+
+        <el-row>
+            <el-form :inline="true" class="inline-form">
                 <el-form-item>
                     <el-button type="primary" @click="gotoAddArticlePage"><i class="el-icon-plus el-icon--left"></i>添加文章</el-button>
                 </el-form-item>
@@ -20,31 +23,37 @@
 					</el-select>
                 </el-form-item>
             </el-form>
-        </el-col>
-        <el-col>
-            <el-table :data="articleLists">
-                <el-table-column label="文章ID" width="160px" align="center">
-                    <template scope="scope">{{scope.row.articleId?scope.row.articleId:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="文章分类" width="160px" align="center">
-                    <template scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="文章标题" align="center">
-                    <template scope="scope">{{scope.row.articleTitle?scope.row.articleTitle:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="操作" width="160px" align="center">
-                    <template scope="scope">
-                        <el-button size="small" @click="gotoUpdateArticlePage(scope.$index, scope.row)">修改</el-button>
-                        <el-button size="small" type="danger" @click="deleteArticle(scope.$index, scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-table :data="articleLists">
+                    <el-table-column label="文章ID" width="160px" align="center">
+                        <template scope="scope">{{scope.row.articleId?scope.row.articleId:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="文章分类" width="160px" align="center">
+                        <template scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="文章标题" align="center">
+                        <template scope="scope">{{scope.row.articleTitle?scope.row.articleTitle:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="160px" align="center">
+                        <template scope="scope">
+                            <el-button size="small" @click="gotoUpdateArticlePage(scope.$index, scope.row)">修改</el-button>
+                            <el-button size="small" type="danger" @click="deleteArticle(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
+
         <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
+        <el-row>
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
     </el-row>
 </template>
 <script>

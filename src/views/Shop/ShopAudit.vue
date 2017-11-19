@@ -1,41 +1,46 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
-            <h3>店铺审核</h3>
-        </el-col>
-        <el-col>
-            <el-form :inline="true">
-                <el-form-item>
-                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShopCategory">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-        </el-col>
-        <el-col>
-            <el-table :data="shopAuditLists">
-                <el-table-column prop="shopId" label="店铺ID" align="center"></el-table-column>
-                <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
-                <el-table-column prop="phoneNum" label="注册手机号" align="center"></el-table-column>
-                <el-table-column label="店铺类型" align="center">
-                    <template scope="scope">{{formatShopType(scope.row.shopType)}}</template>
+        <el-row>
+            <el-col class="title">
+                <h3>店铺审核</h3>
+            </el-col>
+        </el-row>
+        <el-row class="search-row">
+            <el-col :span="4">
+                <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShopCategory">
+                </el-input>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col>
+                <el-table :data="shopAuditLists">
+                    <el-table-column prop="shopId" label="店铺ID" align="center"></el-table-column>
+                    <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
+                    <el-table-column prop="phoneNum" label="注册手机号" align="center"></el-table-column>
+                    <el-table-column label="店铺类型" align="center">
+                        <template scope="scope">{{formatShopType(scope.row.shopType)}}</template>
+                    </el-table-column>
+                    <el-table-column label="审核状态" align="center">
+                        <template scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
+                    </el-table-column><el-table-column label="配送审核状态" align="center">
+                    <template scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
                 </el-table-column>
-                <el-table-column label="审核状态" align="center">
-                    <template scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
-                </el-table-column><el-table-column label="配送审核状态" align="center">
-                    <template scope="scope">{{formatAuditStatus(scope.row.deliveryAudit)}}</template>
-                </el-table-column>
-                <el-table-column label="操作" width="200px" align="center">
-                    <template scope="scope">
-                        <el-button size="small" type="primary" @click="getAuditbyId(scope.$index, scope.row)">审核</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-col>
-        <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
+                    <el-table-column label="操作" width="200px" align="center">
+                        <template scope="scope">
+                            <el-button size="small" type="primary" @click="getAuditbyId(scope.$index, scope.row)">审核</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
+        <el-row>
+            <!-- 分页 -->
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
     </el-row>
 </template>
 <script>
@@ -118,6 +123,9 @@ export default {
     }
     .label-color{
         color: red;
+    }
+    .search-row {
+        margin: 15px 0;
     }
 }
 </style>
