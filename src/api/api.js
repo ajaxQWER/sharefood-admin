@@ -127,6 +127,10 @@ export const soldOut = params => {
 export const putAway = params => {
     return ajax.post('admin/shopDetail/' + params.shopId, params);
 };
+//设置店铺置顶
+export const setToperClass = (shopId, toperClass) => {
+    return ajax.post('admin/shopDetail/topper/' + shopId + '/' + toperClass);
+};
 
 //店铺分类
 export const shopCategoryList = params => {

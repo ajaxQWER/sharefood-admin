@@ -32,14 +32,29 @@
                 <el-table-column label="状态" align="center">
                     <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
                 </el-table-column>
+                <el-table-column label="置顶值" align="center">
+                    <template scope="scope">{{scope.row.topper}}</template>
+                </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
                     <template scope="scope">
                         <el-button size="small" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
                         <el-button size="small" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
+                        <el-button size="small" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </el-col>
+        <el-dialog title="设置置顶值" :visible.sync="addToperPopup" size="tiny" @close="closeaddToperPopup" class="dialog">
+            <el-form :model="formInline" label-width="120px">
+                <el-form-item label="置顶值">
+                    <el-input-number v-model.number="formInline.topper" :min="0" :step="1"></el-input-number>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancelSetToper">取 消</el-button>
+                <el-button type="primary" @click="setToperClassFn" :loading="addLoading">确 定</el-button>
+            </div>
+        </el-dialog>
         <!-- 分页 -->
         <el-col class="pagination">
             <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
@@ -52,19 +67,24 @@ import {
     shopList,
     putAway,
     soldOut,
-    findShopById
+    findShopById,
+    setToperClass
 } from '@/api/api'
 export default {
     data: function() {
         return {
             addLoading: false,
-            addDialog: false,
+            addToperPopup: false,
             searchContent: '',
             pageId: 1,
             pageSize: 10,
             counts: 0,
             isAdd: true,
-            shopList: null
+            shopList: null,
+            shopId: 0,
+            formInline: {
+                topper: 0
+            }
         }
     },
     created: function() {
@@ -134,6 +154,33 @@ export default {
             this.$router.push('?page=' + val)
             this.pageId = val;
             this.getShopLists()
+        },
+        closeaddToperPopup: function(){
+            this.shopId = 0;
+            this.formInline = {
+                topper: 0
+            }
+        },
+        cancelSetToper: function(){
+            this.addToperPopup = false;
+        },
+        //设置置顶
+        openToperPopup: function(index, row){
+            this.addToperPopup = true;
+            this.shopId = row.shopId;
+            this.formInline = {
+                topper: row.topper
+            }
+        },
+        setToperClassFn: function(){
+            setToperClass(this.shopId, this.formInline.topper).then(res => {
+                this.getShopLists();
+                this.$message({
+                    type: 'success',
+                    message: '设置成功!'
+                });
+                this.cancelSetToper()
+            })
         }
     }
 }
