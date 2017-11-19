@@ -21,6 +21,8 @@
                 </el-table-column>
                 <el-table-column label="审核状态" align="center">
                     <template scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
+                </el-table-column><el-table-column label="配送审核状态" align="center">
+                    <template scope="scope">{{formatAuditStatus(scope.row.deliveryAudit)}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="200px" align="center">
                     <template scope="scope">
