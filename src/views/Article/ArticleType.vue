@@ -44,7 +44,7 @@
                 <el-form-item label="上级分类">
 		            <el-select v-model="formInline.parentId" @change="handleChange" placeholder="请选择">
 		            	<el-option label="无" value="0"></el-option>
-    					<el-option v-for="item in AllArticleType" :label="item.articleCategoryName" :value="item.articleCategoryId">
+    					<el-option v-for="item in AllArticleType" :label="item.articleCategoryName" :value="item.articleCategoryId" :key="item.articleCategoryId">
     					</el-option>
 					</el-select>
                 </el-form-item>
@@ -97,8 +97,6 @@ export default {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getArticleType();
         this.getArticleTypeAll();
-        console.log("VueQuillEditor is ")
-        console.log(VueQuillEditor)
     },
     methods: {
         //获取视频分类列表
@@ -106,6 +104,7 @@ export default {
             getArticleCategoryList({ params: { pageId: this.pageId, pageSize: this.pageSize, articleCategoryName: this.searchContent } }).then(data => {
                 this.counts = data.count;
                 this.ArticleType = data.list;
+                console.log(data.list)
             })
         },
         getArticleTypeAll : function() {

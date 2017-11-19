@@ -66,6 +66,16 @@
                 <li>开户支行：{{shopDetail.settlement.openBank}}</li>
             </ul>
         </el-row>
+        <el-row class="settlement">
+            <el-select v-model="settlementTemplateId" filterable placeholder="请选择">
+                <el-option
+                  v-for="item in settlementTemplateList"
+                  :key="item.settlementTemplateId"
+                  :label="item.settlementTemplateName + ' - ' + item.percentageOfSettle"
+                  :value="item.settlementTemplateId">
+                </el-option>
+              </el-select>
+        </el-row>
         <el-row>
             <span>审核操作：</span>
             <el-button type="primary" @click="pass">通过</el-button>
@@ -79,18 +89,22 @@ import {
     findShopAuditById,
     rejectShopAudit,
     getProvinceById,
-    getCityById
+    getCityById,
+    getSettlementTemplateLists
 } from '@/api/api'
 export default {
     data: function() {
         return {
             shopDetail: null,
             provinceName: '',
-            cityName: ''
+            cityName: '',
+            settlementTemplateList: [],
+            settlementTemplateId: ''
         }
     },
     created: function() {
         var shopId = parseInt(this.$route.query.shopId);
+        this.getSettlementList()
         if (!shopId) {
             this.$message({
                 type: 'error',
@@ -102,7 +116,6 @@ export default {
             return;
         }
         this.getShopAuditDetail(shopId);
-        
     },
     methods: {
         getShopAuditDetail: function(shopId) {
@@ -116,6 +129,12 @@ export default {
                 setTimeout(() => {
                     this.$router.push('/shopAudit')
                 }, 2500)
+            })
+        },
+        getSettlementList: function(){
+            getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
+                console.log(res)
+                this.settlementTemplateList = res.list;
             })
         },
         back: function(){
@@ -221,7 +240,11 @@ export default {
             }
         },
         pass: function(){
-            passShopAudit(this.shopDetail.shopId).then(res=>{
+            var params = {
+                settlementTemplateId: this.settlementTemplateId,
+                shopId: this.shopDetail.shopId
+            }
+            passShopAudit(params).then(res=>{
                 if(res){
                     this.$message({
                         type: 'success',
@@ -272,6 +295,9 @@ export default {
     img{
         vertical-align: middle;
         height: 120px;
+    }
+    .settlement{
+        margin: 15px 0;
     }
 }
 </style>

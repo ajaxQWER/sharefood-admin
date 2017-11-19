@@ -228,6 +228,22 @@ export const updateArticleById = params => {
     return ajax.post('admin/article/' + params.articleId, params);
 };
 
+//结算模板
+export const getSettlementTemplateLists = params => {
+    return ajax.get('admin/settlementTemplate', params);
+};
+export const addSettlementTemplate = params => {
+    return ajax.put('admin/settlementTemplate', params);
+};
+export const deleteSettlementTemplateById = id => {
+    return ajax.delete('admin/settlementTemplate/' + id);
+};
+export const findOneBySettlementTemplateId = id => {
+    return ajax.get('admin/settlementTemplate/' + id);
+};
+export const updateSettlementTemplateId = params => {
+    return ajax.post('admin/settlementTemplate/' + params.settlementTemplateId, params);
+};
 
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
