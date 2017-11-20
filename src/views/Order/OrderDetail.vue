@@ -16,6 +16,8 @@
                 <li>订单名称：{{orderLists.orderName}}</li>
                 <li>订单价格：{{orderLists.orderPrice?formatMoney(orderLists.orderPrice):'0.00'}}元</li>
                 <li>订单状态：{{formatOrderStatus(orderLists.orderStatus)}}</li>
+                <li v-if="orderLists.orderCancel">取消类型：{{formatOrderCancelType(orderLists.orderCancel.cancelType)}}</li>
+                <li v-if="orderLists.orderCancel">取消原因：{{formatOrderCancelReason(orderLists.orderCancel.orderCancelReason)}}</li>
                 <li>订单类型：{{formatOrderType(orderLists.orderType)}}</li>
                 <!-- <li>订单支付SN号：{{orderLists.paymentSN}}</li> -->
                 <li>订单备注：{{orderLists.orderContent?orderLists.orderContent:'-'}}</li>
@@ -95,6 +97,38 @@ export default {
                     break;
             }
         },
+	    formatOrderCancelType: function (cancelType) {
+		    switch(cancelType){
+			    case 'USER':
+				    return '用户取消';
+			    case 'SHOP':
+				    return '商家取消';
+			    case 'WAIT_PAY_TIMEOUT':
+				    return '等待支付超时';
+			    case 'RECEIVING_TIMEOUT':
+				    return '等待接单超时';
+			    case 'DELIVERY_REJECT':
+				    return '配送拒绝';
+			    default:
+				    break;
+		    }
+	    },
+	    formatOrderCancelReason: function (cancelReason) {
+		    switch(cancelReason){
+			    case 'TEMPORARY_EMERGENCY':
+				    return '临时有事，我不想要了';
+			    case 'WRONG_INFORMATION':
+				    return '信息错误，我想重新点';
+			    case 'PAYMENT_PROBLEMS':
+				    return '支付遇到问题';
+			    case 'OTHER':
+				    return '其他原因';
+			    case 'CLICK_ERRORLY':
+				    return '点错了，我想重新点';
+			    default:
+				    break;
+		    }
+	    },
         formatPayType: function(type){
             switch(type){
                 case 'WX':
