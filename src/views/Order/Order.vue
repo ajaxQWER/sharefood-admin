@@ -6,13 +6,43 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-form class="inline-form">
-                <el-form-item label="搜索订单"></el-form-item>
+            <el-form class="inline-form" :inline="true" @sublimt.navite.prevent>
+                <el-form-item label="搜索订单">
+                    <el-input placeholder="请输入订单号" icon="search" v-model="orderNum" :on-icon-click="searchOrder">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="店铺名称">
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="orderShopNameLike" :on-icon-click="searchOrder">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="下单人">
+                    <el-input placeholder="请输入下单人名称" icon="search" v-model="orderContactNameLike" :on-icon-click="searchOrder">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="订单状态">
+                    <el-select v-model="orderStatus" placeholder="请选择" @change="searchOrder">
+                        <el-option
+                          v-for="(item,index) in orderStatusList"
+                          :key="index"
+                          :label="item.key"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="订单起始时间">
+                    <el-date-picker
+                          v-model="dateRange"
+                          type="datetimerange"
+                          placeholder="选择时间范围"
+                          align="right"
+                          range-separator="~"
+                          @change="selectDateRange">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="resetForm('ruleForm')">重置查询条件</el-button>
+                </el-form-item>
             </el-form>
-            <el-col :span="4">
-                <el-input placeholder="请输入订单号" icon="search" v-model="searchContent" :on-icon-click="searchOrder">
-                </el-input>
-            </el-col>
         </el-row>
         <el-row>
             <el-col>
@@ -67,12 +97,50 @@ import {
 } from '@/api/api'
 export default {
     data: function() {
+        var _this = this;
         return {
-            searchContent: '',
+            orderNum: '',
             pageId: 1,
             pageSize: 20,
             counts: 0,
-            orderLists: null
+            orderLists: null,
+            orderStatus: '',
+            orderShopNameLike: '',
+            dateRange: '',
+            orderTimeBeginTime: '',
+            orderTimeEndTime: '',
+            orderContactNameLike: '',
+            orderStatusList: [{
+                key: '全部订单',
+                value: ''
+            },{
+                key: '等待支付',
+                value: 'WAIT_PAY'
+            },{
+                key: '等待商家接单',
+                value: 'PAYED'
+            },{
+                key: '商家接单',
+                value: 'MERCHANT_CONFIRM_RECEIPT'
+            },{
+                key: '等待取货',
+                value: 'WAIT_PICKUP'
+            },{
+                key: '取货中',
+                value: 'PICKUPING'
+            },{
+                key: '配送中',
+                value: 'SHIPPING'
+            },{
+                key: '已送达',
+                value: 'DELIVERED'
+            },{
+                key: '交易完成',
+                value: 'TRANSACT_FINISHED'
+            },{
+                key: '订单取消',
+                value: 'CANCELLATION'
+            }]
         }
     },
     created: function() {
@@ -82,7 +150,7 @@ export default {
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
-            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.searchContent } }).then(data => {
+            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.orderLists = data.list;
@@ -103,13 +171,21 @@ export default {
                 case 'WAIT_PAY':
                     return '等待支付';
                 case 'PAYED':
-                    return '支付完成,等待发货';
+                    return '等待商家接单';
                 case 'SHIPPING':
                     return '配送中';
                 case 'CANCELLATION':
-                    return '已取消';
+                    return '订单取消';
                 case 'TRANSACT_FINISHED':
                     return '交易完成';
+                case 'MERCHANT_CONFIRM_RECEIPT':
+                    return '商家接单';
+                case 'WAIT_PICKUP':
+                    return '等待取货';
+                case 'PICKUPING':
+                    return '取货中';
+                case 'DELIVERED':
+                    return '已送达';
                 default:
                     break;
             }
@@ -117,6 +193,29 @@ export default {
         showOrderInfo: function(index, row){
             var orderId = row.orderId;
             this.$router.push('/orderDetail?orderId=' + orderId)
+        },
+        selectDateRange: function(value){
+            if(!value){
+                this.orderTimeBeginTime = '';
+                this.orderTimeEndTime = '';
+                this.getOrderLists();
+                // this.orderTimeEndTime = '';
+                return;
+            }
+            var dateRange = value.split('~');
+            this.orderTimeBeginTime = dateRange[0];
+            this.orderTimeEndTime = dateRange[1];
+            this.getOrderLists();
+        },
+        resetForm: function(formName) {
+            this.orderNum = '';
+            this.orderStatus = '';
+            this.orderShopNameLike = '';
+            this.dateRange = '';
+            this.orderTimeBeginTime = '';
+            this.orderTimeEndTime = '';
+            this.orderContactNameLike = '';
+            this.getOrderLists();
         }
     }
 }
