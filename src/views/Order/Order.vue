@@ -19,6 +19,10 @@
                     <el-input placeholder="请输入下单人名称" icon="search" v-model="orderContactNameLike" :on-icon-click="searchOrder">
                     </el-input>
                 </el-form-item>
+                <el-form-item label="联系人手机号">
+                    <el-input placeholder="请输入下单联系人手机号" icon="search" v-model="orderPhoneLike" :on-icon-click="searchOrder">
+                    </el-input>
+                </el-form-item>
                 <el-form-item label="订单状态">
                     <el-select v-model="orderStatus" placeholder="请选择" @change="searchOrder">
                         <el-option
@@ -53,8 +57,11 @@
                     <el-table-column label="订单名称" align="center">
                         <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="下单人" align="center">
+                    <el-table-column label="下单人" width="100px" align="center">
                         <template scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="联系人手机号" width="140px" align="center">
+                        <template scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="下单时间" align="center">
                         <template scope="scope">{{moment(scope.row.addTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
@@ -68,7 +75,7 @@
                             <span v-else>{{formatOrderStatus(scope.row.orderStatus)}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="店铺名称" align="center">
+                    <el-table-column label="店铺名称" width="240px" align="center">
                         <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
@@ -79,7 +86,6 @@
                 </el-table>
             </el-col>
         </el-row>
-
         <!-- 分页 -->
         <el-row>
             <el-col class="pagination">
@@ -106,6 +112,7 @@ export default {
             orderLists: null,
             orderStatus: '',
             orderShopNameLike: '',
+            orderPhoneLike: '',
             dateRange: '',
             orderTimeBeginTime: '',
             orderTimeEndTime: '',
@@ -114,32 +121,35 @@ export default {
                 key: '全部订单',
                 value: ''
             },{
-                key: '等待支付',
-                value: 'WAIT_PAY'
-            },{
-                key: '等待商家接单',
-                value: 'PAYED'
-            },{
-                key: '商家接单',
-                value: 'MERCHANT_CONFIRM_RECEIPT'
-            },{
-                key: '等待取货',
-                value: 'WAIT_PICKUP'
-            },{
-                key: '取货中',
-                value: 'PICKUPING'
-            },{
-                key: '配送中',
-                value: 'SHIPPING'
-            },{
-                key: '已送达',
-                value: 'DELIVERED'
-            },{
                 key: '交易完成',
                 value: 'TRANSACT_FINISHED'
             },{
                 key: '订单取消',
                 value: 'CANCELLATION'
+            },{
+                key: '已送达',
+                value: 'DELIVERED'
+            },{
+                key: '配送中',
+                value: 'SHIPPING'
+            },{
+                key: '取货中',
+                value: 'PICKUPING'
+            },{
+                key: '等待取货',
+                value: 'WAIT_PICKUP'
+            },{
+                key: '等待取货',
+                value: 'WAIT_PICKUP'
+            },{
+                key: '商家接单',
+                value: 'MERCHANT_CONFIRM_RECEIPT'
+            },{
+                key: '等待商家接单',
+                value: 'PAYED'
+            },{
+                key: '等待支付',
+                value: 'WAIT_PAY'
             }]
         }
     },
@@ -150,7 +160,7 @@ export default {
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
-            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike } }).then(data => {
+            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike,orderPhoneLike: this.orderPhoneLike } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.orderLists = data.list;
@@ -215,6 +225,7 @@ export default {
             this.orderTimeBeginTime = '';
             this.orderTimeEndTime = '';
             this.orderContactNameLike = '';
+            this.orderPhoneLike = '';
             this.getOrderLists();
         }
     }
