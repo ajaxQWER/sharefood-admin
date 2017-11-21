@@ -31,6 +31,22 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="店铺状态">
+                    <el-select v-model="shelves" placeholder="请选择店铺状态" @change="searchShop">
+                        <el-option
+                            label="全部"
+                            value=" ">
+                        </el-option>
+                        <el-option
+                            label="上架"
+                            :value="true">
+                        </el-option>
+                        <el-option
+                            label="下架"
+                            :value="false">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
         </el-row>
         <el-row>
@@ -115,6 +131,7 @@ export default {
             audit: '',
             deliveryAuditStatus: '',
             audit: '',
+            shelves: '',
             shopType: '',
             formInline: {
                 topper: 0
@@ -160,7 +177,7 @@ export default {
     methods: {
         //获取列表
         getShopLists: function() {
-            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent,deliveryAuditStatus: this.deliveryAuditStatus, audit: this.audit } }).then(data => {
+            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent,deliveryAuditStatus: this.deliveryAuditStatus, audit: this.audit, shelves: this.shelves } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.shopList = data.list;
