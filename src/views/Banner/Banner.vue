@@ -196,7 +196,7 @@ export default {
             this.getBannerLists()
         },
         formatImageUrl: function(url) {
-            return this.UPLOADURL + url;
+            return this.UPLOADURL + url + '/banner.png';
         },
         handleAvatarSuccess: function(res){
             console.log(res)

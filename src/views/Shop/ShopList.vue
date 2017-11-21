@@ -6,13 +6,32 @@
             </el-col>
         </el-row>
         <el-row class="search-row">
-            <el-form class="inline-form">
-                <el-form-item label="搜索店铺"></el-form-item>
+            <el-form class="inline-form" :inline="true">
+                <el-form-item label="搜索店铺">
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShop">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="店铺审核状态">
+                    <el-select v-model="audit" placeholder="请选择店铺审核状态" @change="searchShop">
+                        <el-option
+                          v-for="(item,index) in shopAuditStatusList"
+                          :key="index"
+                          :label="item.key"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="配送审核状态">
+                    <el-select v-model="deliveryAuditStatus" placeholder="请选择配送审核状态" @change="searchShop">
+                        <el-option
+                          v-for="(item,index) in deliveryAuditStatusList"
+                          :key="index"
+                          :label="item.key"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
-            <el-col :span="4">
-                <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShop">
-                </el-input>
-            </el-col>
         </el-row>
         <el-row>
             <el-col>
@@ -93,9 +112,45 @@ export default {
             isAdd: true,
             shopList: null,
             shopId: 0,
+            audit: '',
+            deliveryAuditStatus: '',
+            audit: '',
+            shopType: '',
             formInline: {
                 topper: 0
-            }
+            },
+            deliveryAuditStatusList: [{
+                key: '全部',
+                value: ' '
+            },{
+                key: '审核通过',
+                value: 'ADOPT'
+            },{
+                key: '审核不通过',
+                value: 'UNADOPT'
+            },{
+                key: '审核中',
+                value: 'IN_THE_REVIEW'
+            },{
+                key: '未审核',
+                value: 'UN_AUDIT'
+            },{
+                key: '未提交',
+                value: 'UN_COMMIT'
+            }],
+            shopAuditStatusList: [{
+                key: '全部',
+                value: ' '
+            },{
+                key: '审核通过',
+                value: 'AUDIT_ADOPT'
+            },{
+                key: '审核不通过',
+                value: 'AUDIT_UNADOPT'
+            },{
+                key: '等待审核',
+                value: 'WAIT_AUDIT'
+            }]
         }
     },
     created: function() {
@@ -105,7 +160,7 @@ export default {
     methods: {
         //获取列表
         getShopLists: function() {
-            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent } }).then(data => {
+            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent,deliveryAuditStatus: this.deliveryAuditStatus, audit: this.audit } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.shopList = data.list;
