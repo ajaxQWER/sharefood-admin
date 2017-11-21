@@ -65,6 +65,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetForm('ruleForm')">重置查询条件</el-button>
+                    <el-button type="primary" @click="searchOrder">更新订单数据</el-button>
                 </el-form-item>
             </el-form>
         </el-row>

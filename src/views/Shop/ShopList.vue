@@ -47,6 +47,22 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="营业状态">
+                    <el-select v-model="operatingState" placeholder="请选择营业状态" @change="searchShop">
+                        <el-option
+                            label="全部"
+                            value=" ">
+                        </el-option>
+                        <el-option
+                            label="营业中"
+                            :value="true">
+                        </el-option>
+                        <el-option
+                            label="歇业中"
+                            :value="false">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
         </el-row>
         <el-row>
@@ -67,6 +83,9 @@
                     </el-table-column>
                     <el-table-column label="联系电话" width="160px" align="center">
                         <template scope="scope">{{scope.row.phoneNum?scope.row.phoneNum:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="营业状态" align="center">
+                        <template scope="scope">{{scope.row.operatingState?'营业中':'歇业中'}}</template>
                     </el-table-column>
                     <el-table-column label="状态" align="center">
                         <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
@@ -133,6 +152,7 @@ export default {
             audit: '',
             shelves: '',
             shopType: '',
+            operatingState: '',
             formInline: {
                 topper: 0
             },
@@ -177,7 +197,7 @@ export default {
     methods: {
         //获取列表
         getShopLists: function() {
-            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent,deliveryAuditStatus: this.deliveryAuditStatus, audit: this.audit, shelves: this.shelves } }).then(data => {
+            shopList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent,deliveryAuditStatus: this.deliveryAuditStatus, audit: this.audit, shelves: this.shelves, operatingState: this.operatingState } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.shopList = data.list;
