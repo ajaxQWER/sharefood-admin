@@ -6,13 +6,26 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-form class="inline-form">
-                <el-form-item label="商品名称"></el-form-item>
+            <el-form class="inline-form" :inline="true">
+                <el-form-item label="商品名称">
+                    <el-input placeholder="请输入商品名称" icon="search" v-model="searchContent" :on-icon-click="getGoodsLists">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="店铺名称">
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="shopNameLike" :on-icon-click="getGoodsLists">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="商品状态">
+                    <el-select v-model="goodsStatus" placeholder="请选择" @change="getGoodsLists">
+                        <el-option
+                                v-for="(item,index) in goodsStatusList"
+                                :key="index"
+                                :label="item.key"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
-            <el-col :span="4">
-                <el-input placeholder="请输入商品名称" icon="search" v-model="searchContent" :on-icon-click="searchGoodsById">
-                        </el-input>
-            </el-col>
         </el-row>
         <el-row>
             <el-col>
@@ -24,7 +37,7 @@
                         <template scope="scope">{{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice)+'元':'0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="商品图片" align="center">
-                        <template scope="scope"><img :src="UPLOADURL + scope.row.goodsImgUrl" alt="" class="goods-img"></template>
+                        <template scope="scope"><img :src="UPLOADURL + scope.row.goodsImgUrl+'/goods.png'" alt="" class="goods-img"></template>
                     </el-table-column>
                     <el-table-column label="商品状态" width="100px" align="center">
                         <template scope="scope">{{formatGoodsStatus(scope.row.goodsStatus)}}</template>
@@ -72,7 +85,22 @@ export default {
             pageId: 1,
             pageSize: 10,
             counts: 0,
-            goodsLists: null
+            goodsLists: null,
+	        shopNameLike: '',
+	        goodsStatus: '',
+	        goodsStatusList: [{
+		        key: '全部商品',
+		        value: ''
+	        },{
+		        key: '上架',
+		        value: 'PUTAWAY'
+	        },{
+		        key: '下架',
+		        value: 'SOLD_OUT'
+	        },{
+		        key: '删除',
+		        value: 'DELETE'
+	        }]
         }
     },
     created: function() {
@@ -82,16 +110,13 @@ export default {
     methods: {
         //获取视频分类列表
         getGoodsLists: function() {
-            goodsList({ params: { pageId: this.pageId, pageSize: this.pageSize, goodsNameLike: this.searchContent } }).then(data => {
+            goodsList({ params: { pageId: this.pageId, pageSize: this.pageSize, goodsNameLike: this.searchContent, goodsStatus: this.goodsStatus, shopNameLike: this.shopNameLike } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.goodsLists = data.list;
             })
         },
-        //搜索
-        searchGoodsById: function() {
-            this.getGoodsLists();
-        },
+
         //分页
         currentChange: function(val) {
             this.$router.push('?page=' + val)
