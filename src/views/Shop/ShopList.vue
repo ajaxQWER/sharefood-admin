@@ -41,7 +41,7 @@
                     </el-table-column>
                     <el-table-column prop="name" label="负责人" align="center"></el-table-column>
                     <el-table-column label="LOGO" align="center" width="140px">
-                        <template scope="scope"><img :src="UPLOADURL + scope.row.logoUrl" alt="" class="logo-img"></template>
+                        <template scope="scope"><img :src="UPLOADURL + scope.row.logoUrl + '/shopLogo.png'" alt="" class="logo-img"></template>
                     </el-table-column>
                     <el-table-column label="地址" width="280px" align="center">
                         <template scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
