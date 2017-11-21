@@ -69,6 +69,9 @@
                     <el-table-column label="订单价格" align="center">
                         <template scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
                     </el-table-column>
+                    <el-table-column label="支付方式" align="center">
+                        <template scope="scope">{{formatPayment(scope.row.payment)}}</template>
+                    </el-table-column>
                     <el-table-column label="订单状态" align="center">
                         <template scope="scope">
                             <span v-if="scope.row.orderStatus=='CANCELLATION'" style="color:red;">{{formatOrderStatus(scope.row.orderStatus)}}</span>
@@ -227,6 +230,18 @@ export default {
             this.orderContactNameLike = '';
             this.orderPhoneLike = '';
             this.getOrderLists();
+        },
+        formatPayment: function(status){
+            switch(status){
+                case 'WX':
+                    return '微信';
+                case 'ALIPAY':
+                    return '支付宝';
+                case 'BALANCE':
+                    return '余额';
+                default:
+                    break;
+            }
         }
     }
 }
