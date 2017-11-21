@@ -28,8 +28,12 @@
                 <!-- <li>优惠券详情：{{orderLists.coupon}}</li> -->
                 <!-- <li>可使用优惠券数量：{{orderLists.couponNum}}</li> -->
                 <li>优惠券序列号：{{orderLists.couponSNId}}</li>
-                <li>订单完成时间：{{orderLists.finishTime?moment(orderLists.finishTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
                 <li>是否支付完成：{{orderLists.isFinishPay?'是':'否'}}</li>
+                <li>订单支付时间：{{orderLists.payTime?moment(orderLists.payTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
+                <li>订单完成时间：{{orderLists.finishTime?moment(orderLists.finishTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
+                <li>支付方式：{{formatPayType(orderLists.payment)}}</li>
+                <li v-if="orderLists.orderType == 'RESERVE'">就餐人数：{{orderLists.repastNum}}人</li>
+                <li v-if="orderLists.orderType == 'RESERVE'">就餐时间：{{moment(orderLists.repastTime).format('YYYY-MM-DD HH:mm:ss')}}</li>
                 <li>是否包房：{{orderLists.isPrivateRoom?'是':'否'}}</li>
                 <li v-if="orderLists.orderGoods.length">订单商品：
                     <el-table :data="orderLists.orderGoods" style="width: 800px; margin-left: 20px;">
@@ -43,10 +47,6 @@
                         </el-table-column>
                     </el-table>
                 </li>
-                <li>订单支付时间：{{orderLists.payTime?moment(orderLists.payTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
-                <li>支付方式：{{formatPayType(orderLists.payment)}}</li>
-                <li>就餐人数：{{orderLists.repastNum}}人</li>
-                <li>就餐时间：{{moment(orderLists.repastTime).format('YYYY-MM-DD HH:mm:ss')}}</li>
             </ul>
         </el-col>
     </el-row>
@@ -83,16 +83,22 @@ export default {
         },
         formatOrderStatus: function(status){
             switch(status){
-                case 'WAIT_PAY':
-                    return '等待支付';
                 case 'PAYED':
-                    return '支付完成,等待发货';
+                    return '新订单';
                 case 'SHIPPING':
                     return '配送中';
                 case 'CANCELLATION':
                     return '已取消';
                 case 'TRANSACT_FINISHED':
-                    return '交易完成';
+                    return '已完成';
+                case 'MERCHANT_CONFIRM_RECEIPT':
+                    return '已接单';
+                case 'WAIT_PICKUP':
+                    return '待取货';
+                case 'PICKUPING':
+                    return '取货中';
+                case 'DELIVERED':
+                    return '已送达';
                 default:
                     break;
             }
@@ -135,6 +141,8 @@ export default {
                     return '微信';
                 case 'ALIPAY':
                     return '支付宝';
+                case 'BALANCE':
+                    return '余额';
                 default:
                     return '-'
             }
