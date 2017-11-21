@@ -26,7 +26,7 @@
                     <el-table-column label="审核状态" align="center">
                         <template scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
                     </el-table-column><el-table-column label="配送审核状态" align="center">
-                    <template scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
+                    <template scope="scope">{{formatDeliveryAuditStatus(scope.row.deliveryAuditStatus)}}</template>
                 </el-table-column>
                     <el-table-column label="操作" width="200px" align="center">
                         <template scope="scope">
@@ -97,6 +97,20 @@ export default {
                 case 'AUDIT_ADOPT':
                     return '审核通过';
                 case 'AUDIT_UNADOPT':
+                    return '审核不通过';
+            }
+        },
+        formatDeliveryAuditStatus: function(auditType){
+            switch(auditType){
+                case 'UN_COMMIT,':
+                    return '未提交';
+                case 'UN_AUDIT':
+                    return '未审核';
+                case 'IN_THE_REVIEW':
+                    return '审核中';
+                case 'ADOPT':
+                    return '审核通过';
+                case 'UNADOPT':
                     return '审核不通过';
             }
         },

@@ -36,6 +36,9 @@
                     <el-table-column label="状态" align="center">
                         <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
                     </el-table-column>
+                    <el-table-column label="配送状态" align="center">
+                        <template scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
+                    </el-table-column>
                     <el-table-column label="置顶值" align="center">
                         <template scope="scope">{{scope.row.topper}}</template>
                     </el-table-column>
@@ -189,6 +192,20 @@ export default {
                 });
                 this.cancelSetToper()
             })
+        },
+        formatAuditStatus: function(auditType){
+            switch(auditType){
+                case 'UN_COMMIT,':
+                    return '未提交';
+                case 'UN_AUDIT':
+                    return '未审核';
+                case 'IN_THE_REVIEW':
+                    return '审核中';
+                case 'ADOPT':
+                    return '审核通过';
+                case 'UNADOPT':
+                    return '审核不通过';
+            }
         }
     }
 }
