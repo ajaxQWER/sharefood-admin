@@ -12,12 +12,13 @@
         </el-col>
         <el-col>
             <ul class="order-lists" v-if="orderLists">
+                <li>订单id：{{orderLists.orderId}}</li>
                 <li>订单号：{{orderLists.orderNum}}</li>
                 <li>订单名称：{{orderLists.orderName}}</li>
                 <li>订单价格：{{orderLists.orderPrice?formatMoney(orderLists.orderPrice):'0.00'}}元</li>
                 <li>订单状态：{{formatOrderStatus(orderLists.orderStatus)}}</li>
-                <li v-if="orderLists.orderCancel">取消类型：{{formatOrderCancelType(orderLists.orderCancel.cancelType)}}</li>
-                <li v-if="orderLists.orderCancel">取消原因：{{formatOrderCancelReason(orderLists.orderCancel.orderCancelReason)}}</li>
+                <li v-if="orderLists.orderStatus=='CANCELLATION'">取消类型：{{formatOrderCancelType(orderLists.orderCancel.cancelType)}}</li>
+                <li v-if="orderLists.orderStatus=='CANCELLATION'">取消原因：{{formatOrderCancelReason(orderLists.orderCancel.orderCancelReason)}}</li>
                 <li>订单类型：{{formatOrderType(orderLists.orderType)}}</li>
                 <!-- <li>订单支付SN号：{{orderLists.paymentSN}}</li> -->
                 <li>订单备注：{{orderLists.orderContent?orderLists.orderContent:'-'}}</li>
@@ -83,6 +84,8 @@ export default {
         },
         formatOrderStatus: function(status){
             switch(status){
+                case 'WAIT_PAY':
+                    return '等待支付';
                 case 'PAYED':
                     return '新订单';
                 case 'SHIPPING':
@@ -110,9 +113,9 @@ export default {
 			    case 'SHOP':
 				    return '商家取消';
 			    case 'WAIT_PAY_TIMEOUT':
-				    return '等待支付超时';
+				    return '支付超时';
 			    case 'RECEIVING_TIMEOUT':
-				    return '等待接单超时';
+				    return '接单超时';
 			    case 'DELIVERY_REJECT':
 				    return '配送拒绝';
 			    default:

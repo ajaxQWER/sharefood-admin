@@ -72,6 +72,9 @@
         <el-row>
             <el-col>
                 <el-table :data="orderLists">
+                    <el-table-column label="订单id" align="center">
+                        <template scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
+                    </el-table-column>
                     <el-table-column label="订单号" align="center">
                         <template scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
                     </el-table-column>
