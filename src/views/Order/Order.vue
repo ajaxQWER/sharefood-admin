@@ -7,7 +7,7 @@
         </el-row>
         <el-row>
             <el-form class="inline-form" :inline="true" @sublimt.navite.prevent>
-                <el-form-item label="搜索订单">
+                <el-form-item label="搜索订单号">
                     <el-input placeholder="请输入订单号" icon="search" v-model="orderNum" :on-icon-click="searchOrder">
                     </el-input>
                 </el-form-item>
@@ -24,12 +24,32 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="订单状态">
-                    <el-select v-model="orderStatus" placeholder="请选择" @change="searchOrder">
+                    <el-select v-model="orderStatus" placeholder="请选择订单状态" @change="searchOrder">
                         <el-option
                           v-for="(item,index) in orderStatusList"
                           :key="index"
                           :label="item.key"
                           :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="支付方式">
+                    <el-select v-model="payment" placeholder="请选择订单支付方式" @change="searchOrder">
+                        <el-option
+                          label="全部"
+                          value=" ">
+                        </el-option>
+                        <el-option
+                          label="余额"
+                          value="BALANCE">
+                        </el-option>
+                        <el-option
+                          label="支付宝"
+                          value="ALIPAY">
+                        </el-option>
+                        <el-option
+                          label="微信"
+                          value="WX">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -78,6 +98,11 @@
                             <span v-else>{{formatOrderStatus(scope.row.orderStatus)}}</span>
                         </template>
                     </el-table-column>
+                    <el-table-column label="拒单原因" align="center">
+                        <template scope="scope">
+                            {{formatCancelType(scope.row.orderCancel.cancelType)}}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="店铺名称" width="240px" align="center">
                         <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
@@ -120,6 +145,7 @@ export default {
             orderTimeBeginTime: '',
             orderTimeEndTime: '',
             orderContactNameLike: '',
+            payment: '',
             orderStatusList: [{
                 key: '全部订单',
                 value: ''
@@ -163,7 +189,7 @@ export default {
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
-            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike,orderPhoneLike: this.orderPhoneLike } }).then(data => {
+            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike,orderPhoneLike: this.orderPhoneLike, payment: this.payment } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.orderLists = data.list;
@@ -241,6 +267,22 @@ export default {
                     return '余额';
                 default:
                     break;
+            }
+        },
+        formatCancelType: function(type){
+            switch(type){
+                case 'USER':
+                    return '用户取消';
+                case 'SHOP':
+                    return '商家取消';
+                case 'WAIT_PAY_TIMEOUT':
+                    return '支付超时';
+                case 'RECEIVING_TIMEOUT':
+                    return '接单超时';
+                case 'DELIVERY_REJECT':
+                    return '配送拒绝';
+                default:
+                    return '-'
             }
         }
     }
