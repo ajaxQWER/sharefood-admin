@@ -33,6 +33,16 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="订单取消原因">
+                    <el-select v-model="cancelType" placeholder="请选择订单取消原因" @change="searchOrder">
+                        <el-option
+                          v-for="(item,index) in cancelTypeArr"
+                          :key="index"
+                          :label="item.key"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="支付方式">
                     <el-select v-model="payment" placeholder="请选择订单支付方式" @change="searchOrder">
                         <el-option
@@ -172,9 +182,6 @@ export default {
                 key: '等待取货',
                 value: 'WAIT_PICKUP'
             },{
-                key: '等待取货',
-                value: 'WAIT_PICKUP'
-            },{
                 key: '商家接单',
                 value: 'MERCHANT_CONFIRM_RECEIPT'
             },{
@@ -183,6 +190,23 @@ export default {
             },{
                 key: '等待支付',
                 value: 'WAIT_PAY'
+            }],
+            cancelType: '',
+            cancelTypeArr: [{
+                key: '用户取消',
+                value: 'USER'
+            },{
+                key: '商家取消',
+                value: 'SHOP'
+            },{
+                key: '支付超时',
+                value: 'WAIT_PAY_TIMEOUT'
+            },{
+                key: '接单超时',
+                value: 'RECEIVING_TIMEOUT'
+            },{
+                key: '配送拒绝',
+                value: 'DELIVERY_REJECT'
             }]
         }
     },
@@ -193,7 +217,7 @@ export default {
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
-            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike,orderPhoneLike: this.orderPhoneLike, payment: this.payment } }).then(data => {
+            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike,orderPhoneLike: this.orderPhoneLike, payment: this.payment, cancelType: this.cancelType } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.orderLists = data.list;
