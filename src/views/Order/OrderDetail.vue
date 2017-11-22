@@ -36,7 +36,7 @@
                 <li v-if="orderLists.orderTakeout.carrierDriverName">
                     <div>骑手信息：
                         <p class="driver">骑手名字：{{orderLists.orderTakeout.carrierDriverName}}</p>
-                        <p class="driver">联系电话：{{orderLists.orderTakeout.deliveryTime}}</p>
+                        <p class="driver">联系电话：{{orderLists.orderTakeout.carrierDriverphone}}</p>
                     </div>
                 </li>
                 <li v-if="orderLists.orderType == 'RESERVE'">就餐人数：{{orderLists.repastNum}}人</li>
