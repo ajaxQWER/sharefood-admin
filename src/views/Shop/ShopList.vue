@@ -81,8 +81,11 @@
                     <el-table-column label="营业时间" width="180px" align="center">
                         <template scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00:00'}}</template>
                     </el-table-column>
-                    <el-table-column label="联系电话" width="160px" align="center">
+                    <el-table-column label="注册账号" width="160px" align="center">
                         <template scope="scope">{{scope.row.phoneNum?scope.row.phoneNum:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="联系电话" width="160px" align="center">
+                        <template scope="scope">{{scope.row.takeOutPhone?scope.row.takeOutPhone:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="营业状态" align="center">
                         <template scope="scope">{{scope.row.operatingState?'营业中':'歇业中'}}</template>
