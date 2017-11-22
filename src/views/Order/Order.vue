@@ -230,7 +230,7 @@ export default {
             if(val){
                 this.interVal = setInterval(() => {
                    this.getOrderLists();
-                }, 2000)
+                }, 10000)
             }else{
                 clearInterval(this.interVal)
                 this.interVal = null;
