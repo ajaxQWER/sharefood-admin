@@ -237,6 +237,10 @@ export default {
             }
         }
     },
+    destroyed: function(){
+        clearInterval(this.interVal)
+        this.interVal = null;
+    },
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
