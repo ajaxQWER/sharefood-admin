@@ -193,6 +193,9 @@ export default {
             }],
             cancelType: '',
             cancelTypeArr: [{
+                key: '全部',
+                value: ' '
+            },{
                 key: '用户取消',
                 value: 'USER'
             },{
