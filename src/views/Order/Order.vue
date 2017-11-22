@@ -106,6 +106,9 @@
                     <el-table-column label="支付方式" align="center">
                         <template scope="scope">{{formatPayment(scope.row.payment)}}</template>
                     </el-table-column>
+                    <el-table-column label="支付完成" align="center">
+                        <template scope="scope">{{scope.row.isFinishPay?'已支付':'未支付'}}</template>
+                    </el-table-column>
                     <el-table-column label="订单状态" align="center">
                         <template scope="scope">
                             <span v-if="scope.row.orderStatus=='CANCELLATION'" style="color:red;">{{formatOrderStatus(scope.row.orderStatus)}}</span>

@@ -33,6 +33,12 @@
                 <li>订单支付时间：{{orderLists.payTime?moment(orderLists.payTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
                 <li>订单完成时间：{{orderLists.finishTime?moment(orderLists.finishTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</li>
                 <li>支付方式：{{formatPayType(orderLists.payment)}}</li>
+                <li v-if="orderLists.orderTakeout.carrierDriverName">
+                    <div>骑手信息：
+                        <p class="driver">骑手名字：{{orderLists.orderTakeout.carrierDriverName}}</p>
+                        <p class="driver">联系电话：{{orderLists.orderTakeout.deliveryTime}}</p>
+                    </div>
+                </li>
                 <li v-if="orderLists.orderType == 'RESERVE'">就餐人数：{{orderLists.repastNum}}人</li>
                 <li v-if="orderLists.orderType == 'RESERVE'">就餐时间：{{moment(orderLists.repastTime).format('YYYY-MM-DD HH:mm:ss')}}</li>
                 <li>是否包房：{{orderLists.isPrivateRoom?'是':'否'}}</li>
@@ -183,6 +189,10 @@ export default {
         padding-left: 20px;
         line-height: 2;
         font-size: 16px;
+    }
+    .driver{
+        padding-left: 20px;
+        margin: 0;
     }
 }
 </style>
