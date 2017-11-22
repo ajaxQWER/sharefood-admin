@@ -75,7 +75,10 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetForm('ruleForm')">重置查询条件</el-button>
-                    <el-button type="primary" @click="searchOrder">更新订单数据</el-button>
+                    <el-button type="primary" @click="searchOrder" :disabled="autoFresh">更新订单数据</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-checkbox v-model="autoFresh">10秒自动更新订单</el-checkbox>
                 </el-form-item>
             </el-form>
         </el-row>
@@ -163,6 +166,8 @@ export default {
             orderTimeEndTime: '',
             orderContactNameLike: '',
             payment: '',
+            autoFresh: false,
+            interVal: null,
             orderStatusList: [{
                 key: '全部订单',
                 value: ''
@@ -219,6 +224,18 @@ export default {
     created: function() {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getOrderLists();
+    },
+    watch: {
+        autoFresh: function(val, oldVal){
+            if(val){
+                this.interVal = setInterval(() => {
+                   this.getOrderLists();
+                }, 2000)
+            }else{
+                clearInterval(this.interVal)
+                this.interVal = null;
+            }
+        }
     },
     methods: {
         //获取视频分类列表
