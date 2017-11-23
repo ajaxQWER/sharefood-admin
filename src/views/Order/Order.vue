@@ -82,9 +82,9 @@
                 </el-form-item>
             </el-form>
         </el-row>
-        <el-row>
+        <el-row class="tabledata">
             <el-col>
-                <el-table :data="orderLists">
+                <el-table :data="orderLists" :row-style="{fontSize:'12px'}">
                     <el-table-column label="订单id" align="center">
                         <template scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
                     </el-table-column>
@@ -94,10 +94,10 @@
                     <el-table-column label="订单名称" align="center">
                         <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="下单人" width="100px" align="center">
+                    <el-table-column label="下单人" align="center">
                         <template scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="联系人手机号" width="140px" align="center">
+                    <el-table-column label="联系人手机号" align="center">
                         <template scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="下单时间" align="center">
@@ -123,7 +123,7 @@
                             {{formatCancelType(scope.row.orderCancel.cancelType)}}
                         </template>
                     </el-table-column>
-                    <el-table-column label="店铺名称" width="240px" align="center">
+                    <el-table-column label="店铺名称" align="center">
                         <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">

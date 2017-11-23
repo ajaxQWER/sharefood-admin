@@ -120,6 +120,7 @@ export default {
         //关闭添加弹窗
         closeaddDialog: function() {
             this.isAdd = true;
+            this.addLoading = false;
             this.formInline = {
                 bannerId: 0,
                 imageUrl: "",
@@ -130,6 +131,7 @@ export default {
         },
         //添加分类
         addCategory: function() {
+            this.addLoading = true;
             if (this.isAdd) {
                 addBanner(this.formInline).then(data => {
                     this.getBannerLists();
