@@ -19,6 +19,7 @@ import ArticleList from './views/Article/ArticleList.vue'
 import ArticleType from './views/Article/ArticleType.vue'
 import ArticleEdit from './views/Article/ArticleEdit.vue'
 import Settlement from './views/Settlement/Settlement.vue'
+import SettlementRecord from './views/Settlement/SettlementRecord.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -159,11 +160,11 @@ let routes = [{
 }, {
     path: '/',
     component: Home,
-    name: '',
-    leaf: true, //只有一个节点
+    name: '结算管理',
     iconCls: 'fa fa-money',
     children: [
         { path: '/settlement', component: Settlement, name: '结算模板' },
+        { path: '/settlementRecord', component: SettlementRecord, name: '结算记录' }
     ]
 }, {
     path: '*',

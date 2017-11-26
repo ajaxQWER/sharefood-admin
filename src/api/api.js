@@ -249,6 +249,15 @@ export const updateSettlementTemplateId = params => {
     return ajax.post('admin/settlementTemplate/' + params.settlementTemplateId, params);
 };
 
+//结算记录
+export const getSettlementRecordLists = params => {
+    return ajax.get('admin/settlementRecord', params);
+};
+export const getSettlementRecordBySerialNumber = serialNumber => {
+    return ajax.get('admin/settlementRecord/' + serialNumber);
+};
+
+
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
     return ajax.post('commons/upload' + params.path, params);
