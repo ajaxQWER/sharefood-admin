@@ -53,7 +53,11 @@ var toDecimal2 = function(num) {
 Object.defineProperty(Vue.prototype, 'UPLOADURL', {value: process.env.UPLOAD_URL});
 Object.defineProperty(Vue.prototype, 'BASEURL', {value: process.env.BASE_URL});
 Object.defineProperty(Vue.prototype, 'moment', {value: moment});
+<<<<<<< HEAD
 Object.defineProperty(Vue.prototype, 'formatMoney', {value: toDecimal2});
+=======
+Object.defineProperty(Vue.prototype, 'moneyFormat', {value: toDecimal2});
+>>>>>>> 0132742e26b713510fede29007bf5cbb0a53ea98
 
 const router = new VueRouter({
     mode:"history",
