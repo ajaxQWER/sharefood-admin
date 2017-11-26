@@ -161,14 +161,14 @@ export default {
         },
         selectDateRange: function(value){
             if(!value){
-                this.recordEndTime = '';
                 this.recordBeginTime = '';
+                this.recordEndTime = '';
                 this.getSettlementRecordLists();
                 return;
             }
             var dateRange = value.split('~');
-            this.recordEndTime = dateRange[0];
-            this.recordBeginTime = dateRange[1];
+            this.recordBeginTime = dateRange[0];
+            this.recordEndTime = dateRange[1];
             this.getSettlementRecordLists();
         },
         closeDialog: function(){
