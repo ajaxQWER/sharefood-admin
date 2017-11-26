@@ -6,13 +6,21 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-form class="inline-form">
-                <el-form-item label="搜索用户"></el-form-item>
+            <el-form class="inline-form" :inline="true" @sublimt.navite.prevent>
+                <el-form-item label="搜索用户">
+                    <el-input placeholder="请输入用户名" icon="search" v-model="searchContent" :on-icon-click="searchCouponById"></el-input>
+                </el-form-item>
+                <el-form-item label="用户注册起始时间">
+                    <el-date-picker
+                          v-model="dateRange"
+                          type="datetimerange"
+                          placeholder="选择时间范围"
+                          align="right"
+                          range-separator="~"
+                          @change="selectDateRange">
+                    </el-date-picker>
+                </el-form-item>
             </el-form>
-            <el-col :span="4">
-                <el-input placeholder="请输入用户名" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
-                </el-input>
-            </el-col>
         </el-row>
         <el-row>
             <el-col>
@@ -67,6 +75,9 @@ export default {
             pageId: 1,
             pageSize: 20,
             counts: 0,
+            dateRange: '',
+            registrationBeginTime: '',
+            registrationEndTime: '',
             userLists: null
         }
     },
@@ -77,7 +88,7 @@ export default {
     methods: {
         //获取视频分类列表
         getUserLists: function() {
-            userList({ params: { pageId: this.pageId, pageSize: this.pageSize, usernameLike: this.searchContent } }).then(data => {
+            userList({ params: { pageId: this.pageId, pageSize: this.pageSize, usernameLike: this.searchContent, registrationBeginTime: this.registrationBeginTime, registrationEndTime: this.registrationEndTime } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.userLists = data.list;
@@ -92,6 +103,18 @@ export default {
             this.$router.push('?page=' + val)
             this.pageId = val;
             this.getUserLists()
+        },
+        selectDateRange: function(value){
+            if(!value){
+                this.registrationBeginTime = '';
+                this.registrationEndTime = '';
+                this.getUserLists();
+                return;
+            }
+            var dateRange = value.split('~');
+            this.registrationBeginTime = dateRange[0];
+            this.registrationEndTime = dateRange[1];
+            this.getUserLists();
         }
     }
 }
