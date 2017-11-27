@@ -257,6 +257,23 @@ export const getSettlementRecordBySerialNumber = serialNumber => {
     return ajax.get('admin/settlementRecord/' + serialNumber);
 };
 
+//代理商
+export const getAgentLists = params => {
+    return ajax.get('admin/agent', params);
+};
+export const addAgent = params => {
+    return ajax.put('admin/agent', params);
+};
+export const deleteAgentById = agentId => {
+    return ajax.delete('admin/agent/' + agentId);
+};
+export const findAgentById = agentId => {
+    return ajax.get('admin/agent/' + agentId);
+};
+export const updateAgentById =  params => {
+    return ajax.post('admin/agent/' + params.agentId, params);
+};
+
 
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
