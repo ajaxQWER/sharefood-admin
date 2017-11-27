@@ -264,8 +264,8 @@ export const getAgentLists = params => {
 export const addAgent = params => {
     return ajax.put('admin/agent', params);
 };
-export const deleteAgentById = agentId => {
-    return ajax.delete('admin/agent/' + agentId);
+export const updateAgentPassword = (agentId, params) => {
+    return ajax.post('admin/agent/secretkey/' + agentId, params);
 };
 export const findAgentById = agentId => {
     return ajax.get('admin/agent/' + agentId);

@@ -19,17 +19,17 @@
 				<el-table-column prop="agentId" label="代理商id" align="center" width="120px"></el-table-column>
                 <el-table-column prop="agentName" label="代理商名称" align="center"></el-table-column>
                 <el-table-column prop="username" label="代理商账号" align="center" width="180px"></el-table-column>
-                <el-table-column prop="settlementTemplateId" label="结算模板id" align="center" width="160px"></el-table-column>
+                <el-table-column prop="settlementTemplateName" label="结算模板" align="center" width="160px"></el-table-column>
                 <el-table-column label="注册时间" align="center" width="200px">
                     <template scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="上次登录时间" align="center" width="200px">
                     <template scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="160px" align="center">
+                <el-table-column label="操作" width="200px" align="center">
                     <template scope="scope">
-                        <el-button size="small" @click="updateAgent(scope.$index, scope.row)">修改</el-button>
-                        <el-button size="small" type="danger" @click="deleteAgent(scope.$index, scope.row)">删除</el-button>
+                        <el-button size="small" @click="updateAgent(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="small" type="primary" @click="showUpdatePwdPopup(scope.$index, scope.row)">修改密码</el-button>
                     </template>
                 </el-table-column>
 			</el-table>
@@ -40,7 +40,7 @@
 		            <el-input type="text" v-model="newAgent.agentName" auto-complete="off" placeholder="代理商名称"></el-input>
 		        </el-form-item>
 		        <el-form-item label="代理商账号">
-		            <el-input type="text" v-model="newAgent.username" auto-complete="off" placeholder="代理商账号"></el-input>
+		            <el-input type="text" v-model="newAgent.username" :disabled="!isAdd" auto-complete="off" placeholder="代理商账号"></el-input>
 		        </el-form-item>
 		        <el-form-item label="代理商密码" v-if="isAdd">
 		            <el-input type="text" v-model="newAgent.secretkey" auto-complete="off" placeholder="代理商密码"></el-input>
@@ -61,10 +61,21 @@
 		        <el-button type="primary" @click="addAgentFn" :loading="addLoading">确 定</el-button>
 		    </div>
 		</el-dialog>
+		<el-dialog title="修改密码" :visible.sync="updatePwdDialog" size="tiny" @close="closeUpdateDialog" class="dialog">
+			    <el-form :model="password" label-width="120px">
+			        <el-form-item label="新密码">
+			            <el-input type="text" v-model="password.newSecretkey" auto-complete="off" placeholder="新密码"></el-input>
+			        </el-form-item>
+			    </el-form>
+		    <div slot="footer" class="dialog-footer">
+		        <el-button @click="cancelUpdate">取 消</el-button>
+		        <el-button type="primary" @click="updatePwdFn" :loading="addLoading">确 定</el-button>
+		    </div>
+		</el-dialog>
 	</el-row>
 </template>
 <script>
-	import {getAgentLists,addAgent,deleteAgentById,updateAgentById,getSettlementTemplateLists} from '@/api/api'
+	import {getAgentLists,addAgent,updateAgentPassword,updateAgentById,getSettlementTemplateLists} from '@/api/api'
 	export default {
 		data: function(){
 			return {
@@ -75,6 +86,7 @@
 				counts: 0,
 				addDialog: false,
 				addLoading: false,
+				updatePwdDialog: false,
 				agentLists: null,
 				settlementTemplate: null,
 				newAgent: {
@@ -82,7 +94,11 @@
 					secretkey: "",
 					settlementTemplateId: "",
 					username: ""
-				}
+				},
+				password: {
+					newSecretkey: ""
+				},
+				agentId: 0
 			}
 		},
 		created: function(){
@@ -154,25 +170,30 @@
 					username: row.username
 				}
 			},
-			deleteAgent: function(index, row){
-				this.$confirm('是否删除该代理商?', '删除代理商', {
-				    confirmButtonText: '确定',
-				    cancelButtonText: '取消',
-				    type: 'warning'
-				}).then(() => {
-				    deleteAgentById(row.agentId).then(() => {
-				        this.getAgentList();
-				        this.$message({
-				            type: 'success',
-				            message: '删除成功!'
-				        });
-				    })
-				}).catch(() => {
-				    this.$message({
-				        type: 'info',
-				        message: '已取消删除'
-				    });
-				});
+			closeUpdateDialog: function(){
+				this.agentId = 0;
+				this.password = {
+					newSecretkey: ""
+				}
+			},
+			cancelUpdate: function(){
+				this.closeUpdateDialog()
+			},
+			showUpdatePwdPopup: function(index, row){
+				this.updatePwdDialog = true;
+				this.agentId = row.agentId;
+			},
+			updatePwdFn: function(){
+				console.log(this.password)
+				updateAgentPassword(this.agentId, this.password).then(res => {
+					console.log(res)
+					this.getAgentList();
+					this.$message({
+						type: 'success',
+						message: '修改成功'
+					})
+					this.updatePwdDialog = false;
+				})
 			}
 		}
 	}
