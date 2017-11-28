@@ -24,7 +24,7 @@
                     <el-table-column prop="sortOrder" label="排序值" align="center"></el-table-column>
                     <el-table-column label="图标" align="center">
                         <template scope="scope">
-                            <img :src="UPLOADURL + scope.row.icon" :alt="scope.row.shopCategoryName" class="icon-img">
+                            <img :src="UPLOADURL + scope.row.icon + '/goods.png'" :alt="scope.row.shopCategoryName" class="icon-img">
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
@@ -44,12 +44,12 @@
                         <el-input-number v-model="formInline.sortOrder" :min="1"></el-input-number>
                     </el-form-item>
                     <el-form-item label="分类图标">
-                        <el-upload ref="uploadImage" action="" :http-request="uploadImage" :show-file-list="false">
+                        <el-upload class="avatar-uploader" :headers="uploadHeader" :action="BASEURL+'/commons/upload/categorylogo'" :show-file-list="false" :on-success="handleUploadSuccess">
                             <el-button size="small" type="primary">上传图标</el-button>
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
-                        <img :src="UPLOADURL+formInline.icon" alt="" class="banner-thumb">
+                        <img v-if="formInline.icon" :src="UPLOADURL+formInline.icon" alt="" class="banner-thumb">
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -91,7 +91,10 @@ export default {
             pageSize: 10,
             counts: 0,
             isAdd: true,
-            shopCategoryLists: null
+            shopCategoryLists: null,
+            uploadHeader: {
+                token: sessionStorage.getItem('jwt')
+            }
         }
     },
     created: function() {
@@ -203,6 +206,21 @@ export default {
                 console.log(err)
             })
         },
+        handleUploadSuccess: function(res){
+            console.log(res)
+            if(res.status){
+                this.$message({
+                    message: '上传分类图标成功',
+                    type: 'success'
+                })
+                this.formInline.icon = res.data.originalUrl;
+            }else{
+                this.$message({
+                    message: '上传分类图标失败',
+                    type: 'error'
+                })
+            }
+        },
         //分页
         currentChange: function(val) {
             this.$router.push('?page=' + val)
@@ -231,7 +249,7 @@ export default {
         width: 60px;
     }
     .banner-thumb{
-        width: 100%;
+        width: 150px;
     }
     .search-row {
         margin: 15px 0;
