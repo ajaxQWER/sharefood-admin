@@ -10,7 +10,7 @@
                 </el-form-item>
             </el-form>
         </el-row>
-        <el-row v-if="shopDetail">
+        <el-row v-if="shopDetail" class="shop-detail">
             <h3>店铺基本信息</h3>
             <ul>
                 <li>店铺ID：{{shopDetail.detail.shopId}}</li>
@@ -81,8 +81,13 @@
             <el-button type="primary" @click="pass">通过</el-button>
             <el-button type="danger" @click="reject">拒绝</el-button>
         </el-row>
-        <el-dialog :visible.sync="showImage" @close="closeDialog" class="dialog">
-            <img :src="bigImageUrl" alt="" width="100%">
+        <el-dialog :visible.sync="showImage" size="tiny" @close="closeDialog" class="dialog">
+            <img :src="bigImageUrl" alt="" class="big-img" ref="bigImg">
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="zoomOut"><i class="fa fa-search-minus"></i></el-button>
+                <el-button @click="zoomIn"><i class="fa fa-search-plus"></i></el-button>
+                <el-button @click="rotate"><i class="fa fa-rotate-left"></i></el-button>
+            </div>
         </el-dialog>
     </el-row>
 </template>
@@ -104,7 +109,9 @@ export default {
             settlementTemplateList: [],
             settlementTemplateId: '',
             showImage: false,
-            bigImageUrl: ''
+            bigImageUrl: '',
+            rotateDeg: 0,
+            zoom: 1
         }
     },
     created: function() {
@@ -279,10 +286,35 @@ export default {
         closeDialog: function(){
             this.showImage = false;
             this.bigImageUrl = '';
+            this.rotateDeg = 0;
+            this.zoom = 1;
+            var img = this.$refs.bigImg;
+            img.style.transform = 'rotate(0) scale(1)';
         },
         showBigImage: function(src){
             this.bigImageUrl = src;
             this.showImage = true;
+        },
+        rotate: function(){
+            var img = this.$refs.bigImg;
+            this.rotateDeg += 90;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
+        },
+        zoomIn: function(){
+            var img = this.$refs.bigImg;
+            if(this.zoom > 1.5){
+                return;
+            }
+            this.zoom += 0.1;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
+        },
+        zoomOut: function(){
+            var img = this.$refs.bigImg;
+            if(this.zoom < 0.5){
+                return;
+            }
+            this.zoom -= 0.1;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
         }
     }
 }
@@ -305,10 +337,24 @@ export default {
     .label-color {
         color: red;
     }
+    .shop-detail{
+        img{
+            cursor: -moz-zoom-in;
+            cursor: -webkit-zoom-in;
+            cursor: zoom-in;
+        }
+    }
     img{
         vertical-align: middle;
+    }
+    .big-img{
+        width: 100%;
         height: 100%;
-        cursor: pointer;
+    }
+    .dialog-footer{
+        text-align: center;
+        position: relative;
+        z-index: 99999;
     }
     .settlement{
         margin: 15px 0;

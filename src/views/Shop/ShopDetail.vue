@@ -10,7 +10,7 @@
                 </el-form-item>
             </el-form>
         </el-row>
-        <el-row v-if="shopModel">
+        <el-row v-if="shopModel" class="shop-model">
             <el-row v-if="shopModel.detail">
                 <h3>基础信息</h3>
                 <el-form label-width="120px">
@@ -103,8 +103,13 @@
                 </el-form>
             </el-row>
         </el-row>
-        <el-dialog :visible.sync="showImage" @close="closeDialog" class="dialog">
-            <img :src="bigImageUrl" alt="" width="100%">
+        <el-dialog :visible.sync="showImage" size="tiny" @close="closeDialog" class="dialog">
+            <img :src="bigImageUrl" alt="" class="big-img" ref="bigImg">
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="zoomOut"><i class="fa fa-search-minus"></i></el-button>
+                <el-button @click="zoomIn"><i class="fa fa-search-plus"></i></el-button>
+                <el-button @click="rotate"><i class="fa fa-rotate-left"></i></el-button>
+            </div>
         </el-dialog>
     </el-row>
 </template>
@@ -117,7 +122,9 @@ export default {
             provinceName: '',
             cityName: '',
             showImage: false,
-            bigImageUrl: ''
+            bigImageUrl: '',
+            rotateDeg: 0,
+            zoom: 1
         }
     },
     created: function() {
@@ -259,10 +266,35 @@ export default {
         closeDialog: function(){
             this.showImage = false;
             this.bigImageUrl = '';
+            this.rotateDeg = 0;
+            this.zoom = 1;
+            var img = this.$refs.bigImg;
+            img.style.transform = 'rotate(0) scale(1)';
         },
         showBigImage: function(src){
             this.bigImageUrl = src;
             this.showImage = true;
+        },
+        rotate: function(){
+            var img = this.$refs.bigImg;
+            this.rotateDeg += 90;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
+        },
+        zoomIn: function(){
+            var img = this.$refs.bigImg;
+            if(this.zoom > 1.5){
+                return;
+            }
+            this.zoom += 0.1;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
+        },
+        zoomOut: function(){
+            var img = this.$refs.bigImg;
+            if(this.zoom < 0.5){
+                return;
+            }
+            this.zoom -= 0.1;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
         }
     }
 }
@@ -282,13 +314,31 @@ export default {
             border-bottom: 1px solid #23b7e5;
         }
     }
+    h3{
+        margin: 0;
+    }
     .label{
         color: #48576a;
         margin-bottom: 0;
     }
+    .shop-model{
+        img{
+            cursor: -moz-zoom-in;
+            cursor: -webkit-zoom-in;
+            cursor: zoom-in;
+        }
+    }
     img{
         vertical-align: middle;
-        cursor: pointer;
+    }
+    .big-img{
+        width: 100%;
+        height: 100%;
+    }
+    .dialog-footer{
+        text-align: center;
+        position: relative;
+        z-index: 99999;
     }
 }
 </style>
