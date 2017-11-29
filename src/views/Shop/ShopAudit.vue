@@ -118,7 +118,7 @@ export default {
         currentChange: function(val) {
             this.$router.push('?page=' + val)
             this.pageId = val;
-            this.getCategoryLists()
+            this.getAuditLists()
         }
     }
 }
