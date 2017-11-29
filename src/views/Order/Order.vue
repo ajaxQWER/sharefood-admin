@@ -25,52 +25,30 @@
                 </el-form-item>
                 <el-form-item label="订单状态">
                     <el-select v-model="orderStatus" placeholder="请选择订单状态" @change="searchOrder">
-                        <el-option
-                          v-for="(item,index) in orderStatusList"
-                          :key="index"
-                          :label="item.key"
-                          :value="item.value">
+                        <el-option v-for="(item,index) in orderStatusList" :key="index" :label="item.key" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="订单取消原因">
                     <el-select v-model="cancelType" placeholder="请选择订单取消原因" @change="searchOrder">
-                        <el-option
-                          v-for="(item,index) in cancelTypeArr"
-                          :key="index"
-                          :label="item.key"
-                          :value="item.value">
+                        <el-option v-for="(item,index) in cancelTypeArr" :key="index" :label="item.key" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="支付方式">
                     <el-select v-model="payment" placeholder="请选择订单支付方式" @change="searchOrder">
-                        <el-option
-                          label="全部"
-                          value=" ">
+                        <el-option label="全部" value=" ">
                         </el-option>
-                        <el-option
-                          label="余额"
-                          value="BALANCE">
+                        <el-option label="余额" value="BALANCE">
                         </el-option>
-                        <el-option
-                          label="支付宝"
-                          value="ALIPAY">
+                        <el-option label="支付宝" value="ALIPAY">
                         </el-option>
-                        <el-option
-                          label="微信"
-                          value="WX">
+                        <el-option label="微信" value="WX">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="订单起始时间">
-                    <el-date-picker
-                          v-model="dateRange"
-                          type="datetimerange"
-                          placeholder="选择时间范围"
-                          align="right"
-                          range-separator="~"
-                          @change="selectDateRange">
+                    <el-date-picker v-model="dateRange" type="datetimerange" placeholder="选择时间范围" align="right" range-separator="~" @change="selectDateRange">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item>
@@ -128,7 +106,8 @@
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
                         <template scope="scope">
-                            <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">查看详情</el-button>
+                            <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">详情</el-button>
+                            <el-button size="small" type="success" @click="printerOrder(scope.$index, scope.row)">补打</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -141,13 +120,13 @@
                 </el-pagination>
             </el-col>
         </el-row>
-
     </el-row>
 </template>
 <script>
 import {
     orderList,
-    findOrderById
+    findOrderById,
+    printerLogsById
 } from '@/api/api'
 export default {
     data: function() {
@@ -171,31 +150,31 @@ export default {
             orderStatusList: [{
                 key: '全部订单',
                 value: ''
-            },{
+            }, {
                 key: '交易完成',
                 value: 'TRANSACT_FINISHED'
-            },{
+            }, {
                 key: '订单取消',
                 value: 'CANCELLATION'
-            },{
+            }, {
                 key: '已送达',
                 value: 'DELIVERED'
-            },{
+            }, {
                 key: '配送中',
                 value: 'SHIPPING'
-            },{
+            }, {
                 key: '取货中',
                 value: 'PICKUPING'
-            },{
+            }, {
                 key: '等待取货',
                 value: 'WAIT_PICKUP'
-            },{
+            }, {
                 key: '商家接单',
                 value: 'MERCHANT_CONFIRM_RECEIPT'
-            },{
+            }, {
                 key: '等待商家接单',
                 value: 'PAYED'
-            },{
+            }, {
                 key: '等待支付',
                 value: 'WAIT_PAY'
             }],
@@ -203,19 +182,19 @@ export default {
             cancelTypeArr: [{
                 key: '全部',
                 value: ' '
-            },{
+            }, {
                 key: '用户取消',
                 value: 'USER'
-            },{
+            }, {
                 key: '商家取消',
                 value: 'SHOP'
-            },{
+            }, {
                 key: '支付超时',
                 value: 'WAIT_PAY_TIMEOUT'
-            },{
+            }, {
                 key: '接单超时',
                 value: 'RECEIVING_TIMEOUT'
-            },{
+            }, {
                 key: '配送拒绝',
                 value: 'DELIVERY_REJECT'
             }]
@@ -226,25 +205,25 @@ export default {
         this.getOrderLists();
     },
     watch: {
-        autoFresh: function(val, oldVal){
-            if(val){
+        autoFresh: function(val, oldVal) {
+            if (val) {
                 this.interVal = setInterval(() => {
-                   this.getOrderLists();
+                    this.getOrderLists();
                 }, 10000)
-            }else{
+            } else {
                 clearInterval(this.interVal)
                 this.interVal = null;
             }
         }
     },
-    destroyed: function(){
+    destroyed: function() {
         clearInterval(this.interVal)
         this.interVal = null;
     },
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
-            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize,orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike,orderPhoneLike: this.orderPhoneLike, payment: this.payment, cancelType: this.cancelType } }).then(data => {
+            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize, orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike, orderPhoneLike: this.orderPhoneLike, payment: this.payment, cancelType: this.cancelType } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.orderLists = data.list;
@@ -260,8 +239,8 @@ export default {
             this.pageId = val;
             this.getOrderLists()
         },
-        formatOrderStatus: function(status){
-            switch(status){
+        formatOrderStatus: function(status) {
+            switch (status) {
                 case 'WAIT_PAY':
                     return '等待支付';
                 case 'PAYED':
@@ -284,12 +263,12 @@ export default {
                     break;
             }
         },
-        showOrderInfo: function(index, row){
+        showOrderInfo: function(index, row) {
             var orderId = row.orderId;
             this.$router.push('/orderDetail?orderId=' + orderId)
         },
-        selectDateRange: function(value){
-            if(!value){
+        selectDateRange: function(value) {
+            if (!value) {
                 this.orderTimeBeginTime = '';
                 this.orderTimeEndTime = '';
                 this.getOrderLists();
@@ -312,8 +291,8 @@ export default {
             this.orderPhoneLike = '';
             this.getOrderLists();
         },
-        formatPayment: function(status){
-            switch(status){
+        formatPayment: function(status) {
+            switch (status) {
                 case 'WX':
                     return '微信';
                 case 'ALIPAY':
@@ -324,8 +303,8 @@ export default {
                     break;
             }
         },
-        formatCancelType: function(type){
-            switch(type){
+        formatCancelType: function(type) {
+            switch (type) {
                 case 'USER':
                     return '用户取消';
                 case 'SHOP':
@@ -339,6 +318,21 @@ export default {
                 default:
                     return '-'
             }
+        },
+        printerOrder: function(index, row) {
+            this.$confirm('确定补打该订单?', '补打提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                console.log(row.orderId)
+                printerLogsById(row.orderId).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                })
+            }).catch(() => {});
         }
     }
 }

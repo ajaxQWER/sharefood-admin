@@ -275,6 +275,17 @@ export const updateAgentById =  params => {
 };
 
 
+//订单打印
+export const getPrinterLogs = params => {
+    return ajax.get('admin/orderPrinterLog', params);
+};
+export const printerLogsById = orderId => {
+    return ajax.post('admin/orderPrinterLog/print/' + orderId);
+};
+export const getPrinterLogById = orderId => {
+    return ajax.get('admin/orderPrinterLog/' + orderId);
+};
+
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
     return ajax.post('commons/upload' + params.path, params);

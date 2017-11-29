@@ -74,6 +74,25 @@ let routes = [{
 }, {
     path: '/',
     component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-user-o',
+    children: [
+        { path: '/user', component: User, name: '用户管理' },
+    ]
+}, {
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-file-text',
+    children: [
+        { path: '/order', component: Order, name: '订单管理' },
+        { path: '/orderDetail', component: OrderDetail, hidden: true, name: '订单详情' },
+    ]
+}, {
+    path: '/',
+    component: Home,
     name: '店铺管理',
     iconCls: 'fa fa-shopping-bag', //图标样式class
     children: [{
@@ -102,7 +121,7 @@ let routes = [{
     path: '/',
     component: Home,
     name: '文章管理',
-    iconCls: 'fa fa-shopping-bag', //图标样式class
+    iconCls: 'fa fa-file-text', //图标样式class
     children: [{
         path: '/articleType',
         component: ArticleType,
@@ -126,37 +145,9 @@ let routes = [{
     path: '/',
     component: Home,
     name: '',
-    leaf: true, //只有一个节点
-    iconCls: 'fa fa-user-o',
-    children: [
-        { path: '/user', component: User, name: '用户管理' },
-    ]
-}, {
-    path: '/',
-    component: Home,
-    name: '',
-    leaf: true, //只有一个节点
-    iconCls: 'fa fa-file-text',
-    children: [
-        { path: '/order', component: Order, name: '订单管理' },
-        { path: '/orderDetail', component: OrderDetail, hidden: true, name: '订单详情' },
-    ]
-}, {
-    path: '/',
-    component: Home,
-    name: '',
     hidden: true,
     children: [
         { path: '/shopDetail', component: ShopDetail, name: '新增店铺' },
-    ]
-}, {
-    path: '/',
-    component: Home,
-    name: '',
-    leaf: true, //只有一个节点
-    iconCls: 'fa fa-list-alt',
-    children: [
-        { path: '/adminLogs', component: AdminLogs, name: '日志管理' },
     ]
 }, {
     path: '/',
@@ -167,7 +158,7 @@ let routes = [{
         { path: '/settlement', component: Settlement, name: '结算模板' },
         { path: '/settlementRecord', component: SettlementRecord, name: '结算记录' }
     ]
-},  {
+}, {
     path: '/',
     component: Home,
     name: '',
@@ -175,6 +166,15 @@ let routes = [{
     iconCls: 'fa fa-list-alt',
     children: [
         { path: '/agent', component: Agent, name: '代理商管理' },
+    ]
+}, {
+    path: '/',
+    component: Home,
+    name: '',
+    leaf: true, //只有一个节点
+    iconCls: 'fa fa-list-ol',
+    children: [
+        { path: '/adminLogs', component: AdminLogs, name: '日志管理' },
     ]
 }, {
     path: '*',
