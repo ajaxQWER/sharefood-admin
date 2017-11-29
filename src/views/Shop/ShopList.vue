@@ -72,19 +72,19 @@
                         <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
                     <el-table-column prop="name" label="负责人" align="center"></el-table-column>
-                    <el-table-column label="LOGO" align="center" width="140px">
+                    <!-- <el-table-column label="LOGO" align="center" width="140px">
                         <template scope="scope"><img :src="UPLOADURL + scope.row.logoUrl + '/shopLogo.png'" alt="" class="logo-img"></template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column label="地址" width="280px" align="center">
                         <template scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="营业时间" width="180px" align="center">
-                        <template scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00:00'}}</template>
+                    <el-table-column label="营业时间" width="130px" align="center">
+                        <template scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00'}}</template>
                     </el-table-column>
-                    <el-table-column label="注册账号" width="160px" align="center">
+                    <!-- <el-table-column label="注册账号" width="160px" align="center">
                         <template scope="scope">{{scope.row.phoneNum?scope.row.phoneNum:'-'}}</template>
-                    </el-table-column>
-                    <el-table-column label="联系电话" width="160px" align="center">
+                    </el-table-column> -->
+                    <el-table-column label="联系电话" width="140px" align="center">
                         <template scope="scope">{{scope.row.takeOutPhone?scope.row.takeOutPhone:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="营业状态" align="center">
@@ -99,11 +99,14 @@
                     <el-table-column label="置顶值" align="center">
                         <template scope="scope">{{scope.row.topper}}</template>
                     </el-table-column>
-                    <el-table-column label="操作" width="160px" align="center">
+                    <el-table-column label="操作" width="200px" align="center">
                         <template scope="scope">
                             <el-button size="small" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
                             <el-button size="small" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
                             <el-button size="small" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
+                            <router-link :to="'/shopDetail?shopId='+scope.row.shopId" class="link">
+                                <el-button size="small" type="primary">详情</el-button>
+                            </router-link>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -323,18 +326,9 @@ export default {
     .logo-img{
         width: 120px;
     }
-    .amap-demo {
-        height: 500px;
-    }
-
-    .search-box {
-        position: absolute;
-        top: 25px;
-        right: 20px;
-    }
-
-    .amap-page-container {
-        position: relative;
+    .link{
+        display: inline-block;
+        margin-left: 10px;
     }
 }
 </style>

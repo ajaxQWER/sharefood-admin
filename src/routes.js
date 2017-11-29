@@ -114,6 +114,10 @@ let routes = [{
     }, {
         path: '/shopAuditDetail',
         component: ShopAuditDetail,
+        name: '店铺审核详情',
+        hidden: true
+    },{ path: '/shopDetail',
+        component: ShopDetail,
         name: '店铺详情',
         hidden: true
     }]
@@ -141,14 +145,6 @@ let routes = [{
         name: '文章新增',
         hidden: true
     }]
-}, {
-    path: '/',
-    component: Home,
-    name: '',
-    hidden: true,
-    children: [
-        { path: '/shopDetail', component: ShopDetail, name: '新增店铺' },
-    ]
 }, {
     path: '/',
     component: Home,

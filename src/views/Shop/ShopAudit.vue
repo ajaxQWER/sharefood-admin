@@ -55,7 +55,7 @@ export default {
         return {
             searchContent: '',
             pageId: 1,
-            pageSize: 10,
+            pageSize: 20,
             counts: 0,
             shopAuditLists: null
         }

@@ -25,24 +25,24 @@
                 <li>店铺注册手机号：{{shopDetail.detail.phoneNum}}</li>
                 <li>店铺联系人：{{shopDetail.detail.name}}</li>
                 <li>店铺分类：{{shopDetail.detail.shopCategoryName}}</li>
-                <li>店铺logo：<img :src="UPLOADURL +'/'+ shopDetail.detail.logoUrl" alt=""></li>
-                <li>店内照：<img :src="formatImage(shopDetail.detail.shopInnerUrl)" alt=""></li>
-                <li>店铺门脸照：<img :src="shopDetail.detail.shopFaceUrl" alt=""></li>
+                <li>店铺logo：<img :src="formatImage(shopDetail.detail.logoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.logoUrl)"></li>
+                <li>店内照：<img :src="formatImage(shopDetail.detail.shopInnerUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopInnerUrl)"></li>
+                <li>店铺门脸照：<img :src="shopDetail.detail.shopFaceUrl" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopFaceUrl)"></li>
             </ul>
             <h3>资质信息</h3>
             <h4 v-if="shopDetail.document">证件信息</h4>
             <ul v-if="shopDetail.document">
                 <li>证件类型：{{formatDocumentType(shopDetail.document.documentType)}}</li>
                 <li>证件号码：{{shopDetail.document.documentNum}}</li>
-                <li>证件正面照：<img :src="formatImage(shopDetail.document.fullFacePhotoUrl)" alt=""></li>
-                <li>证件手持正面照：<img :src="formatImage(shopDetail.document.handFullFacePhotoUrl)" alt=""></li>
-                <li>证件反面照：<img :src="formatImage(shopDetail.document.reverseSideAsUrl)" alt=""></li>
+                <li>证件正面照：<img :src="formatImage(shopDetail.document.fullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.fullFacePhotoUrl)"></li>
+                <li>证件手持正面照：<img :src="formatImage(shopDetail.document.handFullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.handFullFacePhotoUrl)"></li>
+                <li>证件反面照：<img :src="formatImage(shopDetail.document.reverseSideAsUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.reverseSideAsUrl)"></li>
             </ul>
             <h4 v-if="shopDetail.subject">主体资质</h4>
             <ul v-if="shopDetail.subject">
                 <li>主体资质类型：{{formatSubjectDocument(shopDetail.subject.subjectDocument)}}</li>
                 <li>主体资质有效期：{{shopDetail.subject.longTerm ? '长期' : (moment(shopDetail.subject.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.subject.endTime).format("YYYY-MM-DD"))}}</li>
-                <li>资质照片：<img :src="formatImage(shopDetail.subject.businessUrl)" alt=""></li>
+                <li>资质照片：<img :src="formatImage(shopDetail.subject.businessUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.subject.businessUrl)"></li>
                 <li>法定代表人 ：{{shopDetail.subject.legal}}</li>
                 <li>注册地址：{{shopDetail.subject.regAddress}}</li>
                 <li>注册号：{{shopDetail.subject.regNumber}}</li>
@@ -52,7 +52,7 @@
             <ul v-if="shopDetail.industry">
                 <li>资质类型：{{formatIntelligence(shopDetail.industry.intelligence)}}</li>
                 <li>许可证有效期：{{shopDetail.industry.longTerm ? '长期' : (moment(shopDetail.industry.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.industry.endTime).format("YYYY-MM-DD"))}}</li>
-                <li>许可证照片：<img :src="formatImage(shopDetail.industry.foodUrl)" alt=""></li>
+                <li>许可证照片：<img :src="formatImage(shopDetail.industry.foodUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.industry.foodUrl)"></li>
                 <li>法定代表人：{{shopDetail.industry.legal}}</li>
                 <li>许可证地址：{{shopDetail.industry.licenseAddress}}</li>
                 <li>许可证编号：{{shopDetail.industry.licenseNumber}}</li>
@@ -81,6 +81,9 @@
             <el-button type="primary" @click="pass">通过</el-button>
             <el-button type="danger" @click="reject">拒绝</el-button>
         </el-row>
+        <el-dialog :visible.sync="showImage" @close="closeDialog" class="dialog">
+            <img :src="bigImageUrl" alt="" width="100%">
+        </el-dialog>
     </el-row>
 </template>
 <script>
@@ -99,7 +102,9 @@ export default {
             provinceName: '',
             cityName: '',
             settlementTemplateList: [],
-            settlementTemplateId: ''
+            settlementTemplateId: '',
+            showImage: false,
+            bigImageUrl: ''
         }
     },
     created: function() {
@@ -141,7 +146,7 @@ export default {
             this.$router.push('/shopAudit')
         },
         formatImage: function(url){
-            return this.UPLOADURL + url
+            return this.UPLOADURL + url + '/goods.png'
         },
         formatShopType: function(type){
             switch(type){
@@ -270,6 +275,14 @@ export default {
                     }
                 })
             }).catch(()=>{})
+        },
+        closeDialog: function(){
+            this.showImage = false;
+            this.bigImageUrl = '';
+        },
+        showBigImage: function(src){
+            this.bigImageUrl = src;
+            this.showImage = true;
         }
     }
 }
@@ -294,7 +307,8 @@ export default {
     }
     img{
         vertical-align: middle;
-        height: 120px;
+        height: 100%;
+        cursor: pointer;
     }
     .settlement{
         margin: 15px 0;
