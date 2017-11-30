@@ -29,6 +29,20 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="店铺名称">
+                    <el-select v-model.number="shopId" filterable @change="getDatas">
+                        <el-option
+                            label="全部"
+                            value=" ">
+                        </el-option>
+                        <el-option
+                            v-for="(item,index) in shopLists"
+                            :key="index"
+                            :label="item.shopName"
+                            :value="item.shopId">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="结算起始时间">
                     <el-date-picker
                           v-model="dateRange"
@@ -44,13 +58,10 @@
         <el-row>
             <el-col>
                 <el-table :data="SettlementRecordList">
-                    <el-table-column label="id" align="center" width="60px">
-                        <template scope="scope">{{scope.row.settlementRecordId?scope.row.settlementRecordId:'-'}}</template>
-                    </el-table-column>
                     <el-table-column label="流水号" align="center">
                         <template scope="scope">{{scope.row.serialNumber?scope.row.serialNumber:'-'}}</template>
                     </el-table-column>
-                    <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
+                    <el-table-column prop="shopName" label="店铺名称" align="center" width="160px"></el-table-column>
                     <el-table-column label="订单号" align="center">
                         <template scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
                     </el-table-column>
@@ -121,7 +132,8 @@
 <script>
 import {
     getSettlementRecordLists,
-    getSettlementRecordBySerialNumber
+    getSettlementRecordBySerialNumber,
+    shopList
 } from '@/api/api'
 export default {
     data: function() {
@@ -137,17 +149,23 @@ export default {
             dialog: false,
             jwt: sessionStorage.getItem('jwt'),
             settleLocalDate: '',
-            SettlementRecordList: null
+            SettlementRecordList: null,
+            shopId: '',
+            shopLists: null
         }
     },
     created: function() {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getSettlementRecordLists();
+        shopList({params: {pageSize: 99999}}).then(res => {
+            console.log(res)
+            this.shopLists = res.list;
+        })
     },
     methods: {
         //获取视频分类列表
         getSettlementRecordLists: function() {
-            getSettlementRecordLists({ params: { pageId: this.pageId, pageSize: this.pageSize, serialNumber: this.serialNumber, recordEndTime: this.recordEndTime, recordBeginTime: this.recordBeginTime, arrivaled: this.arrivaled } }).then(data => {
+            getSettlementRecordLists({ params: { pageId: this.pageId, pageSize: this.pageSize, serialNumber: this.serialNumber, recordEndTime: this.recordEndTime, recordBeginTime: this.recordBeginTime, arrivaled: this.arrivaled, shopId: this.shopId } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.SettlementRecordList = data.list;

@@ -90,16 +90,19 @@
                     <el-table-column label="营业状态" align="center">
                         <template scope="scope">{{scope.row.operatingState?'营业中':'歇业中'}}</template>
                     </el-table-column>
-                    <el-table-column label="状态" align="center">
+                    <el-table-column label="状态" align="center" width="80px">
                         <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
                     </el-table-column>
                     <el-table-column label="配送状态" align="center">
                         <template scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
                     </el-table-column>
+                    <el-table-column label="结算模板" align="center">
+                        <template scope="scope">{{scope.row.settlementTemplateName}}</template>
+                    </el-table-column>
                     <el-table-column label="置顶值" align="center">
                         <template scope="scope">{{scope.row.topper}}</template>
                     </el-table-column>
-                    <el-table-column label="操作" width="200px" align="center">
+                    <el-table-column label="操作" align="center" width="200px">
                         <template scope="scope">
                             <el-button size="small" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
                             <el-button size="small" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
@@ -148,7 +151,7 @@ export default {
             addToperPopup: false,
             searchContent: '',
             pageId: 1,
-            pageSize: 10,
+            pageSize: 20,
             counts: 0,
             isAdd: true,
             shopList: null,
