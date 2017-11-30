@@ -43,7 +43,7 @@
                         <el-input type="text" v-model="formInline.settlementTemplateName" auto-complete="off" placeholder="结算模板名称"></el-input>
                     </el-form-item>
                     <el-form-item label="结算比例">
-                        <el-input-number v-model.number="formInline.percentageOfSettle" auto-complete="off" :min="0.000" :max="1.000" :step="0.001"></el-input-number>
+                        <el-input type="number" v-model.number="formInline.percentageOfSettle" auto-complete="off" :max="1" :min="0" :step="0.001"></el-input>
                     </el-form-item>
                     <el-form-item label="提示">
                         <span class="tips">结算比例范围0-1，保留三位小数</span>
@@ -121,6 +121,34 @@ export default {
         },
         //添加分类
         addSettlement: function() {
+            if(this.formInline.percentageOfSettle > 1){
+                this.$message({
+                    message: '结算比例不能大于1，请修改',
+                    type: 'error'
+                })
+                return;
+            }
+            if(this.formInline.percentageOfSettle < 0){
+                this.$message({
+                    message: '结算比例不能小于0，请修改',
+                    type: 'error'
+                })
+                return;
+            }
+            if(this.formInline.settlementTemplateName === ''){
+                this.$message({
+                    message: '请输入结算模板名称',
+                    type: 'error'
+                })
+                return;
+            }
+            if(this.formInline.percentageOfSettle === ''){
+                this.$message({
+                    message: '请输入结算比例',
+                    type: 'error'
+                })
+                return;
+            }
             if (this.isAdd) {
                 addSettlementTemplate(this.formInline).then(data => {
                     this.getSettlementTemplateList();

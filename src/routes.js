@@ -21,6 +21,9 @@ import ArticleEdit from './views/Article/ArticleEdit.vue'
 import Settlement from './views/Settlement/Settlement.vue'
 import SettlementRecord from './views/Settlement/SettlementRecord.vue'
 import Agent from './views/Agent/Agent.vue'
+import ShopTag from './views/Tag/ShopTag.vue'
+import GoodsTag from './views/Tag/GoodsTag.vue'
+import DeliveryTag from './views/Tag/DeliveryTag.vue'
 let routes = [{
     path: '/login',
     component: Login,
@@ -153,6 +156,16 @@ let routes = [{
     children: [
         { path: '/settlement', component: Settlement, name: '结算模板' },
         { path: '/settlementRecord', component: SettlementRecord, name: '结算记录' }
+    ]
+}, {
+    path: '/',
+    component: Home,
+    name: '评价标签管理',
+    iconCls: 'fa fa-money',
+    children: [
+        { path: '/shopTag', component: ShopTag, name: '店铺评价标签' },
+        { path: '/goodsTag', component: GoodsTag, name: '商品评价标签' },
+        { path: '/deliveryTag', component: DeliveryTag, name: '配送评价标签' }
     ]
 }, {
     path: '/',

@@ -286,6 +286,57 @@ export const getPrinterLogById = orderId => {
     return ajax.get('admin/orderPrinterLog/' + orderId);
 };
 
+//评价标签管理
+//店铺评价
+export const getShopAppraiseTagLists = params => {
+    return ajax.get('admin/shopappraisetag', params);
+};
+export const addShopAppraiseTag = params => {
+    return ajax.put('admin/shopappraisetag', params);
+};
+export const deleteShopAppraiseTag = shopAppraiseTagId => {
+    return ajax.delete('admin/shopappraisetag/' + shopAppraiseTagId);
+};
+export const getShopAppraiseTagById = shopAppraiseTagId => {
+    return ajax.get('admin/shopappraisetag/' + shopAppraiseTagId);
+};
+export const updateShopAppraiseTagById = params => {
+    return ajax.post('admin/shopappraisetag/' + params.shopAppraiseTagId, params);
+};
+//商品评价
+export const getGoodsAppraiseTagLists = params => {
+    return ajax.get('admin/goodsappraisetag', params);
+};
+export const addGoodsAppraiseTag = params => {
+    return ajax.put('admin/goodsappraisetag', params);
+};
+export const deleteGoodsAppraiseTag = goodsAppraiseTagId => {
+    return ajax.delete('admin/goodsappraisetag/' + goodsAppraiseTagId);
+};
+export const getGoodsAppraiseTagById = goodsAppraiseTagId => {
+    return ajax.get('admin/goodsappraisetag/' + goodsAppraiseTagId);
+};
+export const updateGoodsAppraiseTagById = params => {
+    return ajax.post('admin/goodsappraisetag/' + params.goodsAppraiseTagId, params);
+};
+//配送评价
+export const getDeliveryAppraiseTagLists = params => {
+    return ajax.get('admin/deliveryappraisetag', params);
+};
+export const addDeliveryAppraiseTag = params => {
+    return ajax.put('admin/deliveryappraisetag', params);
+};
+export const deleteDeliveryAppraiseTag = deliveryAppraiseTagId => {
+    return ajax.delete('admin/deliveryappraisetag/' + deliveryAppraiseTagId);
+};
+export const getDeliveryAppraiseTagById = deliveryAppraiseTagId => {
+    return ajax.get('admin/deliveryappraisetag/' + deliveryAppraiseTagId);
+};
+export const updateDeliveryAppraiseTagById = params => {
+    return ajax.post('admin/deliveryappraisetag/' + params.deliveryAppraiseTagId, params);
+};
+
+
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {
     return ajax.post('commons/upload' + params.path, params);
