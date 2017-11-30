@@ -98,8 +98,9 @@
                 <el-form label-width="120px">
                     <el-form-item label="开户人名" class="label">{{shopModel.settlement.openName}}</el-form-item>
                     <el-form-item label="银行卡号" class="label">{{shopModel.settlement.bankNumber}}</el-form-item>
+                    <el-form-item label="所属银行" class="label">{{shopModel.settlement.bankHouse}}</el-form-item>
+                    <el-form-item label="开户支行" class="label">{{shopModel.settlement.openBank}}</el-form-item>
                     <el-form-item label="所属地" class="label">{{provinceName}}-{{cityName}}</el-form-item>
-                    <el-form-item label="开户行" class="label">{{shopModel.settlement.openBank}}</el-form-item>
                 </el-form>
             </el-row>
         </el-row>

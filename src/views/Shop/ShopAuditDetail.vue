@@ -60,10 +60,11 @@
             </ul>
             <h3 v-if="shopDetail.settlement">结算信息</h3>
             <ul v-if="shopDetail.settlement">
+                <li>开户人名：{{shopDetail.settlement.openName}}</li>
                 <li>银行卡号：{{shopDetail.settlement.bankNumber}}</li>
                 <li>所属银行：{{shopDetail.settlement.bankHouse}}</li>
-                <li>银行所在地：{{provinceName}}{{cityName}}</li>
                 <li>开户支行：{{shopDetail.settlement.openBank}}</li>
+                <li>所属地：{{provinceName}}{{cityName}}</li>
             </ul>
         </el-row>
         <el-row class="settlement">
