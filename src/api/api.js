@@ -289,51 +289,51 @@ export const getPrinterLogById = orderId => {
 //评价标签管理
 //店铺评价
 export const getShopAppraiseTagLists = params => {
-    return ajax.get('admin/shopappraisetag', params);
+    return ajax.get('admin/shopAppraiseTag', params);
 };
 export const addShopAppraiseTag = params => {
-    return ajax.put('admin/shopappraisetag', params);
+    return ajax.put('admin/shopAppraiseTag', params);
 };
 export const deleteShopAppraiseTag = shopAppraiseTagId => {
-    return ajax.delete('admin/shopappraisetag/' + shopAppraiseTagId);
+    return ajax.delete('admin/shopAppraiseTag/' + shopAppraiseTagId);
 };
 export const getShopAppraiseTagById = shopAppraiseTagId => {
-    return ajax.get('admin/shopappraisetag/' + shopAppraiseTagId);
+    return ajax.get('admin/shopAppraiseTag/' + shopAppraiseTagId);
 };
 export const updateShopAppraiseTagById = params => {
-    return ajax.post('admin/shopappraisetag/' + params.shopAppraiseTagId, params);
+    return ajax.post('admin/shopAppraiseTag/' + params.shopAppraiseTagId, params);
 };
 //商品评价
 export const getGoodsAppraiseTagLists = params => {
-    return ajax.get('admin/goodsappraisetag', params);
+    return ajax.get('admin/goodsAppraiseTag', params);
 };
 export const addGoodsAppraiseTag = params => {
-    return ajax.put('admin/goodsappraisetag', params);
+    return ajax.put('admin/goodsAppraiseTag', params);
 };
 export const deleteGoodsAppraiseTag = goodsAppraiseTagId => {
-    return ajax.delete('admin/goodsappraisetag/' + goodsAppraiseTagId);
+    return ajax.delete('admin/goodsAppraiseTag/' + goodsAppraiseTagId);
 };
 export const getGoodsAppraiseTagById = goodsAppraiseTagId => {
-    return ajax.get('admin/goodsappraisetag/' + goodsAppraiseTagId);
+    return ajax.get('admin/goodsAppraiseTag/' + goodsAppraiseTagId);
 };
 export const updateGoodsAppraiseTagById = params => {
-    return ajax.post('admin/goodsappraisetag/' + params.goodsAppraiseTagId, params);
+    return ajax.post('admin/goodsAppraiseTag/' + params.goodsAppraiseTagId, params);
 };
 //配送评价
 export const getDeliveryAppraiseTagLists = params => {
-    return ajax.get('admin/deliveryappraisetag', params);
+    return ajax.get('admin/deliveryAppraiseTag', params);
 };
 export const addDeliveryAppraiseTag = params => {
-    return ajax.put('admin/deliveryappraisetag', params);
+    return ajax.put('admin/deliveryAppraiseTag', params);
 };
 export const deleteDeliveryAppraiseTag = deliveryAppraiseTagId => {
-    return ajax.delete('admin/deliveryappraisetag/' + deliveryAppraiseTagId);
+    return ajax.delete('admin/deliveryAppraiseTag/' + deliveryAppraiseTagId);
 };
 export const getDeliveryAppraiseTagById = deliveryAppraiseTagId => {
-    return ajax.get('admin/deliveryappraisetag/' + deliveryAppraiseTagId);
+    return ajax.get('admin/deliveryAppraiseTag/' + deliveryAppraiseTagId);
 };
 export const updateDeliveryAppraiseTagById = params => {
-    return ajax.post('admin/deliveryappraisetag/' + params.deliveryAppraiseTagId, params);
+    return ajax.post('admin/deliveryAppraiseTag/' + params.deliveryAppraiseTagId, params);
 };
 
 
