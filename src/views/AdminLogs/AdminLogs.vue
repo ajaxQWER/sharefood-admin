@@ -31,7 +31,7 @@ export default {
     data: function() {
         return {
             pageId: 1,
-            pageSize: 10,
+            pageSize: 20,
             counts: 0,
             logLists: null
         }
