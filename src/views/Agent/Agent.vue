@@ -76,132 +76,138 @@
 	</el-row>
 </template>
 <script>
-	import {getAgentLists,addAgent,updateAgentPassword,updateAgentById,getSettlementTemplateLists} from '@/api/api'
-	export default {
-		data: function(){
-			return {
-				agentNameLike: '',
-				isAdd: true,
-				pageId: 1,
-				pageSize: 10,
-				counts: 0,
-				addDialog: false,
-				addLoading: false,
-				updatePwdDialog: false,
-				agentLists: null,
-				settlementTemplate: null,
-				newAgent: {
-					agentName: "",
-					secretkey: "",
-					settlementTemplateId: "",
-					username: ""
-				},
-				password: {
-					newSecretkey: ""
-				},
-				agentId: 0
-			}
-		},
-		created: function(){
-			this.getAgentList();
-			getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
+import {
+	getAgentLists,
+	addAgent,
+	updateAgentPassword,
+	updateAgentById,
+	getSettlementTemplateLists
+} from '@/api/api'
+export default {
+	data: function(){
+		return {
+			agentNameLike: '',
+			isAdd: true,
+			pageId: 1,
+			pageSize: 10,
+			counts: 0,
+			addDialog: false,
+			addLoading: false,
+			updatePwdDialog: false,
+			agentLists: null,
+			settlementTemplate: null,
+			newAgent: {
+				agentName: "",
+				secretkey: "",
+				settlementTemplateId: "",
+				username: ""
+			},
+			password: {
+				newSecretkey: ""
+			},
+			agentId: 0
+		}
+	},
+	created: function(){
+		this.getAgentList();
+		getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
+			console.log(res)
+			this.settlementTemplate = res.list;
+		})
+	},
+	methods: {
+		getAgentList: function(){
+			getAgentLists({params: { pageId: this.pageId, pageSize: this.pageSize, agentNameLike: this.agentNameLike}}).then(res => {
 				console.log(res)
-				this.settlementTemplate = res.list;
+				this.counts = res.count;
+				this.agentLists = res.list;
 			})
 		},
-		methods: {
-			getAgentList: function(){
-				getAgentLists({params: { pageId: this.pageId, pageSize: this.pageSize, agentNameLike: this.agentNameLike}}).then(res => {
+		searchAgent: function(){
+			this.getAgentList()
+		},
+		showAddDialog: function(){
+			this.isAdd = true;
+			this.addDialog = true;
+		},
+		closeDialog: function(){
+			this.isAdd = false;
+			this.addDialog = false;
+			this.newAgent = {
+				agentId: 0,
+				agentName: "",
+				secretkey: "",
+				settlementTemplateId: '',
+				username: ""
+			}
+		},
+		cancel: function(){
+			this.closeDialog()
+		},
+		addAgentFn: function(){
+			if(this.isAdd){
+				addAgent(this.newAgent).then(res => {
 					console.log(res)
-					this.counts = res.count;
-					this.agentLists = res.list;
+					this.getAgentList();
+					this.$message({
+						type: 'success',
+						message: '添加成功'
+					})
+					this.addDialog = false;
 				})
-			},
-			searchAgent: function(){
-				this.getAgentList()
-			},
-			showAddDialog: function(){
-				this.isAdd = true;
-				this.addDialog = true;
-			},
-			closeDialog: function(){
-				this.isAdd = false;
-				this.addDialog = false;
-				this.newAgent = {
-					agentId: 0,
-					agentName: "",
-					secretkey: "",
-					settlementTemplateId: '',
-					username: ""
-				}
-			},
-			cancel: function(){
-				this.closeDialog()
-			},
-			addAgentFn: function(){
-				if(this.isAdd){
-					addAgent(this.newAgent).then(res => {
-						console.log(res)
-						this.getAgentList();
-						this.$message({
-							type: 'success',
-							message: '添加成功'
-						})
-						this.addDialog = false;
-					})
-				}else{
-					updateAgentById(this.newAgent).then(res => {
-						console.log(res)
-						this.getAgentList();
-						this.$message({
-							type: 'success',
-							message: '修改成功'
-						})
-						this.addDialog = false;
-					})
-				}
-			},
-			updateAgent: function(index, row){
-				this.isAdd = false;
-				this.addDialog = true;
-				this.newAgent = {
-					agentId: row.agentId,
-					agentName: row.agentName,
-					settlementTemplateId: row.settlementTemplateId,
-					username: row.username
-				}
-			},
-			updateAgentRegion: function(index, row){
-				var agentId = row.agentId;
-            	this.$router.push({path: '/agent/region',query: {agentId : row.agentId}})
-			},
-			closeUpdateDialog: function(){
-				this.agentId = 0;
-				this.password = {
-					newSecretkey: ""
-				}
-			},
-			cancelUpdate: function(){
-				this.closeUpdateDialog()
-			},
-			showUpdatePwdPopup: function(index, row){
-				this.updatePwdDialog = true;
-				this.agentId = row.agentId;
-			},
-			updatePwdFn: function(){
-				console.log(this.password)
-				updateAgentPassword(this.agentId, this.password).then(res => {
+			}else{
+				updateAgentById(this.newAgent).then(res => {
 					console.log(res)
 					this.getAgentList();
 					this.$message({
 						type: 'success',
 						message: '修改成功'
 					})
-					this.updatePwdDialog = false;
+					this.addDialog = false;
 				})
 			}
+		},
+		updateAgent: function(index, row){
+			this.isAdd = false;
+			this.addDialog = true;
+			this.newAgent = {
+				agentId: row.agentId,
+				agentName: row.agentName,
+				settlementTemplateId: row.settlementTemplateId,
+				username: row.username
+			}
+		},
+		updateAgentRegion: function(index, row){
+			var agentId = row.agentId;
+        	this.$router.push({path: '/agent/region',query: {agentId : row.agentId}})
+		},
+		closeUpdateDialog: function(){
+			this.agentId = 0;
+			this.password = {
+				newSecretkey: ""
+			}
+		},
+		cancelUpdate: function(){
+			this.closeUpdateDialog()
+		},
+		showUpdatePwdPopup: function(index, row){
+			this.updatePwdDialog = true;
+			this.agentId = row.agentId;
+		},
+		updatePwdFn: function(){
+			console.log(this.password)
+			updateAgentPassword(this.agentId, this.password).then(res => {
+				console.log(res)
+				this.getAgentList();
+				this.$message({
+					type: 'success',
+					message: '修改成功'
+				})
+				this.updatePwdDialog = false;
+			})
 		}
 	}
+}
 </script>
 <style scoped lang="scss">
 	.lives-news {

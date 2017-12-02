@@ -253,6 +253,15 @@ export const getProvinceById = provinceId => {
 export const getCityById = cityId => {
     return ajax.get('commons/region/area/city/' + cityId);
 };
+export const getProvinceList = () => {
+    return ajax.get('commons/region/province');
+};
+export const getCityList = provinceId => {
+    return ajax.get('commons/region/city/' + provinceId);
+};
+export const getAreaList = cityId => {
+    return ajax.get('commons/region/area/' + cityId);
+};
 
 //文章管理
 //文章分类
@@ -323,8 +332,8 @@ export const getAgentLists = params => {
 export const addAgent = params => {
     return ajax.put('admin/agent', params);
 };
-export const updateAgentPassword = (agentId, params) => {
-    return ajax.post('admin/agent/secretkey/' + agentId, params);
+export const updateAgentPassword = (agentId, newSecretkey) => {
+    return ajax.post('admin/agent/secretkey/' + agentId, newSecretkey);
 };
 export const findAgentById = agentId => {
     return ajax.get('admin/agent/' + agentId);
