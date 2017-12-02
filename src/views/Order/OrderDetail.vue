@@ -48,7 +48,7 @@
                         <el-table-column property="goodsName" label="商品名称" align="center"></el-table-column>
                         <el-table-column property="goodsCount" label="商品数量" align="center"></el-table-column>
                         <el-table-column property="goodsPrice" label="商品价格" align="center">
-                            <template scope="scope">
+                            <template slot-scope="scope">
                                 {{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice):'0.00'}}元
                             </template>
                         </el-table-column>

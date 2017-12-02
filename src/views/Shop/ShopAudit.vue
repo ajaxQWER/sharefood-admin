@@ -21,15 +21,15 @@
                     <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
                     <el-table-column prop="phoneNum" label="注册手机号" align="center"></el-table-column>
                     <el-table-column label="店铺类型" align="center">
-                        <template scope="scope">{{formatShopType(scope.row.shopType)}}</template>
+                        <template slot-scope="scope">{{formatShopType(scope.row.shopType)}}</template>
                     </el-table-column>
                     <el-table-column label="审核状态" align="center">
-                        <template scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
+                        <template slot-scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
                     </el-table-column><el-table-column label="配送审核状态" align="center">
-                    <template scope="scope">{{formatDeliveryAuditStatus(scope.row.deliveryAuditStatus)}}</template>
+                    <template slot-scope="scope">{{formatDeliveryAuditStatus(scope.row.deliveryAuditStatus)}}</template>
                 </el-table-column>
                     <el-table-column label="操作" width="200px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" type="primary" @click="getAuditbyId(scope.$index, scope.row)">审核</el-button>
                         </template>
                     </el-table-column>

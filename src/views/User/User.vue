@@ -26,28 +26,28 @@
             <el-col>
                 <el-table :data="userLists">
                     <el-table-column label="用户名" width="160px" align="center">
-                        <template scope="scope">{{scope.row.username?scope.row.username:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.username?scope.row.username:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="是否设置昵称" align="center">
-                        <template scope="scope">{{scope.row.initNicknameed?'是':'否'}}</template>
+                        <template slot-scope="scope">{{scope.row.initNicknameed?'是':'否'}}</template>
                     </el-table-column>
                     <el-table-column label="昵称" align="center">
-                        <template scope="scope">{{scope.row.nickname?scope.row.nickname:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.nickname?scope.row.nickname:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="余额" align="center">
-                        <template scope="scope">{{scope.row.balance?formatMoney(scope.row.balance)+'元':'0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.balance?formatMoney(scope.row.balance)+'元':'0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="积分" align="center">
-                        <template scope="scope">{{scope.row.integral}}</template>
+                        <template slot-scope="scope">{{scope.row.integral}}</template>
                     </el-table-column>
                     <el-table-column label="优惠券数量" align="center">
-                        <template scope="scope">{{scope.row.couponNumber?scope.row.couponNumber:'0'}}</template>
+                        <template slot-scope="scope">{{scope.row.couponNumber?scope.row.couponNumber:'0'}}</template>
                     </el-table-column>
                     <el-table-column label="注册时间" align="center">
-                        <template scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                        <template slot-scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
                     <el-table-column label="上次登录" align="center">
-                        <template scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                        <template slot-scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
                 </el-table>
             </el-col>

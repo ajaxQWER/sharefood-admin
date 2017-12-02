@@ -45,47 +45,47 @@
             <el-col>
                 <el-table :data="SettlementRecordList">
                     <el-table-column label="id" align="center" width="60px">
-                        <template scope="scope">{{scope.row.settlementRecordId?scope.row.settlementRecordId:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.settlementRecordId?scope.row.settlementRecordId:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="流水号" align="center">
-                        <template scope="scope">{{scope.row.serialNumber?scope.row.serialNumber:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.serialNumber?scope.row.serialNumber:'-'}}</template>
                     </el-table-column>
                     <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
                     <el-table-column label="订单号" align="center">
-                        <template scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="订单金额" align="center">
-                        <template scope="scope">{{scope.row.orderAmount?formatMoney(scope.row.orderAmount)+'元':'0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderAmount?formatMoney(scope.row.orderAmount)+'元':'0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="配送费" align="center">
-                        <template scope="scope">{{scope.row.distributionFee?formatMoney(scope.row.distributionFee)+'元':'0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.distributionFee?formatMoney(scope.row.distributionFee)+'元':'0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="代理商名称" align="center">
-                        <template scope="scope">{{scope.row.agentName?scope.row.agentName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.agentName?scope.row.agentName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="是否到账" align="center" width="100px">
-                        <template scope="scope">{{scope.row.arrivaled?'已到账':'未到账'}}</template>
+                        <template slot-scope="scope">{{scope.row.arrivaled?'已到账':'未到账'}}</template>
                     </el-table-column>
                     <el-table-column label="记录时间" align="center">
-                        <template scope="scope">{{moment(scope.row.recordTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                        <template slot-scope="scope">{{moment(scope.row.recordTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
                     <el-table-column label="计划到账时间" align="center">
-                        <template scope="scope">{{moment(scope.row.planArrivalTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                        <template slot-scope="scope">{{moment(scope.row.planArrivalTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
                     <el-table-column label="实际到账时间" align="center">
-                        <template scope="scope">{{moment(scope.row.arrivalTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                        <template slot-scope="scope">{{moment(scope.row.arrivalTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
                     <el-table-column label="费率" align="center" width="80px">
-                        <template scope="scope">{{scope.row.percentageOfSettle*100+'%'}}</template>
+                        <template slot-scope="scope">{{scope.row.percentageOfSettle*100+'%'}}</template>
                     </el-table-column>
                     <el-table-column label="平台佣金" align="center">
-                        <template scope="scope">{{scope.row.platformAmount?formatMoney(scope.row.platformAmount)+'元':'0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.platformAmount?formatMoney(scope.row.platformAmount)+'元':'0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="代理商佣金" align="center">
-                        <template scope="scope">{{scope.row.agentAmount?formatMoney(scope.row.agentAmount)+'元':'0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.agentAmount?formatMoney(scope.row.agentAmount)+'元':'0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="商家佣金" align="center">
-                        <template scope="scope">{{scope.row.sellerAmount?formatMoney(scope.row.sellerAmount)+'元':'0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.sellerAmount?formatMoney(scope.row.sellerAmount)+'元':'0.00元'}}</template>
                     </el-table-column>
                 </el-table>
             </el-col>

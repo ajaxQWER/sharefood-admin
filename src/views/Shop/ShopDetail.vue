@@ -37,22 +37,22 @@
                             <el-table-column width="80px" property="activityId" label="活动ID" align="center"></el-table-column>
                             <el-table-column width="160px" property="activityName" label="活动名称" align="center"></el-table-column>
                             <el-table-column width="120px" property="activityType" label="活动类型" align="center">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     {{formatActivityType(scope.row.activityType)}}
                                 </template>
                             </el-table-column>
                             <el-table-column label="开始时间" align="center">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     {{scope.row.beginTime?moment(scope.row.beginTime).format('YYYY-MM-DD'):'长期'}}
                                 </template>
                             </el-table-column>
                             <el-table-column label="结束时间" align="center">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     {{scope.row.endTime?moment(scope.row.endTime).format('YYYY-MM-DD'):'长期'}}
                                 </template>
                             </el-table-column>
                             <el-table-column label="是否可用" align="center">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     {{scope.row.isValid?'可用':'不可用'}}
                                 </template>
                             </el-table-column>

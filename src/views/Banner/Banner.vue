@@ -18,14 +18,14 @@
             <el-table :data="bannerList">
                 <el-table-column prop="sortOrder" label="排序值" width="120px" align="center"></el-table-column>
                 <el-table-column label="是否显示" align="center" width="100px">
-                    <template scope="scope">{{scope.row.show?'是':'否'}}</template>
+                    <template slot-scope="scope">{{scope.row.show?'是':'否'}}</template>
                 </el-table-column>
                 <el-table-column label="缩略图" align="center">
-                    <template scope="scope"><img :src="formatImageUrl(scope.row.imageUrl)" alt="" class="thumb-img"></template>
+                    <template slot-scope="scope"><img :src="formatImageUrl(scope.row.imageUrl)" alt="" class="thumb-img"></template>
                 </el-table-column>
                 <el-table-column prop="url" label="链接地址" width="180px" align="center"></el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <el-button size="small" @click="updateVideoCategory(scope.$index, scope.row)">修改</el-button>
                         <el-button size="small" type="danger" @click="deleteVideoCategory(scope.$index, scope.row)">删除</el-button>
                     </template>

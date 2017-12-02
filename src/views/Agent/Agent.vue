@@ -21,14 +21,15 @@
                 <el-table-column prop="username" label="代理商账号" align="center" width="180px"></el-table-column>
                 <el-table-column prop="settlementTemplateName" label="结算模板" align="center" width="160px"></el-table-column>
                 <el-table-column label="注册时间" align="center" width="200px">
-                    <template scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="上次登录时间" align="center" width="200px">
-                    <template scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="200px" align="center">
-                    <template scope="scope">
+                <el-table-column label="操作" width="300px" align="center">
+                    <template slot-scope="scope">
                         <el-button size="small" @click="updateAgent(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="small" @click="updateAgentRegion(scope.$index, scope.row)">区域管理</el-button>
                         <el-button size="small" type="primary" @click="showUpdatePwdPopup(scope.$index, scope.row)">修改密码</el-button>
                     </template>
                 </el-table-column>
@@ -169,6 +170,10 @@
 					settlementTemplateId: row.settlementTemplateId,
 					username: row.username
 				}
+			},
+			updateAgentRegion: function(index, row){
+				var agentId = row.agentId;
+            	this.$router.push({path: '/agentRegion',query: {agentId : row.agentId}})
 			},
 			closeUpdateDialog: function(){
 				this.agentId = 0;

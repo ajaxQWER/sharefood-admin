@@ -21,6 +21,7 @@ import ArticleEdit from './views/Article/ArticleEdit.vue'
 import Settlement from './views/Settlement/Settlement.vue'
 import SettlementRecord from './views/Settlement/SettlementRecord.vue'
 import Agent from './views/Agent/Agent.vue'
+import AgentRegion from './views/Agent/AgentRegion.vue'
 import ShopTag from './views/Tag/ShopTag.vue'
 import GoodsTag from './views/Tag/GoodsTag.vue'
 import DeliveryTag from './views/Tag/DeliveryTag.vue'
@@ -174,7 +175,17 @@ let routes = [{
     leaf: true, //只有一个节点
     iconCls: 'fa fa-list-alt',
     children: [
-        { path: '/agent', component: Agent, name: '代理商管理' },
+        { 
+        	path: '/agent', 
+        	component: Agent, 
+        	name: '代理商管理'
+        },
+        { 
+			path: '/agentRegion',
+        	component: AgentRegion, 
+        	name: '代理商区域管理',
+        	hidden: true
+        }
     ]
 }, {
     path: '/',
