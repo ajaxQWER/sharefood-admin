@@ -25,6 +25,11 @@ import AgentRegion from './views/Agent/AgentRegion.vue'
 import ShopTag from './views/Tag/ShopTag.vue'
 import GoodsTag from './views/Tag/GoodsTag.vue'
 import DeliveryTag from './views/Tag/DeliveryTag.vue'
+import Admin from './views/Admin/Admin.vue'
+import AdminRole from './views/Admin/AdminRole.vue'
+import Role from './views/Admin/Role.vue'
+import AdminPermissionPoint from './views/Admin/AdminPermissionPoint.vue'
+
 let routes = [{
     path: '/login',
     component: Login,
@@ -181,9 +186,35 @@ let routes = [{
         	name: '代理商管理'
         },
         { 
-			path: '/agentRegion',
+			path: '/agent/region',
         	component: AgentRegion, 
         	name: '代理商区域管理',
+        	hidden: true
+        }
+    ]
+}, {
+    path: '/',
+    component: Home,
+    name: '管理员管理',
+    iconCls: 'fa fa-money',
+    children: [
+        { 
+        	path: '/admin', 
+        	component: Admin, 
+        	name: '管理员列表'
+        }, { 
+        	path: '/admin/role', 
+        	component: AdminRole, 
+        	name: '角色管理',
+        	hidden: true
+        }, { 
+        	path: '/role', 
+        	component: Role, 
+        	name: '角色列表' 
+        }, { 
+        	path: '/role/permissionPoint', 
+        	component: AdminPermissionPoint, 
+        	name: '权限管理',
         	hidden: true
         }
     ]

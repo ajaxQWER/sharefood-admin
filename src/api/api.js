@@ -2,6 +2,7 @@ import ElementUI from 'element-ui'
 import axios from 'axios';
 
 var ajax = axios.create({
+    // baseURL: 'http://127.0.0.1:8080', //测试
     baseURL: process.env.BASE_URL, //测试
     // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
@@ -53,17 +54,75 @@ ajax.interceptors.response.use(function(res) {
 
 //管理员
 export const adminLogin = params => {
-    return ajax.post('admin/admin/login', params);
+    return ajax.post('admin/adminMime/login', params);
 };
 export const updatePwd = params => {
-    return ajax.post('admin/admin/secretkey', params);
+    return ajax.post('admin/adminMime/secretkey', params);
 };
 export const getAdminInfo = params => {
-    return ajax.get('admin/admin', params);
+    return ajax.get('admin/adminMime', params);
 };
 export const getAdminLogs = params => {
     return ajax.get('admin/adminLogging', params);
 };
+
+export const getAdmin = adminId => {
+    return ajax.get('admin/admin/' + adminId);
+};
+export const getAdminList = params => {
+    return ajax.get('admin/admin', params);
+};
+export const saveAdmin = admin => {
+    return ajax.put('admin/admin', admin);
+};
+export const updateAdmin = admin => {
+    return ajax.post('admin/admin/' + admin.adminId, admin);
+};
+export const updateAdminSecretkey = (adminId, newSecretkey) => {
+    return ajax.post('admin/admin/secretkey/' + adminId, newSecretkey);
+};
+export const deleteAdmin = adminId => {
+    return ajax.delete('admin/admin/' + adminId);
+};
+
+
+
+export const getRole = roleId => {
+    return ajax.get('admin/role/' + roleId);
+};
+export const getRoleList = params => {
+    return ajax.get('admin/role', params);
+};
+export const saveRole = role => {
+    return ajax.put('admin/role', role);
+};
+export const updateRole = role => {
+    return ajax.post('admin/role/' + role.roleId, role);
+};
+export const deleteRole = roleId => {
+    return ajax.delete('admin/role/' + roleId);
+};
+
+
+export const getAdminRole = adminId => {
+    return ajax.get('admin/adminRole/' + adminId);
+};
+export const updateAdminRole = (adminId, roleIds) => {
+    return ajax.put('admin/adminRole/' + adminId, roleIds);
+};
+
+export const getRolePermissionPoint = roleId => {
+    return ajax.get('admin/rolePermissionPoint/' + roleId);
+};
+export const updateRolePermissionPoint = (roleId, permissionPointKeyList) => {
+    return ajax.put('admin/rolePermissionPoint/' + roleId, permissionPointKeyList);
+};
+
+export const getAllPermissionPoint = () => {
+    return ajax.get('admin/permissionPoint');
+};
+
+
 
 //banner
 export const bannerList = params => {

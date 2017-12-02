@@ -173,7 +173,7 @@
 			},
 			updateAgentRegion: function(index, row){
 				var agentId = row.agentId;
-            	this.$router.push({path: '/agentRegion',query: {agentId : row.agentId}})
+            	this.$router.push({path: '/agent/region',query: {agentId : row.agentId}})
 			},
 			closeUpdateDialog: function(){
 				this.agentId = 0;
