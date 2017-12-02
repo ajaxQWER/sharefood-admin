@@ -2,7 +2,7 @@ import ElementUI from 'element-ui'
 import axios from 'axios';
 
 var ajax = axios.create({
-    // baseURL: 'http://127.0.0.1:8080', //测试
+    //baseURL: 'http://127.0.0.1:8080', //测试
     baseURL: process.env.BASE_URL, //测试
     // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
@@ -78,8 +78,8 @@ export const saveAdmin = admin => {
 export const updateAdmin = admin => {
     return ajax.post('admin/admin/' + admin.adminId, admin);
 };
-export const updateAdminSecretkey = (adminId, newSecretkey) => {
-    return ajax.post('admin/admin/secretkey/' + adminId, newSecretkey);
+export const updateAdminSecretkey = params => {
+    return ajax.post('admin/admin/updateSecretkey/', params);
 };
 export const deleteAdmin = adminId => {
     return ajax.delete('admin/admin/' + adminId);
@@ -332,8 +332,8 @@ export const getAgentLists = params => {
 export const addAgent = params => {
     return ajax.put('admin/agent', params);
 };
-export const updateAgentPassword = (agentId, newSecretkey) => {
-    return ajax.post('admin/agent/secretkey/' + agentId, newSecretkey);
+export const updateAgentPassword = params => {
+    return ajax.post('admin/agent/updateSecretkey', params);
 };
 export const findAgentById = agentId => {
     return ajax.get('admin/agent/' + agentId);

@@ -103,6 +103,7 @@ export default {
 				username: ""
 			},
 			password: {
+				agentId: 0,
 				newSecretkey: ""
 			},
 			agentId: 0
@@ -193,11 +194,10 @@ export default {
 		showUpdatePwdPopup: function(index, row){
 			this.updatePwdDialog = true;
 			this.agentId = row.agentId;
+			this.password.agentId = this.agentId;
 		},
 		updatePwdFn: function(){
-			console.log(this.password)
-			updateAgentPassword(this.agentId, this.password).then(res => {
-				console.log(res)
+			updateAgentPassword(this.password).then(res => {
 				this.getAgentList();
 				this.$message({
 					type: 'success',

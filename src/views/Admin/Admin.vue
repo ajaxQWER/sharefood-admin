@@ -92,6 +92,7 @@ export default {
 				username: ""
 			},
 			password: {
+				adminId: 0,
 				newSecretkey: ""
 			},
 			adminId: 0
@@ -163,9 +164,10 @@ export default {
 		showUpdatePwdPopup: function(index, row){
 			this.updatePwdDialog = true;
 			this.adminId = row.adminId;
+			this.password.adminId = this.adminId;
 		},
 		updatePwdFn: function(){
-			updateAdminSecretkey(this.adminId, this.password).then(res => {
+			updateAdminSecretkey(this.password).then(res => {
 				this.getAdminList();
 				this.$message({
 					type: 'success',
