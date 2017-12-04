@@ -96,7 +96,7 @@
                         <template slot-scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
                     </el-table-column>
                     <el-table-column label="结算模板" align="center">
-                        <template scope="scope">{{scope.row.settlementTemplateName}}</template>
+                        <template slot-scope="scope">{{scope.row.settlementTemplateName}}</template>
                     </el-table-column>
                     <el-table-column label="置顶值" align="center">
                         <template slot-scope="scope">{{scope.row.topper}}</template>

@@ -10,6 +10,7 @@ import ShopType from './views/Shop/ShopType.vue'
 import ShopDetail from './views/Shop/ShopDetail.vue'
 import ShopAppraise from './views/Shop/ShopAppraise.vue'
 import ShopAudit from './views/Shop/ShopAudit.vue'
+import ShopAuditLogs from './views/Shop/ShopAuditLogs.vue'
 import ShopAuditDetail from './views/Shop/ShopAuditDetail.vue'
 import User from './views/User/User.vue'
 import Order from './views/Order/Order.vue'
@@ -120,6 +121,10 @@ let routes = [{
         path: '/shopAudit',
         component: ShopAudit,
         name: '店铺审核'
+    }, {
+        path: '/shopAuditLogs',
+        component: ShopAuditLogs,
+        name: '审核日志'
     }, {
         path: '/shopAuditDetail',
         component: ShopAuditDetail,
