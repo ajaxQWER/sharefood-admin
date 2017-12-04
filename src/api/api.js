@@ -411,6 +411,12 @@ export const updateDeliveryAppraiseTagById = params => {
     return ajax.post('admin/deliveryAppraiseTag/' + params.deliveryAppraiseTagId, params);
 };
 
+//审核记录日志
+export const getAuditLogList = params => {
+    return ajax.get('admin/auditLogging', params);
+};
+
+
 
 //文件上传 前台文件需要设置一个path属性
 export const uploadFiles = params => {

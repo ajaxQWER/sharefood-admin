@@ -61,7 +61,41 @@
                     <el-table-column label="名称" align="center">
                         <template slot-scope="scope">{{scope.row.shopName ? scope.row.shopName : '-'}}</template>
                     </el-table-column>
+<<<<<<< HEAD
                     <el-table-column label="负责人" width="160px" align="center">
+=======
+                    <el-table-column prop="name" label="负责人" align="center"></el-table-column>
+                    <!-- <el-table-column label="LOGO" align="center" width="140px">
+                        <template slot-scope="scope"><img :src="UPLOADURL + scope.row.logoUrl + '/shopLogo.png'" alt="" class="logo-img"></template>
+                    </el-table-column> -->
+                    <el-table-column label="地址" width="280px" align="center">
+                        <template slot-scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="营业时间" width="130px" align="center">
+                        <template slot-scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00'}}</template>
+                    </el-table-column>
+                    <!-- <el-table-column label="注册账号" width="160px" align="center">
+                        <template slot-scope="scope">{{scope.row.phoneNum?scope.row.phoneNum:'-'}}</template>
+                    </el-table-column> -->
+                    <el-table-column label="联系电话" width="140px" align="center">
+                        <template slot-scope="scope">{{scope.row.takeOutPhone?scope.row.takeOutPhone:'-'}}</template>
+                    </el-table-column>
+                    <el-table-column label="营业状态" align="center">
+                        <template slot-scope="scope">{{scope.row.operatingState?'营业中':'歇业中'}}</template>
+                    </el-table-column><el-table-column label="状态" align="center">
+                        <template slot-scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
+                    </el-table-column>
+                    <el-table-column label="配送状态" align="center">
+                        <template slot-scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
+                    </el-table-column>
+                    <el-table-column label="结算模板" align="center">
+                        <template slot-scope="scope">{{scope.row.settlementTemplateName}}</template>
+                    </el-table-column>
+                    <el-table-column label="置顶值" align="center">
+                        <template slot-scope="scope">{{scope.row.topper}}</template>
+                    </el-table-column>
+                        <el-table-column label="操作" width="200px" align="center">
+>>>>>>> branch 'dev' of git@gitee.com:gjgx/share-food-admin.git
                         <template slot-scope="scope">
                         	{{scope.row.name}}<br>
                         	({{scope.row.phoneNum}})
