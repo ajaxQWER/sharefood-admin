@@ -73,6 +73,14 @@
 		        <el-button type="primary" @click="updatePwdFn" :loading="addLoading">确 定</el-button>
 		    </div>
 		</el-dialog>
+
+        <!-- 分页 -->
+        <el-row>
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="params.pageId" :page-size="params.pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
 	</el-row>
 </template>
 <script>
@@ -86,10 +94,12 @@ import {
 export default {
 	data: function(){
 		return {
-			agentNameLike: '',
+			params: {
+				agentNameLike: '',
+				pageId: 1,
+				pageSize: 20,
+			},
 			isAdd: true,
-			pageId: 1,
-			pageSize: 10,
 			counts: 0,
 			addDialog: false,
 			addLoading: false,
@@ -117,9 +127,16 @@ export default {
 		})
 	},
 	methods: {
+		changeRouterPushValue: function() {
+            this.$router.push('?pageId=' + this.params.pageId + '&agentNameLike=' + this.params.agentNameLike)
+		},
+		currentChange: function(val) {
+            this.params.pageId = val;
+            this.getAgentList()
+        },
 		getAgentList: function(){
-			getAgentLists({params: { pageId: this.pageId, pageSize: this.pageSize, agentNameLike: this.agentNameLike}}).then(res => {
-				console.log(res)
+			getAgentLists({params: this.params}).then(res => {
+				this.changeRouterPushValue();
 				this.counts = res.count;
 				this.agentLists = res.list;
 			})
