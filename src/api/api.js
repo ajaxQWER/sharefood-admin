@@ -346,7 +346,7 @@ export const getAgentRegion = agentId => {
     return ajax.get('admin/agentRegion/' + agentId);
 };
 export const updateAgentRegion = (agentId, data) => {
-    return ajax.post('admin/agentRegion/' + agentId, data);
+    return ajax.put('admin/agentRegion/' + agentId, data);
 };
 
 
