@@ -6,13 +6,36 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-form class="inline-form">
-                <el-form-item label="搜索店铺"></el-form-item>
+            <el-form class="inline-form" :inline="true">
+                <el-form-item label="搜索店铺">
+                    <el-input placeholder="请输入店铺名称" v-model="params.shopNameLike" @blur="searchShop" @keyup.enter.native="searchShop">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="注册手机号">
+                    <el-input placeholder="请输入店铺名称" v-model="params.phoneNum" @blur="searchShop" @keyup.enter.native="searchShop">
+                    </el-input>
+                </el-form-item>
+		        <el-form-item label="地区">
+		            <el-select v-model.number="params.provinceId" placeholder="不限" @change="provinceChange">
+					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
+					</el-select>
+		        </el-form-item>
+		        <el-form-item label="">
+		            <el-select v-model.number="params.cityId" placeholder="不限" @change="cityChange">
+					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
+					</el-select>
+		        </el-form-item>
+		        <el-form-item label="">
+		            <el-select v-model.number="params.areaId" placeholder="不限" @change="areaChange">
+					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
+					</el-select>
+		        </el-form-item>
+                <el-form-item label="">
+                    <el-select v-model="params.deliveryAuditStatus" placeholder="请选择配送审核状态" @change="searchShop">
+					    <el-option v-for="(item,index) in deliveryAuditStatusList" :key="index" :label="item.key" :value="item.value" />
+                    </el-select>
+                </el-form-item>
             </el-form>
-            <el-col :span="4">
-                <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchShopCategory">
-                </el-input>
-            </el-col>
         </el-row>
         <el-row>
             <el-col>
@@ -21,15 +44,15 @@
                     <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
                     <el-table-column prop="phoneNum" label="注册手机号" align="center"></el-table-column>
                     <el-table-column label="店铺类型" align="center">
-                        <template scope="scope">{{formatShopType(scope.row.shopType)}}</template>
+                        <template slot-scope="scope">{{formatShopType(scope.row.shopType)}}</template>
                     </el-table-column>
                     <el-table-column label="审核状态" align="center">
-                        <template scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
+                        <template slot-scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
                     </el-table-column><el-table-column label="配送审核状态" align="center">
-                    <template scope="scope">{{formatDeliveryAuditStatus(scope.row.deliveryAuditStatus)}}</template>
+                    <template slot-scope="scope">{{formatDeliveryAuditStatus(scope.row.deliveryAuditStatus)}}</template>
                 </el-table-column>
                     <el-table-column label="操作" width="200px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" type="primary" @click="getAuditbyId(scope.$index, scope.row)">审核</el-button>
                         </template>
                     </el-table-column>
@@ -39,7 +62,7 @@
         <el-row>
             <!-- 分页 -->
             <el-col class="pagination">
-                <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+                <el-pagination @current-change="currentChange" :current-page="params.pageId" :page-size="params.pageSize" layout="total, prev, pager, next" :total="counts">
                 </el-pagination>
             </el-col>
         </el-row>
@@ -48,33 +71,116 @@
 </template>
 <script>
 import {
+	getProvinceList,
+	getCityList,
+	getAreaList,
     getShopAuditList
 } from '@/api/api'
 export default {
     data: function() {
         return {
-            searchContent: '',
-            pageId: 1,
-            pageSize: 20,
+        	params: {
+            	shopNameLike: null,
+            	phoneNum: null,
+            	deliveryAuditStatus: null,
+				provinceId: null,
+				cityId: null,
+				areaId: null,
+	            pageId: 1,
+	            pageSize: 20
+        	},
             counts: 0,
-            shopAuditLists: null
+            shopAuditLists: null,
+            provinceList: [],
+			cityList: [],
+			areaList: [],
+			cityListCache: {},
+			areaListCache: {},
+            deliveryAuditStatusList: [
+            	{
+                	key: '全部',
+                	value: null
+            	},{
+                	key: '审核通过',
+                	value: 'ADOPT'
+            	},{
+	                key: '审核不通过',
+	                value: 'UNADOPT'
+	            },{
+	                key: '审核中',
+	                value: 'IN_THE_REVIEW'
+	            },{
+	                key: '未审核',
+	                value: 'UN_AUDIT'
+	            },{
+	                key: '未提交',
+	                value: 'UN_COMMIT'
+	            }]
         }
     },
     created: function() {
+		getProvinceList().then(data => {
+			this.provinceList = [{
+				provinceName: '不限',
+				provinceId: null
+			}]
+			this.provinceList = this.provinceList.concat(data)
+		})
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getAuditLists();
     },
     methods: {
+		provinceChange: function(value) {
+			this.params.provinceId = value;
+			if (this.cityListCache[value]) {
+				this.cityList = this.cityListCache[value];
+        		this.getAuditLists();
+			} else {
+				getCityList(value).then(data => {
+					var temp = [{
+						cityName: '不限',
+						cityId: null
+					}]
+					data = temp.concat(data)
+				
+					this.cityListCache[value] = data;
+					this.cityList = data;
+        			this.getAuditLists();
+				})
+			}
+		},
+		cityChange: function(value) {
+			this.params.cityId = value;
+			if (this.areaListCache[value]) {
+				this.areaList = this.areaListCache[value];
+        		this.getAuditLists();
+			} else {
+				getAreaList(value).then(data => {
+					var temp = [{
+						areaName: '不限',
+						areaId: null
+					}]
+					data = temp.concat(data)
+					
+					this.areaListCache[value] = data;
+					this.areaList = data;
+        			this.getAuditLists();
+				})
+			}
+		},
+		areaChange: function(value) {
+			this.params.areaId = value;
+        	this.getAuditLists();
+		},
         //获取视频分类列表
         getAuditLists: function() {
-            getShopAuditList({ params: { pageId: this.pageId, pageSize: this.pageSize, shopNameLike: this.searchContent } }).then(data => {
-                console.log(data)
+            getShopAuditList({ params: this.params }).then(data => {
                 this.counts = data.count;
                 this.shopAuditLists = data.list;
             })
         },
         //搜索
-        searchShopCategory: function() {
+        searchShop: function() {
             this.getAuditLists();
         },
         getAuditbyId: function(inde,row){

@@ -14,40 +14,40 @@
         <el-row>
             <el-table :data="shopAppraise">
                 <el-table-column label="用户名" width="160px" align="center">
-                    <template scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
+                    <template slot-scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="订单Id" align="center">
-                    <template scope="scope">{{scope.row.orderId}}</template>
+                    <template slot-scope="scope">{{scope.row.orderId}}</template>
                 </el-table-column>
                 <el-table-column label="订单名称" width="160px" align="center">
-                    <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
+                    <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="总评星级" align="center">
-                    <template scope="scope">{{scope.row.shopAppraise?scope.row.shopAppraise:'-'}}</template>
+                    <template slot-scope="scope">{{scope.row.shopAppraise?scope.row.shopAppraise:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="环境评价" align="center">
-                    <template scope="scope">{{scope.row.environmentShopAppraise?scope.row.environmentShopAppraise:'-'}}</template>
+                    <template slot-scope="scope">{{scope.row.environmentShopAppraise?scope.row.environmentShopAppraise:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="服务评价" align="center">
-                    <template scope="scope">{{scope.row.serviceShopAppraise?scope.row.serviceShopAppraise:'-'}}</template>
+                    <template slot-scope="scope">{{scope.row.serviceShopAppraise?scope.row.serviceShopAppraise:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="味道评价" align="center">
-                    <template scope="scope">{{scope.row.tasteShopAppraise?scope.row.tasteShopAppraise:'-'}}</template>
+                    <template slot-scope="scope">{{scope.row.tasteShopAppraise?scope.row.tasteShopAppraise:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="评价内容" width="180px" align="center">
-                    <template scope="scope">{{scope.row.contentShopAppraise?scope.row.contentShopAppraise:'-'}}</template>
+                    <template slot-scope="scope">{{scope.row.contentShopAppraise?scope.row.contentShopAppraise:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="评价时间" width="180px" align="center">
-                    <template scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="评价浏览量" width="120px" align="center">
-                    <template scope="scope">{{scope.row.appraisePageView}}</template>
+                    <template slot-scope="scope">{{scope.row.appraisePageView}}</template>
                 </el-table-column>
                 <el-table-column label="评价点赞数" width="120px" align="center">
-                    <template scope="scope">{{scope.row.appraisePraiseCount}}</template>
+                    <template slot-scope="scope">{{scope.row.appraisePraiseCount}}</template>
                 </el-table-column>
                 <el-table-column label="评价时间" width="180px" align="center">
-                    <template scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
             </el-table>
         </el-row>

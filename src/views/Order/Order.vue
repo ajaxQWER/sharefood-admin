@@ -64,48 +64,48 @@
             <el-col>
                 <el-table :data="orderLists" :row-style="{fontSize:'12px'}">
                     <el-table-column label="订单id" align="center">
-                        <template scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="订单号" align="center">
-                        <template scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderNum?scope.row.orderNum:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="订单名称" align="center">
-                        <template scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="下单人" align="center">
-                        <template scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="联系人手机号" width="140px" align="center">
-                        <template scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="下单时间" align="center">
-                        <template scope="scope">{{moment(scope.row.addTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                        <template slot-scope="scope">{{moment(scope.row.addTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
                     <el-table-column label="订单价格" align="center">
-                        <template scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="支付方式" align="center">
-                        <template scope="scope">{{formatPayment(scope.row.payment)}}</template>
+                        <template slot-scope="scope">{{formatPayment(scope.row.payment)}}</template>
                     </el-table-column>
                     <el-table-column label="支付完成" align="center">
-                        <template scope="scope">{{scope.row.isFinishPay?'已支付':'未支付'}}</template>
+                        <template slot-scope="scope">{{scope.row.isFinishPay?'已支付':'未支付'}}</template>
                     </el-table-column>
                     <el-table-column label="订单状态" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <span v-if="scope.row.orderStatus=='CANCELLATION'" style="color:red;">{{formatOrderStatus(scope.row.orderStatus)}}</span>
                             <span v-else>{{formatOrderStatus(scope.row.orderStatus)}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="拒单原因" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             {{formatCancelType(scope.row.orderCancel.cancelType)}}
                         </template>
                     </el-table-column>
                     <el-table-column label="店铺名称" width="240px" align="center">
-                        <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">详情</el-button>
                             <el-button size="small" type="success" @click="printerOrder(scope.$index, scope.row)">补打</el-button>
                         </template>

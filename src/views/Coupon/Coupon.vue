@@ -21,37 +21,37 @@
             <el-col>
                 <el-table :data="couponLists">
                     <el-table-column label="名称" align="center">
-                        <template scope="scope">{{scope.row.couponName ? scope.row.couponName : '-'}}</template>
+                        <template slot-scope="scope">{{scope.row.couponName ? scope.row.couponName : '-'}}</template>
                     </el-table-column>
                     <el-table-column label="金额类型" align="center" width="120px">
-                    	<template scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? '固定金额' : '随机金额'}}</template>
+                    	<template slot-scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? '固定金额' : '随机金额'}}</template>
                     </el-table-column>
                     <el-table-column label="金额" align="center" width="160px">
-                    	<template scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? formatMoney(scope.row.money) + '元' : formatMoney(scope.row.minMoney) + '~' + formatMoney(scope.row.maxMoney) + '元'}}</template>
+                    	<template slot-scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? formatMoney(scope.row.money) + '元' : formatMoney(scope.row.minMoney) + '~' + formatMoney(scope.row.maxMoney) + '元'}}</template>
                     </el-table-column>
                     <el-table-column label="最低消费额度" width="120px" align="center">
-                        <template scope="scope">{{scope.row.minimum ? formatMoney(scope.row.minimum) + '元' : '0.00元'}}</template>
+                        <template slot-scope="scope">{{scope.row.minimum ? formatMoney(scope.row.minimum) + '元' : '0.00元'}}</template>
                     </el-table-column>
                     <el-table-column label="领取方式" width="160px" align="center">
-                        <template scope="scope">{{formatPickUpType(scope.row.pickUpType)}}</template>
+                        <template slot-scope="scope">{{formatPickUpType(scope.row.pickUpType)}}</template>
                     </el-table-column>
                     <el-table-column label="使用范围" width="160px" align="center">
-                        <template scope="scope">{{formatUseSocpe(scope.row.useSocpe)}}</template>
+                        <template slot-scope="scope">{{formatUseSocpe(scope.row.useSocpe)}}</template>
                     </el-table-column>
                     <el-table-column label="可领取" width="80px" align="center">
-                        <template scope="scope">{{scope.row.canPickUp ? '是' : '否'}}</template>
+                        <template slot-scope="scope">{{scope.row.canPickUp ? '是' : '否'}}</template>
                     </el-table-column>
                     <el-table-column label="最大领取数量" width="120px" align="center">
-                        <template scope="scope">{{scope.row.maxPickUpNumber ? scope.row.maxPickUpNumber : '0'}}</template>
+                        <template slot-scope="scope">{{scope.row.maxPickUpNumber ? scope.row.maxPickUpNumber : '0'}}</template>
                     </el-table-column>
                     <el-table-column label="已领数量" width="100px" align="center">
-                        <template scope="scope">{{scope.row.pickUped ? scope.row.pickUped : '-'}}</template>
+                        <template slot-scope="scope">{{scope.row.pickUped ? scope.row.pickUped : '-'}}</template>
                     </el-table-column>
                     <el-table-column label="有效期" width="200px" align="center">
-                        <template scope="scope">{{showTime(scope.row.startTime, scope.row.endTime)}}</template>
+                        <template slot-scope="scope">{{showTime(scope.row.startTime, scope.row.endTime)}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" @click="updateVideoCategory(scope.$index, scope.row)">修改</el-button>
                             <el-button size="small" type="danger" @click="deleteVideoCategory(scope.$index, scope.row)">删除</el-button>
                         </template>

@@ -16,7 +16,7 @@
                 
                 <el-table-column prop="shopAppraiseTagName" label="标签名称" align="center"></el-table-column>
                 <el-table-column label="操作" width="200px" align="center">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <el-button size="small" @click="updateTag(scope.$index, scope.row)">修改</el-button>
                         <el-button size="small" type="danger" @click="deleteTag(scope.$index, scope.row)">删除</el-button>
                     </template>

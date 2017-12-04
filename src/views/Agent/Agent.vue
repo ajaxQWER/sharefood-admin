@@ -21,14 +21,15 @@
                 <el-table-column prop="username" label="代理商账号" align="center" width="180px"></el-table-column>
                 <el-table-column prop="settlementTemplateName" label="结算模板" align="center" width="160px"></el-table-column>
                 <el-table-column label="注册时间" align="center" width="200px">
-                    <template scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="上次登录时间" align="center" width="200px">
-                    <template scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="200px" align="center">
-                    <template scope="scope">
+                <el-table-column label="操作" width="300px" align="center">
+                    <template slot-scope="scope">
                         <el-button size="small" @click="updateAgent(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="small" @click="updateAgentRegion(scope.$index, scope.row)">区域管理</el-button>
                         <el-button size="small" type="primary" @click="showUpdatePwdPopup(scope.$index, scope.row)">修改密码</el-button>
                     </template>
                 </el-table-column>
@@ -75,128 +76,138 @@
 	</el-row>
 </template>
 <script>
-	import {getAgentLists,addAgent,updateAgentPassword,updateAgentById,getSettlementTemplateLists} from '@/api/api'
-	export default {
-		data: function(){
-			return {
-				agentNameLike: '',
-				isAdd: true,
-				pageId: 1,
-				pageSize: 10,
-				counts: 0,
-				addDialog: false,
-				addLoading: false,
-				updatePwdDialog: false,
-				agentLists: null,
-				settlementTemplate: null,
-				newAgent: {
-					agentName: "",
-					secretkey: "",
-					settlementTemplateId: "",
-					username: ""
-				},
-				password: {
-					newSecretkey: ""
-				},
-				agentId: 0
-			}
-		},
-		created: function(){
-			this.getAgentList();
-			getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
+import {
+	getAgentLists,
+	addAgent,
+	updateAgentPassword,
+	updateAgentById,
+	getSettlementTemplateLists
+} from '@/api/api'
+export default {
+	data: function(){
+		return {
+			agentNameLike: '',
+			isAdd: true,
+			pageId: 1,
+			pageSize: 10,
+			counts: 0,
+			addDialog: false,
+			addLoading: false,
+			updatePwdDialog: false,
+			agentLists: null,
+			settlementTemplate: null,
+			newAgent: {
+				agentName: "",
+				secretkey: "",
+				settlementTemplateId: "",
+				username: ""
+			},
+			password: {
+				agentId: 0,
+				newSecretkey: ""
+			},
+			agentId: 0
+		}
+	},
+	created: function(){
+		this.getAgentList();
+		getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
+			console.log(res)
+			this.settlementTemplate = res.list;
+		})
+	},
+	methods: {
+		getAgentList: function(){
+			getAgentLists({params: { pageId: this.pageId, pageSize: this.pageSize, agentNameLike: this.agentNameLike}}).then(res => {
 				console.log(res)
-				this.settlementTemplate = res.list;
+				this.counts = res.count;
+				this.agentLists = res.list;
 			})
 		},
-		methods: {
-			getAgentList: function(){
-				getAgentLists({params: { pageId: this.pageId, pageSize: this.pageSize, agentNameLike: this.agentNameLike}}).then(res => {
+		searchAgent: function(){
+			this.getAgentList()
+		},
+		showAddDialog: function(){
+			this.isAdd = true;
+			this.addDialog = true;
+		},
+		closeDialog: function(){
+			this.isAdd = false;
+			this.addDialog = false;
+			this.newAgent = {
+				agentId: 0,
+				agentName: "",
+				secretkey: "",
+				settlementTemplateId: '',
+				username: ""
+			}
+		},
+		cancel: function(){
+			this.closeDialog()
+		},
+		addAgentFn: function(){
+			if(this.isAdd){
+				addAgent(this.newAgent).then(res => {
 					console.log(res)
-					this.counts = res.count;
-					this.agentLists = res.list;
+					this.getAgentList();
+					this.$message({
+						type: 'success',
+						message: '添加成功'
+					})
+					this.addDialog = false;
 				})
-			},
-			searchAgent: function(){
-				this.getAgentList()
-			},
-			showAddDialog: function(){
-				this.isAdd = true;
-				this.addDialog = true;
-			},
-			closeDialog: function(){
-				this.isAdd = false;
-				this.addDialog = false;
-				this.newAgent = {
-					agentId: 0,
-					agentName: "",
-					secretkey: "",
-					settlementTemplateId: '',
-					username: ""
-				}
-			},
-			cancel: function(){
-				this.closeDialog()
-			},
-			addAgentFn: function(){
-				if(this.isAdd){
-					addAgent(this.newAgent).then(res => {
-						console.log(res)
-						this.getAgentList();
-						this.$message({
-							type: 'success',
-							message: '添加成功'
-						})
-						this.addDialog = false;
-					})
-				}else{
-					updateAgentById(this.newAgent).then(res => {
-						console.log(res)
-						this.getAgentList();
-						this.$message({
-							type: 'success',
-							message: '修改成功'
-						})
-						this.addDialog = false;
-					})
-				}
-			},
-			updateAgent: function(index, row){
-				this.isAdd = false;
-				this.addDialog = true;
-				this.newAgent = {
-					agentId: row.agentId,
-					agentName: row.agentName,
-					settlementTemplateId: row.settlementTemplateId,
-					username: row.username
-				}
-			},
-			closeUpdateDialog: function(){
-				this.agentId = 0;
-				this.password = {
-					newSecretkey: ""
-				}
-			},
-			cancelUpdate: function(){
-				this.closeUpdateDialog()
-			},
-			showUpdatePwdPopup: function(index, row){
-				this.updatePwdDialog = true;
-				this.agentId = row.agentId;
-			},
-			updatePwdFn: function(){
-				console.log(this.password)
-				updateAgentPassword(this.agentId, this.password).then(res => {
+			}else{
+				updateAgentById(this.newAgent).then(res => {
 					console.log(res)
 					this.getAgentList();
 					this.$message({
 						type: 'success',
 						message: '修改成功'
 					})
-					this.updatePwdDialog = false;
+					this.addDialog = false;
 				})
 			}
+		},
+		updateAgent: function(index, row){
+			this.isAdd = false;
+			this.addDialog = true;
+			this.newAgent = {
+				agentId: row.agentId,
+				agentName: row.agentName,
+				settlementTemplateId: row.settlementTemplateId,
+				username: row.username
+			}
+		},
+		updateAgentRegion: function(index, row){
+			var agentId = row.agentId;
+        	this.$router.push({path: '/agent/region',query: {agentId : row.agentId}})
+		},
+		closeUpdateDialog: function(){
+			this.agentId = 0;
+			this.password = {
+				newSecretkey: ""
+			}
+		},
+		cancelUpdate: function(){
+			this.closeUpdateDialog()
+		},
+		showUpdatePwdPopup: function(index, row){
+			this.updatePwdDialog = true;
+			this.agentId = row.agentId;
+			this.password.agentId = this.agentId;
+		},
+		updatePwdFn: function(){
+			updateAgentPassword(this.password).then(res => {
+				this.getAgentList();
+				this.$message({
+					type: 'success',
+					message: '修改成功'
+				})
+				this.updatePwdDialog = false;
+			})
 		}
 	}
+}
 </script>
 <style scoped lang="scss">
 	.lives-news {

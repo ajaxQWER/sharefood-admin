@@ -28,16 +28,16 @@
             <el-col>
                 <el-table :data="articleLists">
                     <el-table-column label="文章ID" width="160px" align="center">
-                        <template scope="scope">{{scope.row.articleId?scope.row.articleId:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.articleId?scope.row.articleId:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="文章分类" width="160px" align="center">
-                        <template scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="文章标题" align="center">
-                        <template scope="scope">{{scope.row.articleTitle?scope.row.articleTitle:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.articleTitle?scope.row.articleTitle:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" @click="gotoUpdateArticlePage(scope.$index, scope.row)">修改</el-button>
                             <el-button size="small" type="danger" @click="deleteArticle(scope.$index, scope.row)">删除</el-button>
                         </template>
