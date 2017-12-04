@@ -196,8 +196,14 @@ export default {
 			this.addInfo.areaName = this.nowAreaMap[value];
 		},
 		addAgentFn: function() {
-			if (this.check(this.addInfo)) {
-				this.regions.push(this.addInfo)
+			var data = {};
+			
+			for (var key in this.addInfo) {
+				data[key] = this.addInfo[key];
+			}
+			
+			if (this.check(data)) {
+				this.regions.push(data)
 			}
 		},
 		cancel: function() {
