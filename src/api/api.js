@@ -342,6 +342,13 @@ export const updateAgentById =  params => {
     return ajax.post('admin/agent/' + params.agentId, params);
 };
 
+export const getAgentRegion = agentId => {
+    return ajax.get('admin/agentRegion/' + agentId);
+};
+export const updateAgentRegion = (agentId, data) => {
+    return ajax.post('admin/agentRegion/' + agentId, data);
+};
+
 
 //订单打印
 export const getPrinterLogs = params => {
