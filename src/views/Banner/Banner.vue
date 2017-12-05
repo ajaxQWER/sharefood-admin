@@ -1,20 +1,26 @@
 <template>
     <el-row class="lives-news">
-        <el-col class="title">
+        <el-row class="title">
             <h3>banner管理</h3>
-        </el-col>
-        <el-col>
+        </el-row>
+        <el-row>
             <el-form :inline="true">
                 <el-form-item>
                     <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加banner</el-button>
                 </el-form-item>
-                <!-- <el-form-item>
-                    <el-input placeholder="请输入banner名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
-                    </el-input>
-                </el-form-item> -->
+                <el-form-item>
+                    <el-select v-model="show" placeholder="请选择" @change="getBannerLists">
+                        <el-option
+                                v-for="(item,index) in showLists"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
-        </el-col>
-        <el-col>
+        </el-row>
+        <el-row>
             <el-table :data="bannerList">
                 <el-table-column prop="sortOrder" label="排序值" width="120px" align="center"></el-table-column>
                 <el-table-column label="是否显示" align="center" width="100px">
@@ -31,7 +37,12 @@
                     </template>
                 </el-table-column>
             </el-table>
-        </el-col>
+        </el-row>
+        <!-- 分页 -->
+        <el-row class="pagination">
+            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
+            </el-pagination>
+        </el-row>
         <el-dialog :title="isAdd?'新增banner':'修改banner'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
             <el-form :model="formInline" label-width="120px">
                 <el-form-item label="排序值">
@@ -57,11 +68,6 @@
                 <el-button type="primary" @click="addCategory" :loading="addLoading">确 定</el-button>
             </div>
         </el-dialog>
-        <!-- 分页 -->
-        <el-col class="pagination">
-            <el-pagination @current-change="currentChange" :current-page="pageId" :page-size="pageSize" layout="total, prev, pager, next" :total="counts">
-            </el-pagination>
-        </el-col>
     </el-row>
 </template>
 <script>
@@ -84,13 +90,23 @@ export default {
                 sortOrder: 0,
                 url: ""
             },
-            searchContent: '',
             pageId: 1,
             pageSize: 10,
             counts: 0,
             isAdd: true,
             uploadLoading: false,
             bannerList: null,
+            show: '',
+            showLists: [{
+                label: '全部',
+                value: ' '
+            },{
+                label: '显示',
+                value: true
+            },{
+                label: '隐藏',
+                value: false
+            }],
             uploadHeader: {
                 token: sessionStorage.getItem('jwt')
             }
@@ -103,7 +119,7 @@ export default {
     methods: {
         //获取视频分类列表
         getBannerLists: function() {
-            bannerList({ params: { pageId: this.pageId, pageSize: this.pageSize, imageUrlLike: this.searchContent } }).then(data => {
+            bannerList({ params: { pageId: this.pageId, pageSize: this.pageSize, show: this.show } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.bannerList = data.list;
