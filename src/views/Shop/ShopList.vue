@@ -58,6 +58,7 @@
         <el-row>
             <el-col>
                 <el-table :data="shopList" :row-class-name="tableRowClassName">
+                    <el-table-column label="id" align="center" prop="shopId"></el-table-column>
                     <el-table-column label="名称" align="center">
                         <template slot-scope="scope">{{scope.row.shopName ? scope.row.shopName : '-'}}</template>
                     </el-table-column>
@@ -81,10 +82,10 @@
                     <el-table-column label="营业时间" width="140px" align="center">
                         <template slot-scope="scope">{{scope.row.busBeginTime ? scope.row.busBeginTime : '00:00'}} - {{scope.row.busEndTime ? scope.row.busEndTime : '00:00'}}</template>
                     </el-table-column>
-                    <el-table-column label="联系电话" width="140px" align="center">
+                    <el-table-column label="联系电话" width="130px" align="center">
                         <template slot-scope="scope">{{scope.row.takeOutPhone ? scope.row.takeOutPhone : '-'}}</template>
                     </el-table-column>
-                    <el-table-column label="状态" width="300px" align="center">
+                    <el-table-column label="状态" width="260px" align="center">
                         <template slot-scope="scope">
                         	<span class="operatingState">{{formatOperatingState(scope.row.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.shelves)}}</span>/<span class="deliveryAuditStatus">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</span>
                         </template>
@@ -313,7 +314,7 @@ export default {
         //分页
         currentChange: function(val) {
             this.$router.push('?page=' + val)
-            this.pageId = val;
+            this.params.pageId = val;
             this.getShopLists()
         },
         closeaddToperPopup: function(){
