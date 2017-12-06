@@ -9,7 +9,7 @@
 			        <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加代理商</el-button>
 			    </el-form-item>
 			    <el-form-item label="代理商搜索">
-			        <el-input placeholder="请输入代理商名称" icon="search" v-model="agentNameLike" :on-icon-click="searchAgent">
+			        <el-input placeholder="请输入代理商名称" icon="search" v-model="params.agentNameLike" :on-icon-click="searchAgent">
 			        </el-input>
 			    </el-form-item>
 			</el-form>
