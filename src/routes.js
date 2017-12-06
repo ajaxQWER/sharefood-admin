@@ -139,7 +139,7 @@ let routes = [{
     path: '/',
     component: Home,
     name: '文章管理',
-    iconCls: 'fa fa-file-text', //图标样式class
+    iconCls: 'fa fa-rss', //图标样式class
     children: [{
         path: '/articleType',
         component: ArticleType,
@@ -172,7 +172,7 @@ let routes = [{
     path: '/',
     component: Home,
     name: '评价标签管理',
-    iconCls: 'fa fa-money',
+    iconCls: 'fa fa-tag',
     children: [
         { path: '/shopTag', component: ShopTag, name: '店铺评价标签' },
         { path: '/goodsTag', component: GoodsTag, name: '商品评价标签' },
@@ -183,7 +183,7 @@ let routes = [{
     component: Home,
     name: '',
     leaf: true, //只有一个节点
-    iconCls: 'fa fa-list-alt',
+    iconCls: 'fa fa-users',
     children: [
         { 
         	path: '/agent', 
@@ -201,7 +201,7 @@ let routes = [{
     path: '/',
     component: Home,
     name: '管理员管理',
-    iconCls: 'fa fa-money',
+    iconCls: 'fa fa-address-card-o',
     children: [
         { 
         	path: '/admin', 
