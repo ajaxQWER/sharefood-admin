@@ -15,22 +15,22 @@
                     <el-input placeholder="请输入店铺名称" v-model="params.phoneNum" @blur="searchShop" @keyup.enter.native="searchShop">
                     </el-input>
                 </el-form-item>
-		        <el-form-item label="地区">
+		        <el-form-item label="省">
 		            <el-select v-model.number="params.provinceId" placeholder="不限" @change="provinceChange">
 					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
 					</el-select>
 		        </el-form-item>
-		        <el-form-item label="">
+		        <el-form-item label="市">
 		            <el-select v-model.number="params.cityId" placeholder="不限" @change="cityChange">
 					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
 					</el-select>
 		        </el-form-item>
-		        <el-form-item label="">
+		        <el-form-item label="区">
 		            <el-select v-model.number="params.areaId" placeholder="不限" @change="areaChange">
 					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
 					</el-select>
 		        </el-form-item>
-                <el-form-item label="">
+                <el-form-item label="配送审核状态">
                     <el-select v-model="params.deliveryAuditStatus" placeholder="请选择配送审核状态" @change="searchShop">
 					    <el-option v-for="(item,index) in deliveryAuditStatusList" :key="index" :label="item.key" :value="item.value" />
                     </el-select>
@@ -40,20 +40,21 @@
         <el-row>
             <el-col>
                 <el-table :data="shopAuditLists">
-                    <el-table-column prop="shopId" label="店铺ID" align="center"></el-table-column>
+                    <el-table-column prop="shopId" label="店铺ID" align="center" width="100px"></el-table-column>
                     <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
-                    <el-table-column prop="phoneNum" label="注册手机号" align="center"></el-table-column>
-                    <el-table-column label="店铺类型" align="center">
+                    <el-table-column prop="phoneNum" label="注册手机号" align="center" width="140px"></el-table-column>
+                    <el-table-column label="店铺类型" align="center" width="120px">
                         <template slot-scope="scope">{{formatShopType(scope.row.shopType)}}</template>
                     </el-table-column>
                     <el-table-column label="审核状态" align="center">
                         <template slot-scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
-                    </el-table-column><el-table-column label="配送审核状态" align="center">
-                    <template slot-scope="scope">{{formatDeliveryAuditStatus(scope.row.deliveryAuditStatus)}}</template>
-                </el-table-column>
-                    <el-table-column label="操作" width="200px" align="center">
+                    </el-table-column>
+                    <el-table-column label="审核操作" align="center">
                         <template slot-scope="scope">
-                            <el-button size="small" type="primary" @click="getAuditbyId(scope.$index, scope.row)">审核</el-button>
+                            <el-button class="audit-btn" size="small" @click="getAuditbyId('base', scope.row)">资料审核</el-button>
+                            <el-button class="audit-btn" size="small" type="success" @click="getAuditbyId('distribution', scope.row)">配送审核</el-button>
+                            <el-button class="audit-btn" size="small" type="warning" @click="getAuditbyId('qualification', scope.row)">资质审核</el-button>
+                            <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">结算审核</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -183,8 +184,8 @@ export default {
         searchShop: function() {
             this.getAuditLists();
         },
-        getAuditbyId: function(inde,row){
-            this.$router.push({path: '/shopAuditDetail',query: {shopId:row.shopId}})
+        getAuditbyId: function(type,row){
+            this.$router.push({path: '/shopAuditDetail',query: {shopId:row.shopId, type: type}})
         },
         formatShopType: function(type){
             switch(type){
@@ -223,7 +224,7 @@ export default {
         //分页
         currentChange: function(val) {
             this.$router.push('?page=' + val)
-            this.pageId = val;
+            this.params.pageId = val;
             this.getAuditLists()
         }
     }
@@ -246,6 +247,9 @@ export default {
     }
     .label-color{
         color: red;
+    }
+    .audit-btn{
+        margin: 5px;
     }
 }
 </style>

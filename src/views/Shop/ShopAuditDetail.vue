@@ -10,9 +10,9 @@
                 </el-form-item>
             </el-form>
         </el-row>
-        <el-row v-if="shopDetail" class="shop-detail">
+        <el-row v-if="auditType=='base'" class="shop-detail">
             <h3>店铺基本信息</h3>
-            <ul>
+            <ul v-if="shopDetail">
                 <li>店铺ID：{{shopDetail.detail.shopId}}</li>
                 <li>店铺名称：{{shopDetail.detail.shopName}}</li>
                 <li>店铺类型：{{formatShopType(shopDetail.detail.shopType)}}</li>
@@ -29,35 +29,54 @@
                 <li>店内照：<img :src="formatImage(shopDetail.detail.shopInnerUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopInnerUrl)"></li>
                 <li>店铺门脸照：<img :src="shopDetail.detail.shopFaceUrl" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopFaceUrl)"></li>
             </ul>
+        </el-row>
+        <el-row v-if="auditType=='qualification'" class="shop-detail">
             <h3>资质信息</h3>
-            <h4 v-if="shopDetail.document">证件信息</h4>
-            <ul v-if="shopDetail.document">
-                <li>证件类型：{{formatDocumentType(shopDetail.document.documentType)}}</li>
-                <li>证件号码：{{shopDetail.document.documentNum}}</li>
-                <li>证件正面照：<img :src="formatImage(shopDetail.document.fullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.fullFacePhotoUrl)"></li>
-                <li>证件手持正面照：<img :src="formatImage(shopDetail.document.handFullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.handFullFacePhotoUrl)"></li>
-                <li>证件反面照：<img :src="formatImage(shopDetail.document.reverseSideAsUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.reverseSideAsUrl)"></li>
-            </ul>
-            <h4 v-if="shopDetail.subject">主体资质</h4>
-            <ul v-if="shopDetail.subject">
-                <li>主体资质类型：{{formatSubjectDocument(shopDetail.subject.subjectDocument)}}</li>
-                <li>主体资质有效期：{{shopDetail.subject.longTerm ? '长期' : (moment(shopDetail.subject.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.subject.endTime).format("YYYY-MM-DD"))}}</li>
-                <li>资质照片：<img :src="formatImage(shopDetail.subject.businessUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.subject.businessUrl)"></li>
-                <li>法定代表人 ：{{shopDetail.subject.legal}}</li>
-                <li>注册地址：{{shopDetail.subject.regAddress}}</li>
-                <li>注册号：{{shopDetail.subject.regNumber}}</li>
-                <li>单位名称：{{shopDetail.subject.unitName}}</li>
-            </ul>
-            <h4 v-if="shopDetail.industry">行业资质</h4>
-            <ul v-if="shopDetail.industry">
-                <li>资质类型：{{formatIntelligence(shopDetail.industry.intelligence)}}</li>
-                <li>许可证有效期：{{shopDetail.industry.longTerm ? '长期' : (moment(shopDetail.industry.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.industry.endTime).format("YYYY-MM-DD"))}}</li>
-                <li>许可证照片：<img :src="formatImage(shopDetail.industry.foodUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.industry.foodUrl)"></li>
-                <li>法定代表人：{{shopDetail.industry.legal}}</li>
-                <li>许可证地址：{{shopDetail.industry.licenseAddress}}</li>
-                <li>许可证编号：{{shopDetail.industry.licenseNumber}}</li>
-                <li>证件单位名称：{{shopDetail.industry.unitName}}</li>
-            </ul>
+            <h4>证件信息</h4>
+            <div v-if="shopDetail">
+                <ul v-if="shopDetail.document">
+                    <li>证件类型：{{formatDocumentType(shopDetail.document.documentType)}}</li>
+                    <li>证件号码：{{shopDetail.document.documentNum}}</li>
+                    <li>证件正面照：<img :src="formatImage(shopDetail.document.fullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.fullFacePhotoUrl)"></li>
+                    <li>证件手持正面照：<img :src="formatImage(shopDetail.document.handFullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.handFullFacePhotoUrl)"></li>
+                    <li>证件反面照：<img :src="formatImage(shopDetail.document.reverseSideAsUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.reverseSideAsUrl)"></li>
+                </ul>
+                <ul v-else>
+                    <li>无</li>
+                </ul>
+            </div>
+            <h4>主体资质</h4>
+            <div v-if="shopDetail">
+                <ul v-if="shopDetail.subject">
+                    <li>主体资质类型：{{formatSubjectDocument(shopDetail.subject.subjectDocument)}}</li>
+                    <li>主体资质有效期：{{shopDetail.subject.longTerm ? '长期' : (moment(shopDetail.subject.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.subject.endTime).format("YYYY-MM-DD"))}}</li>
+                    <li>资质照片：<img :src="formatImage(shopDetail.subject.businessUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.subject.businessUrl)"></li>
+                    <li>法定代表人 ：{{shopDetail.subject.legal}}</li>
+                    <li>注册地址：{{shopDetail.subject.regAddress}}</li>
+                    <li>注册号：{{shopDetail.subject.regNumber}}</li>
+                    <li>单位名称：{{shopDetail.subject.unitName}}</li>
+                </ul>
+                <ul v-else>
+                    <li>无</li>
+                </ul>
+            </div>
+            <h4>行业资质</h4>
+            <div v-if="shopDetail">
+                <ul v-if="shopDetail.industry">
+                    <li>资质类型：{{formatIntelligence(shopDetail.industry.intelligence)}}</li>
+                    <li>许可证有效期：{{shopDetail.industry.longTerm ? '长期' : (moment(shopDetail.industry.beginTime).format("YYYY-MM-DD") + '至' + moment(shopDetail.industry.endTime).format("YYYY-MM-DD"))}}</li>
+                    <li>许可证照片：<img :src="formatImage(shopDetail.industry.foodUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.industry.foodUrl)"></li>
+                    <li>法定代表人：{{shopDetail.industry.legal}}</li>
+                    <li>许可证地址：{{shopDetail.industry.licenseAddress}}</li>
+                    <li>许可证编号：{{shopDetail.industry.licenseNumber}}</li>
+                    <li>证件单位名称：{{shopDetail.industry.unitName}}</li>
+                </ul>
+                <ul v-else>
+                    <li>无</li>
+                </ul>
+            </div>
+        </el-row>
+        <el-row v-if="auditType=='settlement'" class="shop-detail">
             <h3 v-if="shopDetail.settlement">结算信息</h3>
             <ul v-if="shopDetail.settlement">
                 <li>开户人名：{{shopDetail.settlement.openName}}</li>
@@ -66,16 +85,16 @@
                 <li>开户支行：{{shopDetail.settlement.openBank}}</li>
                 <li>所属地：{{provinceName}}{{cityName}}</li>
             </ul>
-        </el-row>
-        <el-row class="settlement">
-            <el-select v-model="settlementTemplateId" filterable placeholder="请选择">
-                <el-option
-                  v-for="item in settlementTemplateList"
-                  :key="item.settlementTemplateId"
-                  :label="item.settlementTemplateName + ' - ' + item.percentageOfSettle"
-                  :value="item.settlementTemplateId">
-                </el-option>
-              </el-select>
+            <el-row class="settlement">
+                <el-select v-model="settlementTemplateId" filterable placeholder="请选择">
+                    <el-option
+                      v-for="item in settlementTemplateList"
+                      :key="item.settlementTemplateId"
+                      :label="item.settlementTemplateName + ' - ' + item.percentageOfSettle"
+                      :value="item.settlementTemplateId">
+                    </el-option>
+                  </el-select>
+            </el-row>
         </el-row>
         <el-row>
             <span>审核操作：</span>
@@ -112,22 +131,36 @@ export default {
             showImage: false,
             bigImageUrl: '',
             rotateDeg: 0,
-            zoom: 1
+            zoom: 1,
+            auditType: ''
         }
     },
     created: function() {
         var shopId = parseInt(this.$route.query.shopId);
+        var type = this.$route.query.type;
+        console.log(type)
         this.getSettlementList()
         if (!shopId) {
             this.$message({
                 type: 'error',
-                message: '店铺查询失败'
+                message: '店铺查询失败!'
             })
             setTimeout(() => {
                 this.$router.push('/shopAudit')
             }, 2500)
             return;
         }
+        if(!type){
+            this.$message({
+                type: 'error',
+                message: '审核类型无效!'
+            })
+            setTimeout(() => {
+                this.$router.push('/shopAudit')
+            }, 2500)
+            return;
+        }
+        this.auditType = type;
         this.getShopAuditDetail(shopId);
     },
     methods: {
@@ -232,22 +265,26 @@ export default {
         },
         getProvinceName: function(){
             try{
-                getProvinceById(this.shopDetail.settlement.provinceId).then(res=>{
-                    this.provinceName = res.provinceName;
-                }).catch(err=>{
-                    console.log(err)
-                })
+                if(this.shopDetail && this.shopDetail.settlement.provinceId){
+                    getProvinceById(this.shopDetail.settlement.provinceId).then(res=>{
+                        this.provinceName = res.provinceName;
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+                }
             } catch(e) {
                 console.log(e)
             }
         },
         geCityName: function(){
             try{
-                getCityById(this.shopDetail.settlement.cityId).then(res=>{
-                    this.cityName = res.cityName;
-                }).catch(err=>{
-                    console.log(err)
-                })
+                if(this.shopDetail && this.shopDetail.settlement.cityId){
+                    getCityById(this.shopDetail.settlement.cityId).then(res=>{
+                        this.cityName = res.cityName;
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+                }
             } catch(e) {
                 console.log(e)
             }
