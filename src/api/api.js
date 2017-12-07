@@ -2,7 +2,7 @@ import ElementUI from 'element-ui'
 import axios from 'axios';
 
 var ajax = axios.create({
-    //baseURL: 'http://127.0.0.1:8080', //测试
+    // baseURL: 'http://127.0.0.1:8080', //测试
     baseURL: process.env.BASE_URL, //测试
     // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
@@ -180,11 +180,11 @@ export const shopList = params => {
 export const findShopById = params => {
     return ajax.get('admin/shopDetail/' + params.shopId, params);
 };
-export const soldOut = params => {
-    return ajax.delete('admin/shopDetail/' + params.shopId, params);
-};
 export const putAway = params => {
-    return ajax.post('admin/shopDetail/' + params.shopId, params);
+    return ajax.post('admin/shopDetail/onShelves', params);
+};
+export const soldOut = params => {
+    return ajax.post('admin/shopDetail/offShelves', params);
 };
 //设置店铺置顶
 export const setToperClass = (shopId, toperClass) => {
@@ -226,10 +226,10 @@ export const findOrderById = params => {
 
 //店铺评价
 export const shopAppraiseList = params => {
-    return ajax.get('damin/shopAppraise', params);
+    return ajax.get('admin/shopAppraise', params);
 };
 export const findShopAppraiseById = params => {
-    return ajax.get('damin/shopAppraise/' + params.shopAppraiseId, params);
+    return ajax.get('admin/shopAppraise/' + params.shopAppraiseId, params);
 };
 
 //店铺审核

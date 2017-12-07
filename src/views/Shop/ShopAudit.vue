@@ -30,11 +30,6 @@
 					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
 					</el-select>
 		        </el-form-item>
-                <el-form-item label="">
-                    <el-select v-model="params.deliveryAuditStatus" placeholder="请选择配送审核状态" @change="searchShop">
-					    <el-option v-for="(item,index) in deliveryAuditStatusList" :key="index" :label="item.key" :value="item.value" />
-                    </el-select>
-                </el-form-item>
             </el-form>
         </el-row>
         <el-row>
@@ -95,27 +90,7 @@ export default {
 			cityList: [],
 			areaList: [],
 			cityListCache: {},
-			areaListCache: {},
-            deliveryAuditStatusList: [
-            	{
-                	key: '全部',
-                	value: null
-            	},{
-                	key: '审核通过',
-                	value: 'ADOPT'
-            	},{
-	                key: '审核不通过',
-	                value: 'UNADOPT'
-	            },{
-	                key: '审核中',
-	                value: 'IN_THE_REVIEW'
-	            },{
-	                key: '未审核',
-	                value: 'UN_AUDIT'
-	            },{
-	                key: '未提交',
-	                value: 'UN_COMMIT'
-	            }]
+			areaListCache: {}
         }
     },
     created: function() {
@@ -172,7 +147,6 @@ export default {
 			this.params.areaId = value;
         	this.getAuditLists();
 		},
-        //获取视频分类列表
         getAuditLists: function() {
             getShopAuditList({ params: this.params }).then(data => {
                 this.counts = data.count;

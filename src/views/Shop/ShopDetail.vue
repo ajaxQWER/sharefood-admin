@@ -22,16 +22,14 @@
                     <el-form-item label="店铺类型" class="label">{{formatShopType(shopModel.detail.shopType)}}</el-form-item>
                     <el-form-item label="是否支持开票" class="label">{{shopModel.detail.canDrawInvoice?'是':'否'}}</el-form-item>
                     <el-form-item label="营业时间" class="label">{{shopModel.detail.busBeginTime}}-{{shopModel.detail.busEndTime}}</el-form-item>
-                    <el-form-item label="冻结金额" class="label">{{shopModel.detail.accountFrozen + '元'}}</el-form-item>
-                    <el-form-item label="可提现金额" class="label">{{shopModel.detail.amountWithdrawal + '元'}}</el-form-item>
-                    <el-form-item label="可用余额" class="label">{{shopModel.detail.availableBalance + '元'}}</el-form-item>
+                    <el-form-item label="冻结金额" class="label">{{fmoney(shopModel.shopFunds.accountFrozen) + '元'}}</el-form-item>
+                    <el-form-item label="可提现金额" class="label">{{fmoney(shopModel.shopFunds.amountWithdrawal) + '元'}}</el-form-item>
+                    <el-form-item label="可用余额" class="label">{{fmoney(shopModel.shopFunds.availableBalance) + '元'}}</el-form-item>
                     <el-form-item label="店铺分类" class="label">{{shopModel.detail.shopCategoryName}}</el-form-item>
-                    <el-form-item label="店铺上架状态" class="label">{{shopModel.detail.shelves?'上架':'下架'}}</el-form-item>
-                    <el-form-item label="店铺营业状态" class="label">{{shopModel.detail.operatingState?'上架':'下架'}}</el-form-item>
-                    <el-form-item label="审核状态" class="label">{{formatAuditStatus(shopModel.detail.audit)}}</el-form-item>
-                    <el-form-item label="配送审核状态" class="label">{{formatAnubisStatus(shopModel.detail.deliveryAuditStatus)}}</el-form-item>
-                    <el-form-item label="最低配送金额" class="label">{{shopModel.detail.minDeliveryPrice + '元'}}</el-form-item>
-                    <el-form-item label="人均消费" class="label">{{shopModel.detail.preConsumption + '元'}}</el-form-item>
+                    <el-form-item label="店铺上架状态" class="label">{{shopModel.detail.shelves ? '上架' : '下架'}}</el-form-item>
+                    <el-form-item label="店铺营业状态" class="label">{{shopModel.detail.operatingState ? '营业' : '歇业'}}</el-form-item>
+                    <el-form-item label="最低配送金额" class="label">{{fmoney(shopModel.detail.minDeliveryPrice) + '元'}}</el-form-item>
+                    <el-form-item label="人均消费" class="label">{{fmoney(shopModel.detail.preConsumption) + '元'}}</el-form-item>
                     <el-form-item label="活动列表" class="label">
                         <el-table :data="shopModel.detail.shopActive" style="width: 800px;">
                             <el-table-column width="80px" property="activityId" label="活动ID" align="center"></el-table-column>
@@ -147,22 +145,18 @@ export default {
         }
     },
     methods: {
+    	fmoney: function(s) {
+			var n = 2; 
+			var t = ""; 
+			s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + ""; 
+			var l = s.split(".")[0].split("").reverse(), r = s.split(".")[1]; 
+			for (var i = 0; i < l.length; i++) { 
+				t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : ""); 
+			} 
+			return t.split("").reverse().join("") + "." + r; 
+    	},
         back: function() {
             this.$router.back()
-        },
-        formatAnubisStatus: function(auditType){
-            switch(auditType){
-                case 'UN_COMMIT,':
-                    return '未提交';
-                case 'UN_AUDIT':
-                    return '未审核';
-                case 'IN_THE_REVIEW':
-                    return '审核中';
-                case 'ADOPT':
-                    return '审核通过';
-                case 'UNADOPT':
-                    return '审核不通过';
-            }
         },
         formatShopType: function(type){
             switch(type){
@@ -172,18 +166,6 @@ export default {
                     return '外卖';
                 case 'RESERVE_TAKEOUT':
                     return '预定加外卖';
-                default:
-                    return '-';
-            }
-        },
-        formatAuditStatus: function(type){
-            switch(type){
-                case 'WAIT_AUDIT':
-                    return '等待审核';
-                case 'AUDIT_ADOPT':
-                    return '审核通过';
-                case 'AUDIT_UNADOPT':
-                    return '审核不通过';
                 default:
                     return '-';
             }
