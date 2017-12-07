@@ -2,7 +2,7 @@ import ElementUI from 'element-ui'
 import axios from 'axios';
 
 var ajax = axios.create({
-    //baseURL: 'http://127.0.0.1:8080', //测试
+    // baseURL: 'http://127.0.0.1:8080', //测试
     baseURL: process.env.BASE_URL, //测试
     // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
@@ -132,7 +132,7 @@ export const addBanner = params => {
     return ajax.put('admin/banner', params);
 };
 export const deleteBannerById = params => {
-    return ajax.delete('admin/banner/' + params.bannerId, params);
+    return ajax.delete('admin/banner/' + params.bannerId);
 };
 export const getBannerById = params => {
     return ajax.get('admin/banner/' + params.bannerId, params);
@@ -149,7 +149,7 @@ export const addCoupon = params => {
     return ajax.put('admin/coupon', params);
 };
 export const deleteCouponById = params => {
-    return ajax.delete('admin/coupon/' + params.couponId, params);
+    return ajax.delete('admin/coupon/' + params.couponId);
 };
 export const findCouponById = params => {
     return ajax.get('admin/coupon/' + params.couponId, params);
@@ -163,7 +163,7 @@ export const goodsList = params => {
     return ajax.get('admin/goods', params);
 };
 export const soldOutGoodsById = params => {
-    return ajax.delete('admin/goods/' + params.goodsId, params);
+    return ajax.delete('admin/goods/' + params.goodsId);
 };
 export const putAwayGoodsById = params => {
     return ajax.post('admin/goods/' + params.goodsId, params);
@@ -180,11 +180,11 @@ export const shopList = params => {
 export const findShopById = params => {
     return ajax.get('admin/shopDetail/' + params.shopId, params);
 };
-export const soldOut = params => {
-    return ajax.delete('admin/shopDetail/' + params.shopId, params);
-};
 export const putAway = params => {
-    return ajax.post('admin/shopDetail/' + params.shopId, params);
+    return ajax.post('admin/shopDetail/onShelves', params);
+};
+export const soldOut = params => {
+    return ajax.post('admin/shopDetail/offShelves', params);
 };
 //设置店铺置顶
 export const setToperClass = (shopId, toperClass) => {
@@ -199,7 +199,7 @@ export const addShopCategory = params => {
     return ajax.put('admin/shopCategory', params);
 };
 export const deleteShopCategoryById = params => {
-    return ajax.delete('admin/shopCategory/' + params.shopCategoryId, params);
+    return ajax.delete('admin/shopCategory/' + params.shopCategoryId);
 };
 export const findShopCategoryById = params => {
     return ajax.get('admin/shopCategory/' + params.shopCategoryId, params);
@@ -226,24 +226,24 @@ export const findOrderById = params => {
 
 //店铺评价
 export const shopAppraiseList = params => {
-    return ajax.get('damin/shopAppraise', params);
+    return ajax.get('admin/shopAppraise', params);
 };
 export const findShopAppraiseById = params => {
-    return ajax.get('damin/shopAppraise/' + params.shopAppraiseId, params);
+    return ajax.get('admin/shopAppraise/' + params.shopAppraiseId, params);
 };
 
 //店铺审核
 export const getShopAuditList = params => {
     return ajax.get('admin/shopAudit', params);
 };
-export const passShopAudit = params => {
-    return ajax.post('admin/shopAudit/', params);
+export const passShopAudit = (type,params) => {
+    return ajax.post('admin/shopAudit/' + type + '/pass', params);
 };
-export const findShopAuditById = shopId => {
-    return ajax.get('admin/shopAudit/' + shopId);
+export const findShopAuditById = (type, shopId) => {
+    return ajax.get('admin/shopAudit/' + type + '/get/' + shopId);
 };
-export const rejectShopAudit = params => {
-    return ajax.delete('admin/shopAudit/' + params.shopId + '/' + params.unauditReason);
+export const rejectShopAudit = (type,params) => {
+    return ajax.post('admin/shopAudit/' + type + '/unpass', params);
 };
 
 //地区

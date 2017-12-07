@@ -30,29 +30,35 @@
 					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
 					</el-select>
 		        </el-form-item>
-                <el-form-item label="配送审核状态">
-                    <el-select v-model="params.deliveryAuditStatus" placeholder="请选择配送审核状态" @change="searchShop">
-					    <el-option v-for="(item,index) in deliveryAuditStatusList" :key="index" :label="item.key" :value="item.value" />
-                    </el-select>
-                </el-form-item>
             </el-form>
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="shopAuditLists">
-                    <el-table-column prop="shopId" label="店铺ID" align="center" width="100px"></el-table-column>
-                    <el-table-column prop="shopName" label="店铺名称" align="center"></el-table-column>
-                    <el-table-column prop="phoneNum" label="注册手机号" align="center" width="140px"></el-table-column>
+                <el-table :data="shopAuditLists" border>
+                    <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
+                    <el-table-column prop="detail.shopName" label="店铺名称" align="center"></el-table-column>
+                    <el-table-column prop="detail.phoneNum" label="注册手机号" align="center" width="140px"></el-table-column>
                     <el-table-column label="店铺类型" align="center" width="120px">
-                        <template slot-scope="scope">{{formatShopType(scope.row.shopType)}}</template>
+                        <template slot-scope="scope">{{formatShopType(scope.row.detail.shopType)}}</template>
                     </el-table-column>
                     <el-table-column label="审核状态" align="center">
-                        <template slot-scope="scope">{{formatAuditStatus(scope.row.audit)}}</template>
+                        <el-table-column label="基本资料" align="center" width="100px">
+                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.base)}}</template>
+                        </el-table-column>
+                        <el-table-column label="配送信息" align="center" width="100px">
+                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}</template>
+                        </el-table-column>
+                        <el-table-column label="资质信息" align="center" width="100px">
+                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}</template>
+                        </el-table-column>
+                        <el-table-column label="结算信息" align="center" width="100px">
+                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}</template>
+                        </el-table-column>
                     </el-table-column>
                     <el-table-column label="审核操作" align="center">
                         <template slot-scope="scope">
                             <el-button class="audit-btn" size="small" @click="getAuditbyId('base', scope.row)">资料审核</el-button>
-                            <el-button class="audit-btn" size="small" type="success" @click="getAuditbyId('distribution', scope.row)">配送审核</el-button>
+                            <el-button class="audit-btn" size="small" type="success" disabled @click="getAuditbyId('distribution', scope.row)">配送审核</el-button>
                             <el-button class="audit-btn" size="small" type="warning" @click="getAuditbyId('qualification', scope.row)">资质审核</el-button>
                             <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">结算审核</el-button>
                         </template>
@@ -96,27 +102,7 @@ export default {
 			cityList: [],
 			areaList: [],
 			cityListCache: {},
-			areaListCache: {},
-            deliveryAuditStatusList: [
-            	{
-                	key: '全部',
-                	value: null
-            	},{
-                	key: '审核通过',
-                	value: 'ADOPT'
-            	},{
-	                key: '审核不通过',
-	                value: 'UNADOPT'
-	            },{
-	                key: '审核中',
-	                value: 'IN_THE_REVIEW'
-	            },{
-	                key: '未审核',
-	                value: 'UN_AUDIT'
-	            },{
-	                key: '未提交',
-	                value: 'UN_COMMIT'
-	            }]
+			areaListCache: {}
         }
     },
     created: function() {
@@ -173,7 +159,6 @@ export default {
 			this.params.areaId = value;
         	this.getAuditLists();
 		},
-        //获取视频分类列表
         getAuditLists: function() {
             getShopAuditList({ params: this.params }).then(data => {
                 this.counts = data.count;
@@ -199,16 +184,6 @@ export default {
         },
         formatAuditStatus: function(auditType){
             switch(auditType){
-                case 'WAIT_AUDIT':
-                    return '等待审核';
-                case 'AUDIT_ADOPT':
-                    return '审核通过';
-                case 'AUDIT_UNADOPT':
-                    return '审核不通过';
-            }
-        },
-        formatDeliveryAuditStatus: function(auditType){
-            switch(auditType){
                 case 'UN_COMMIT,':
                     return '未提交';
                 case 'UN_AUDIT':
@@ -216,9 +191,11 @@ export default {
                 case 'IN_THE_REVIEW':
                     return '审核中';
                 case 'ADOPT':
-                    return '审核通过';
+                    return '通过';
                 case 'UNADOPT':
-                    return '审核不通过';
+                    return '不通过';
+                default:
+                    return '-';
             }
         },
         //分页

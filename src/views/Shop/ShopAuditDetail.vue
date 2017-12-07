@@ -13,21 +13,24 @@
         <el-row v-if="auditType=='base'" class="shop-detail">
             <h3>店铺基本信息</h3>
             <ul v-if="shopDetail">
-                <li>店铺ID：{{shopDetail.detail.shopId}}</li>
-                <li>店铺名称：{{shopDetail.detail.shopName}}</li>
-                <li>店铺类型：{{formatShopType(shopDetail.detail.shopType)}}</li>
-                <li>审核状态：{{formatAuditStaus(shopDetail.detail.audit)}}</li>
-                <li>店铺地址：{{shopDetail.detail.address}}</li>
-                <li>营业时间：{{shopDetail.detail.busBeginTime}}-{{shopDetail.detail.busEndTime}}</li>
-                <li>配送费：{{shopDetail.detail.fee}}</li>
-                <li>送餐电话：{{shopDetail.detail.takeOutPhone}}</li>
-                <li>店铺上架状态：{{shopDetail.detail.shelves?'上架':'下架'}}</li>
-                <li>店铺注册手机号：{{shopDetail.detail.phoneNum}}</li>
-                <li>店铺联系人：{{shopDetail.detail.name}}</li>
-                <li>店铺分类：{{shopDetail.detail.shopCategoryName}}</li>
-                <li>店铺logo：<img :src="formatImage(shopDetail.detail.logoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.logoUrl)"></li>
-                <li>店内照：<img :src="formatImage(shopDetail.detail.shopInnerUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopInnerUrl)"></li>
-                <li>店铺门脸照：<img :src="shopDetail.detail.shopFaceUrl" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopFaceUrl)"></li>
+                <li>店铺ID：{{shopDetail.shopId}}</li>
+                <li>店铺名称：{{shopDetail.shopName}}</li>
+                <li>店铺类型：{{formatShopType(shopDetail.shopType)}}</li>
+                <li>审核状态：{{formatAuditStaus(shopDetail.audit)}}</li>
+                <li>店铺地址：{{shopDetail.address}}</li>
+                <li>营业时间：{{shopDetail.busBeginTime}}-{{shopDetail.busEndTime}}</li>
+                <li>配送费：{{shopDetail.fee}}</li>
+                <li>送餐电话：{{shopDetail.takeOutPhone}}</li>
+                <li>店铺上架状态：{{shopDetail.shelves?'上架':'下架'}}</li>
+                <li>店铺注册手机号：{{shopDetail.phoneNum}}</li>
+                <li>店铺联系人：{{shopDetail.name}}</li>
+                <li>店铺分类：{{shopDetail.shopCategoryName}}</li>
+                <li>店铺logo：<img :src="formatImage(shopDetail.logoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.logoUrl)"></li>
+                <li>店内照：<img :src="formatImage(shopDetail.shopInnerUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.shopInnerUrl)"></li>
+                <li>店铺门脸照：<img :src="formatImage(shopDetail.shopFaceUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.shopFaceUrl)"></li>
+            </ul>
+            <ul v-else>
+                <li>无</li>
             </ul>
         </el-row>
         <el-row v-if="auditType=='qualification'" class="shop-detail">
@@ -77,16 +80,17 @@
             </div>
         </el-row>
         <el-row v-if="auditType=='settlement'" class="shop-detail">
-            <h3 v-if="shopDetail.settlement">结算信息</h3>
-            <ul v-if="shopDetail.settlement">
-                <li>开户人名：{{shopDetail.settlement.openName}}</li>
-                <li>银行卡号：{{shopDetail.settlement.bankNumber}}</li>
-                <li>所属银行：{{shopDetail.settlement.bankHouse}}</li>
-                <li>开户支行：{{shopDetail.settlement.openBank}}</li>
+            <h3>结算信息</h3>
+            <ul v-if="shopDetail">
+                <li>开户人名：{{shopDetail.openName}}</li>
+                <li>银行卡号：{{shopDetail.bankNumber}}</li>
+                <li>所属银行：{{shopDetail.bankHouse}}</li>
+                <li>开户支行：{{shopDetail.openBank}}</li>
                 <li>所属地：{{provinceName}}{{cityName}}</li>
             </ul>
             <el-row class="settlement">
-                <el-select v-model="settlementTemplateId" filterable placeholder="请选择">
+                选择结算模板：
+                <el-select v-model="settlementTemplateId" filterable placeholder="请选择结算模板">
                     <el-option
                       v-for="item in settlementTemplateList"
                       :key="item.settlementTemplateId"
@@ -99,7 +103,7 @@
         <el-row>
             <span>审核操作：</span>
             <el-button type="primary" @click="pass">通过</el-button>
-            <el-button type="danger" @click="reject">拒绝</el-button>
+            <el-button type="danger" @click="showRegectDialog">拒绝</el-button>
         </el-row>
         <el-dialog :visible.sync="showImage" size="tiny" @close="closeDialog" class="dialog">
             <img :src="bigImageUrl" alt="" class="big-img" ref="bigImg">
@@ -107,6 +111,20 @@
                 <el-button @click="zoomOut"><i class="fa fa-search-minus"></i></el-button>
                 <el-button @click="zoomIn"><i class="fa fa-search-plus"></i></el-button>
                 <el-button @click="rotate"><i class="fa fa-rotate-left"></i></el-button>
+            </div>
+        </el-dialog>
+        <el-dialog :visible.sync="rejectDialog" size="tiny" @close="closeRejectDialog" class="dialog" title="审核拒绝">
+            <el-form label-width="80px">
+                <el-form-item label="拒绝理由">
+                    <el-input type="textarea" v-model="unauditReason"></el-input>
+                </el-form-item>
+                <el-form-item label="备注">
+                    <el-input v-model="auditRemark"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer">
+                <el-button @click="closeRejectDialog">取消</el-button>
+                <el-button type="primary" @click="reject">确定</el-button>
             </div>
         </el-dialog>
     </el-row>
@@ -123,6 +141,7 @@ import {
 export default {
     data: function() {
         return {
+            shopId: '',
             shopDetail: null,
             provinceName: '',
             cityName: '',
@@ -132,13 +151,16 @@ export default {
             bigImageUrl: '',
             rotateDeg: 0,
             zoom: 1,
-            auditType: ''
+            auditType: '',
+            rejectDialog: false,
+            unauditReason: '',
+            auditRemark: ''
         }
     },
     created: function() {
         var shopId = parseInt(this.$route.query.shopId);
+        this.shopId = shopId;
         var type = this.$route.query.type;
-        console.log(type)
         this.getSettlementList()
         if (!shopId) {
             this.$message({
@@ -161,15 +183,17 @@ export default {
             return;
         }
         this.auditType = type;
-        this.getShopAuditDetail(shopId);
+        this.getShopAuditDetail(type, shopId);
     },
     methods: {
-        getShopAuditDetail: function(shopId) {
-            findShopAuditById(shopId).then(res => {
+        getShopAuditDetail: function(type, shopId) {
+            findShopAuditById(type, shopId).then(res => {
                 console.log(res)
                 this.shopDetail = res;
-                this.getProvinceName()
-                this.geCityName()
+                if(type == 'settlement'){
+                    this.getProvinceName()
+                    this.geCityName()
+                }
             }).catch(err => {
                 console.log(err)
                 setTimeout(() => {
@@ -265,61 +289,91 @@ export default {
         },
         getProvinceName: function(){
             try{
-                if(this.shopDetail && this.shopDetail.settlement.provinceId){
-                    getProvinceById(this.shopDetail.settlement.provinceId).then(res=>{
-                        this.provinceName = res.provinceName;
-                    }).catch(err=>{
-                        console.log(err)
-                    })
-                }
+                getProvinceById(this.shopDetail.provinceId).then(res=>{
+                    this.provinceName = res.provinceName;
+                }).catch(err=>{
+                    console.log(err)
+                })
             } catch(e) {
                 console.log(e)
             }
         },
         geCityName: function(){
             try{
-                if(this.shopDetail && this.shopDetail.settlement.cityId){
-                    getCityById(this.shopDetail.settlement.cityId).then(res=>{
-                        this.cityName = res.cityName;
-                    }).catch(err=>{
-                        console.log(err)
-                    })
-                }
+                getCityById(this.shopDetail.cityId).then(res=>{
+                    this.cityName = res.cityName;
+                }).catch(err=>{
+                    console.log(err)
+                })
             } catch(e) {
                 console.log(e)
             }
         },
         pass: function(){
-            var params = {
-                settlementTemplateId: this.settlementTemplateId,
-                shopId: this.shopDetail.shopId
+            console.log(this.auditType == 'settlement', this.settlementTemplateId == '')
+            if(this.auditType == 'settlement' && this.settlementTemplateId == ''){
+                this.$message({
+                    type: 'error',
+                    message: '请选择结算模板'
+                })
+                return;
             }
-            passShopAudit(params).then(res=>{
-                if(res){
-                    this.$message({
-                        type: 'success',
-                        message: '操作成功！'
-                    })
-                    this.back()
-                }
-            })
-        },
-        reject: function(){
-            this.$prompt('请输入拒绝理由', '审核不通过').then(({ value })=>{
+            this.$prompt('添加审核备注', '提示').then(({ value })=>{
+                console.log(value)
                 var params = {
-                    shopId: this.shopDetail.shopId,
-                    unauditReason: value
+                    auditRemark: value,
+                    shopId: this.shopId
                 }
-                rejectShopAudit(params).then((res)=>{
+                console.log(params)
+                if(this.auditType == 'settlement'){
+                    params.settlementTemplateId = this.settlementTemplateId;
+                }
+                passShopAudit(this.auditType, params).then(res => {
                     if(res){
                         this.$message({
                             type: 'success',
                             message: '操作成功！'
                         })
-                        this.back()
+                        setTimeout(() => {
+                            this.back()
+                        }, 2000)
                     }
                 })
             }).catch(()=>{})
+        },
+        showRegectDialog: function(){
+            this.rejectDialog = true;
+        },
+        reject: function(){
+            if(this.unauditReason == ''){
+                this.$message({
+                    type: 'error',
+                    message: '请输入拒绝理由'
+                })
+                return;
+            }
+            var params = {
+                auditRemark: this.auditRemark,
+                shopId: this.shopId,
+                unauditReason: this.unauditReason
+            }
+            console.log(params)
+            rejectShopAudit(this.auditType, params).then((res)=>{
+                if(res){
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功！'
+                    })
+                    setTimeout(() => {
+                        this.back()
+                    }, 2000)
+                }
+            })
+        },
+        closeRejectDialog: function(){
+            this.rejectDialog = false;
+            this.unauditReason = '';
+            this.auditRemark = '';
         },
         closeDialog: function(){
             this.showImage = false;

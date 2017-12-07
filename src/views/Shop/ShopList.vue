@@ -10,16 +10,6 @@
                 <el-form-item label="搜索店铺">
                     <el-input placeholder="请输入店铺名称" v-model="params.shopNameLike" />
                 </el-form-item>
-                <el-form-item label="店铺审核状态">
-                    <el-select v-model="params.audit" placeholder="请选择店铺审核状态">
-                        <el-option v-for="(item,index) in shopAuditStatusList" :key="index" :label="item.key" :value="item.value" />
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="配送审核状态">
-                    <el-select v-model="params.deliveryAuditStatus" placeholder="请选择配送审核状态">
-                        <el-option v-for="(item,index) in deliveryAuditStatusList" :key="index" :label="item.key" :value="item.value" />
-                    </el-select>
-                </el-form-item>
                 <el-form-item label="店铺状态">
                     <el-select v-model="params.shelves" placeholder="请选择店铺状态">
                         <el-option label="全部" value=" " />
@@ -34,7 +24,6 @@
                         <el-option label="歇业中" :value="false" />
                     </el-select>
                 </el-form-item>
-                <br>
 		        <el-form-item label="地区">
 		            <el-select v-model.number="params.provinceId" placeholder="不限" @change="provinceChange">
 					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
@@ -58,7 +47,7 @@
         <el-row>
             <el-col>
                 <el-table :data="shopList" :row-class-name="tableRowClassName">
-                    <el-table-column label="id" align="center" prop="shopId"></el-table-column>
+                    <el-table-column label="id" width="100px" align="center" prop="shopId" />
                     <el-table-column label="名称" align="center">
                         <template slot-scope="scope">{{scope.row.shopName ? scope.row.shopName : '-'}}</template>
                     </el-table-column>
@@ -82,19 +71,16 @@
                     <el-table-column label="营业时间" width="140px" align="center">
                         <template slot-scope="scope">{{scope.row.busBeginTime ? scope.row.busBeginTime : '00:00'}} - {{scope.row.busEndTime ? scope.row.busEndTime : '00:00'}}</template>
                     </el-table-column>
-                    <el-table-column label="联系电话" width="130px" align="center">
+                    <el-table-column label="联系电话" width="140px" align="center">
                         <template slot-scope="scope">{{scope.row.takeOutPhone ? scope.row.takeOutPhone : '-'}}</template>
                     </el-table-column>
-                    <el-table-column label="状态" width="260px" align="center">
+                    <el-table-column label="状态" width="180px" align="center">
                         <template slot-scope="scope">
-                        	<span class="operatingState">{{formatOperatingState(scope.row.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.shelves)}}</span>/<span class="deliveryAuditStatus">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</span>
+                        	<span class="operatingState">{{formatOperatingState(scope.row.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.shelves)}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="结算模板" width="140px" align="center">
-                        <template slot-scope="scope">{{scope.row.settlementTemplateName}}</template>
-                    </el-table-column>
-                    <el-table-column prop="topper" label="置顶值" width="100px" align="center" />
-                    <el-table-column label="操作" width="400px" align="center">
+                    <el-table-column prop="topper" label="置顶值" width="80px" align="center" />
+                    <el-table-column label="操作" width="280px" align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
                             <el-button size="mini" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
@@ -171,39 +157,7 @@ export default {
             shopId: 0,
             formInline: {
                 topper: 0
-            },
-            deliveryAuditStatusList: [{
-                key: '全部',
-                value: ' '
-            },{
-                key: '审核通过',
-                value: 'ADOPT'
-            },{
-                key: '审核不通过',
-                value: 'UNADOPT'
-            },{
-                key: '审核中',
-                value: 'IN_THE_REVIEW'
-            },{
-                key: '未审核',
-                value: 'UN_AUDIT'
-            },{
-                key: '未提交',
-                value: 'UN_COMMIT'
-            }],
-            shopAuditStatusList: [{
-                key: '全部',
-                value: ' '
-            },{
-                key: '审核通过',
-                value: 'AUDIT_ADOPT'
-            },{
-                key: '审核不通过',
-                value: 'AUDIT_UNADOPT'
-            },{
-                key: '等待审核',
-                value: 'WAIT_AUDIT'
-            }]
+            }
         }
     },
     created: function() {
