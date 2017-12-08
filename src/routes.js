@@ -9,6 +9,7 @@ import ShopList from './views/Shop/ShopList.vue'
 import ShopType from './views/Shop/ShopType.vue'
 import ShopDetail from './views/Shop/ShopDetail.vue'
 import ShopAppraise from './views/Shop/ShopAppraise.vue'
+import ShopAppraiseDetail from './views/Shop/ShopAppraiseDetail.vue'
 import ShopAudit from './views/Shop/ShopAudit.vue'
 import ShopAuditLogs from './views/Shop/ShopAuditLogs.vue'
 import ShopAuditDetail from './views/Shop/ShopAuditDetail.vue'
@@ -133,6 +134,10 @@ let routes = [{
     },{ path: '/shopDetail',
         component: ShopDetail,
         name: '店铺详情',
+        hidden: true
+    },{ path: '/shopAppraiseDetail',
+        component: ShopAppraiseDetail,
+        name: '店铺评价详情',
         hidden: true
     }]
 }, {

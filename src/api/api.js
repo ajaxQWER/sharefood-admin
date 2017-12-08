@@ -18,6 +18,7 @@ ajax.interceptors.request.use(function(config) {
     }
     return config;
 }, function(err) {
+    console.log(err.name,err.message)
     console.error(err);
     ElementUI.Message.error({
         message: '请求发生错误,请稍后再试!',

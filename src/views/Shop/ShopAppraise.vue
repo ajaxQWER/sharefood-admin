@@ -12,20 +12,17 @@
             </el-col>
         </el-row> -->
         <el-row>
-            <el-table :data="shopAppraise">
-                <el-table-column label="用户名" width="160px" align="center">
-                    <template slot-scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="订单Id" align="center">
+            <el-table :data="shopAppraise" border>
+                <el-table-column label="订单Id" align="center" width="100px">
                     <template slot-scope="scope">{{scope.row.orderId}}</template>
                 </el-table-column>
-                <el-table-column label="订单名称" width="160px" align="center">
+                <el-table-column label="订单名称" width="200px" align="center">
                     <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="总评星级" align="center">
+                <!-- <el-table-column label="总评星级" align="center" width="100px">
                     <template slot-scope="scope">{{scope.row.shopAppraise?scope.row.shopAppraise:'-'}}</template>
-                </el-table-column>
-                <el-table-column label="环境评价" align="center">
+                </el-table-column> -->
+                <!-- <el-table-column label="环境评价" align="center">
                     <template slot-scope="scope">{{scope.row.environmentShopAppraise?scope.row.environmentShopAppraise:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="服务评价" align="center">
@@ -33,21 +30,31 @@
                 </el-table-column>
                 <el-table-column label="味道评价" align="center">
                     <template slot-scope="scope">{{scope.row.tasteShopAppraise?scope.row.tasteShopAppraise:'-'}}</template>
+                </el-table-column> -->
+                <el-table-column label="用户名" width="160px" align="center">
+                    <template slot-scope="scope">{{scope.row.userName?scope.row.userName:'-'}}</template>
                 </el-table-column>
-                <el-table-column label="评价内容" width="180px" align="center">
+                <el-table-column label="店铺名称" align="center" prop="shopName" width="300px"></el-table-column>
+                <el-table-column label="评价内容" align="center">
                     <template slot-scope="scope">{{scope.row.contentShopAppraise?scope.row.contentShopAppraise:'-'}}</template>
                 </el-table-column>
                 <el-table-column label="评价时间" width="180px" align="center">
                     <template slot-scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
-                <el-table-column label="评价浏览量" width="120px" align="center">
+                <!-- <el-table-column label="评价浏览量" width="120px" align="center">
                     <template slot-scope="scope">{{scope.row.appraisePageView}}</template>
                 </el-table-column>
                 <el-table-column label="评价点赞数" width="120px" align="center">
                     <template slot-scope="scope">{{scope.row.appraisePraiseCount}}</template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column label="评价时间" width="180px" align="center">
                     <template slot-scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                </el-table-column>
+                <el-table-column label="操作" width="180px" align="center">
+                   <!--  <template slot-scope="scope">{{moment(scope.row.appraiseTime).format('YYYY-MM-DD HH:mm:ss')}}</template> -->
+                   <template slot-scope="scope">
+                       <el-button size="small" type="primary" @click="showAppriseDetail(scope.$index, scope.row)">查看详情</el-button>
+                   </template>
                 </el-table-column>
             </el-table>
         </el-row>
@@ -62,8 +69,7 @@
 </template>
 <script>
 import {
-    shopAppraiseList,
-    findShopAppraiseById
+    shopAppraiseList
 } from '@/api/api'
 export default {
     data: function() {
@@ -97,6 +103,10 @@ export default {
             this.$router.push('?page=' + val)
             this.pageId = val;
             this.getShopAppraiseLists()
+        },
+        showAppriseDetail: function(index, row){
+            console.log(row.shopAppraiseId)
+            this.$router.push({path: '/shopAppraiseDetail',query: {shopAppraiseId:row.shopAppraiseId}})
         }
     }
 }
