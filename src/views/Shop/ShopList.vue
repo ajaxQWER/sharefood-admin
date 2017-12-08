@@ -244,14 +244,25 @@ export default {
                 });
             });
         },
+
         //下架
         soldOutShop: function(index, row) {
-            this.$confirm('是否下架该店铺?', '下架店铺', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                soldOut(row).then(() => {
+            this.$prompt('请输入下架原因', '下架店铺', {
+                inputPattern: /\S+/,
+                inputErrorMessage: '下架原因不能为空'
+            }).then(({value}) => {
+                if(!value.trim()){
+                    this.$message({
+                        type: 'error',
+                        message: '请输入下架原因'
+                    });
+                    return
+                }
+                var params = {
+                    shopId: row.shopId,
+                    unshelvesReason: value.trim()
+                }
+                soldOut(params).then(() => {
                     this.getShopLists();
                     this.$message({
                         type: 'success',
