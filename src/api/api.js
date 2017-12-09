@@ -6,6 +6,7 @@ var ajax = axios.create({
     baseURL: process.env.BASE_URL, //测试
     // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
+    timeout: 15000,
     withCredentials: true, //cookie
     crossDomain: true //跨域
 });
@@ -42,10 +43,10 @@ ajax.interceptors.response.use(function(res) {
 
     return (res.data.data?res.data.data:res.data.status);
 }, function(err) {
-    console.log(err.name,err.message)
     console.error(err);
+    console.log('网络错误')
     ElementUI.Message.error({
-        message: '响应发生错误,请稍后再试!',
+        message: '网络请求错误,请稍后再试!',
         type: 'error'
     });
     //Do something with response error
