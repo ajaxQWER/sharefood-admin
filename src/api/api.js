@@ -18,7 +18,6 @@ ajax.interceptors.request.use(function(config) {
     }
     return config;
 }, function(err) {
-    console.log(err.name,err.message)
     console.error(err);
     ElementUI.Message.error({
         message: '请求发生错误,请稍后再试!',
@@ -43,6 +42,7 @@ ajax.interceptors.response.use(function(res) {
 
     return (res.data.data?res.data.data:res.data.status);
 }, function(err) {
+    console.log(err.name,err.message)
     console.error(err);
     ElementUI.Message.error({
         message: '响应发生错误,请稍后再试!',
