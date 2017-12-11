@@ -36,32 +36,41 @@
             <el-col>
                 <el-table :data="shopAuditLists" border>
                     <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
-                    <el-table-column prop="detail.shopName" label="店铺名称" align="center"></el-table-column>
+                    <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="300px"></el-table-column>
+                    <el-table-column label="店铺行政区" align="center">
+                        <el-table-column label="省" align="center" prop="detail.provinceName"></el-table-column>
+                        <el-table-column label="市" align="center" prop="detail.cityName"></el-table-column>
+                        <el-table-column label="区" align="center" prop="detail.areaName"></el-table-column>
+                    </el-table-column>
                     <el-table-column prop="detail.phoneNum" label="注册手机号" align="center" width="140px"></el-table-column>
                     <el-table-column label="店铺类型" align="center" width="120px">
                         <template slot-scope="scope">{{formatShopType(scope.row.detail.shopType)}}</template>
                     </el-table-column>
                     <el-table-column label="审核状态" align="center">
-                        <el-table-column label="基本资料" align="center" width="100px">
-                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.base)}}</template>
+                        <el-table-column label="基本资料" align="center" width="150px">
+                            <template slot-scope="scope">
+                                {{formatAuditStatus(scope.row.shopAuditInformation.base)}}
+                                <el-button v-if="scope.row.shopAuditInformation.base == 'UN_AUDIT'" class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
+                            </template>
                         </el-table-column>
-                        <el-table-column label="配送信息" align="center" width="100px">
-                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}</template>
+                        <el-table-column label="配送信息" align="center" width="150px">
+                            <template slot-scope="scope">
+                                {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
+                                <el-button v-if="scope.row.shopAuditInformation.delivery == 'UN_AUDIT'" class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
+                            </template>
                         </el-table-column>
-                        <el-table-column label="资质信息" align="center" width="100px">
-                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}</template>
+                        <el-table-column label="资质信息" align="center" width="150px">
+                            <template slot-scope="scope">
+                                {{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}
+                                <el-button v-if="scope.row.shopAuditInformation.qualification == 'UN_AUDIT'" class="audit-btn" size="small" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
+                            </template>
                         </el-table-column>
-                        <el-table-column label="结算信息" align="center" width="100px">
-                            <template slot-scope="scope">{{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}</template>
+                        <el-table-column label="结算信息" align="center" width="150px">
+                            <template slot-scope="scope">
+                                {{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}
+                                <el-button v-if="scope.row.shopAuditInformation.settlement == 'UN_AUDIT'" class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
+                            </template>
                         </el-table-column>
-                    </el-table-column>
-                    <el-table-column label="审核操作" align="center">
-                        <template slot-scope="scope">
-                            <el-button class="audit-btn" size="small" @click="getAuditbyId('base', scope.row)">资料审核</el-button>
-                            <el-button class="audit-btn" size="small" type="success" disabled @click="getAuditbyId('distribution', scope.row)">配送审核</el-button>
-                            <el-button class="audit-btn" size="small" type="warning" @click="getAuditbyId('qualification', scope.row)">资质审核</el-button>
-                            <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">结算审核</el-button>
-                        </template>
                     </el-table-column>
                 </el-table>
             </el-col>
@@ -87,12 +96,11 @@ export default {
     data: function() {
         return {
         	params: {
-            	shopNameLike: null,
-            	phoneNum: null,
-            	deliveryAuditStatus: null,
-				provinceId: null,
-				cityId: null,
-				areaId: null,
+            	shopNameLike: '',
+            	phoneNum: '',
+				provinceId: '',
+				cityId: '',
+				areaId: '',
 	            pageId: 1,
 	            pageSize: 20
         	},
@@ -100,60 +108,52 @@ export default {
             shopAuditLists: null,
             provinceList: [],
 			cityList: [],
-			areaList: [],
-			cityListCache: {},
-			areaListCache: {}
+			areaList: []
         }
     },
     created: function() {
 		getProvinceList().then(data => {
-			this.provinceList = [{
-				provinceName: '不限',
-				provinceId: null
-			}]
-			this.provinceList = this.provinceList.concat(data)
+			this.provinceList = data
 		})
         this.pageId = parseInt(this.$route.query.page) || 1;
+        var shopNameLike = this.$route.query.shopNameLike || '';
+        var phoneNum = this.$route.query.phoneNum || '';
+        var provinceId = parseInt(this.$route.query.provinceId) || '';
+        var cityId = parseInt(this.$route.query.cityId) || '';
+        var areaId = parseInt(this.$route.query.areaId) || '';
+        this.params.shopNameLike = shopNameLike;
+        this.params.phoneNum = phoneNum;
+        this.params.provinceId = provinceId;
+        this.params.cityId = cityId;
+        this.params.areaId = areaId;
+        if(provinceId) {
+            getCityList(provinceId).then(data => {
+                this.cityList = data;
+            })
+        }
+        if(cityId){
+            getAreaList(cityId).then(data => {
+                this.areaList = data;
+            })
+        }
         this.getAuditLists();
     },
     methods: {
 		provinceChange: function(value) {
 			this.params.provinceId = value;
-			if (this.cityListCache[value]) {
-				this.cityList = this.cityListCache[value];
-        		this.getAuditLists();
-			} else {
-				getCityList(value).then(data => {
-					var temp = [{
-						cityName: '不限',
-						cityId: null
-					}]
-					data = temp.concat(data)
-				
-					this.cityListCache[value] = data;
-					this.cityList = data;
-        			this.getAuditLists();
-				})
-			}
+                getCityList(value).then(data => {
+                    this.params.cityId = data[0].cityId;
+                    this.cityList = data;
+                    this.getAuditLists();
+                })
 		},
 		cityChange: function(value) {
 			this.params.cityId = value;
-			if (this.areaListCache[value]) {
-				this.areaList = this.areaListCache[value];
-        		this.getAuditLists();
-			} else {
 				getAreaList(value).then(data => {
-					var temp = [{
-						areaName: '不限',
-						areaId: null
-					}]
-					data = temp.concat(data)
-					
-					this.areaListCache[value] = data;
+                    this.params.areaId = data[0].areaId;
 					this.areaList = data;
         			this.getAuditLists();
 				})
-			}
 		},
 		areaChange: function(value) {
 			this.params.areaId = value;
@@ -161,6 +161,15 @@ export default {
 		},
         getAuditLists: function() {
             getShopAuditList({ params: this.params }).then(data => {
+                var str = '?';
+                for(var key in this.params){
+                    if(this.params[key]){
+                        str += key + '=' + this.params[key] + '&'                        
+                    }
+                }
+                console.log(str)
+                this.$router.push(str)
+                console.log(data)
                 this.counts = data.count;
                 this.shopAuditLists = data.list;
             })

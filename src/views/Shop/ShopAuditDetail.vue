@@ -168,7 +168,7 @@ export default {
                 message: '店铺查询失败!'
             })
             setTimeout(() => {
-                this.$router.push('/shopAudit')
+                this.$router.back()
             }, 2500)
             return;
         }
@@ -178,7 +178,7 @@ export default {
                 message: '审核类型无效!'
             })
             setTimeout(() => {
-                this.$router.push('/shopAudit')
+                this.$router.back()
             }, 2500)
             return;
         }
@@ -197,7 +197,7 @@ export default {
             }).catch(err => {
                 console.log(err)
                 setTimeout(() => {
-                    this.$router.push('/shopAudit')
+                    this.$router.back()
                 }, 2500)
             })
         },
@@ -208,7 +208,7 @@ export default {
             })
         },
         back: function(){
-            this.$router.push('/shopAudit')
+            this.$router.back()
         },
         formatImage: function(url){
             return this.UPLOADURL + url + '/goods.png'
