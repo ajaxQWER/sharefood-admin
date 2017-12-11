@@ -164,10 +164,9 @@ export default {
                 var str = '?';
                 for(var key in this.params){
                     if(this.params[key]){
-                        str += key + '=' + this.params[key] + '&'                        
+                        str += key + '=' + this.params[key] + '&'
                     }
                 }
-                console.log(str)
                 this.$router.push(str)
                 console.log(data)
                 this.counts = data.count;

@@ -6,6 +6,7 @@
 		<el-row>
 			<el-form :inline="true">
 			    <el-form-item>
+			        <el-button type="primary" icon="arrow-left" @click="back">返回</el-button>
 			        <el-button type="primary" @click="showAddDialog"><i class="el-icon-plus el-icon--left"></i>添加区域</el-button>
 			        <el-button type="primary" @click="saveRegion">保存</el-button>
 			    </el-form-item>
@@ -18,7 +19,7 @@
                 <el-table-column prop="areaName" label="区" align="center"></el-table-column>
                 <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
+                        <el-button size="small" type="danger" @click="deleteRow(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
 			</el-table>
@@ -31,7 +32,7 @@
 	        		<el-input type="hidden" v-model="addInfo.areaName" ></el-input>
 	        	</div>
 		        <el-form-item label="省">
-		            <el-select v-model.number="addInfo.provinceId" filterable placeholder="请选择省" @change="provinceChange">
+		            <el-select ref="province" v-model.number="addInfo.provinceId" filterable placeholder="请选择省" @change="provinceChange">
 					    <el-option
 					      v-for="(item,index) in provinceList"
 					      :key="index"
@@ -41,7 +42,7 @@
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="市">
-		            <el-select v-model.number="addInfo.cityId" filterable placeholder="请选择市" @change="cityChange">
+		            <el-select ref="city" v-model.number="addInfo.cityId" filterable placeholder="请选择市" @change="cityChange">
 					    <el-option
 					      v-for="(item,index) in cityList"
 					      :key="index"
@@ -51,7 +52,7 @@
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="区">
-		            <el-select v-model.number="addInfo.areaId" filterable placeholder="请选择区" @change="areaChange">
+		            <el-select ref="area" v-model.number="addInfo.areaId" filterable placeholder="请选择区" @change="areaChange">
 					    <el-option
 					      v-for="(item,index) in areaList"
 					      :key="index"
@@ -197,13 +198,27 @@ export default {
 		},
 		addAgentFn: function() {
 			var data = {};
-			
+			this.addInfo = {
+				provinceId: this.addInfo.provinceId,
+				provinceName: this.$refs.province.query,
+				cityId: this.addInfo.cityId,
+				cityName: this.$refs.city.query,
+				areaId: this.addInfo.areaId,
+				areaName: this.$refs.area.query
+			}
+			// console.log(this.addInfo)
+			// return
 			for (var key in this.addInfo) {
 				data[key] = this.addInfo[key];
 			}
 			
 			if (this.check(data)) {
 				this.regions.push(data)
+			}else{
+				this.$message({
+					message: '添加失败，该区域代理已存在！',
+					type: 'error'
+				})
 			}
 		},
 		cancel: function() {
@@ -239,6 +254,9 @@ export default {
 					message: '保存成功'
 				})
 			})
+		},
+		back: function(){
+			this.$router.back()
 		}
 	}
 }

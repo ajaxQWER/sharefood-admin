@@ -120,6 +120,8 @@ export default {
 		}
 	},
 	created: function(){
+		var agentNameLike = this.$route.query.agentNameLike || '';
+		this.params.agentNameLike = agentNameLike;
 		this.getAgentList();
 		getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
 			console.log(res)
@@ -127,16 +129,19 @@ export default {
 		})
 	},
 	methods: {
-		changeRouterPushValue: function() {
-            this.$router.push('?pageId=' + this.params.pageId + '&agentNameLike=' + this.params.agentNameLike)
-		},
 		currentChange: function(val) {
             this.params.pageId = val;
             this.getAgentList()
         },
 		getAgentList: function(){
 			getAgentLists({params: this.params}).then(res => {
-				this.changeRouterPushValue();
+				var str = '?';
+				for(var key in this.params){
+				    if(this.params[key]){
+				        str += key + '=' + this.params[key] + '&'
+				    }
+				}
+				this.$router.push(str)
 				this.counts = res.count;
 				this.agentLists = res.list;
 			})
