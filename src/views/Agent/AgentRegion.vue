@@ -99,11 +99,7 @@ export default {
 			provinceList: [],
 			cityList: [],
 			areaList: [],
-			cityListCache: {},
-			areaListCache: {},
-			regions: [],
-			cache: {},
-			nowAreaMap: {}
+			regions: []
 		}
 	},
 	created: function(){
@@ -118,87 +114,39 @@ export default {
     		this.agent = data
     	})
     	getAgentRegion(this.agentId).then(data => {
+    		console.log(data)
     		this.regions = data
-    		
-    		for (var k in data){
-    			var r = data[k];
-    			
-    			if (!this.cache[r.provinceId]){
-    				this.cache[r.provinceId] = {};
-    			}
-    			
-    			if (!this.cache[r.provinceId][r.cityId]){
-    				this.cache[r.provinceId][r.cityId] = {};
-    			}
-    			
-    			if (!this.cache[r.provinceId][r.cityId][r.areaId]){
-    				this.cache[r.provinceId][r.cityId][r.areaId] = r;
-    			}
-    		}
     	})
 	},
 	methods: {
 		provinceChange: function(value) {
-			if (this.cityListCache[value]) {
-				this.cityList = this.cityListCache[value];
-				
-				this.setCityInfo(this.cityList[0])
-			} else {
-				getCityList(value).then(data => {
-					this.cityListCache[value] = data;
-					this.cityList = data;
-					
-					this.setCityInfo(data[0])
-				})
-			}
-		},
-		setCityInfo: function(city) {
-			this.addInfo.cityId = city.cityId;
-			this.addInfo.cityName = city.cityName;
-			
-			this.cityChange(city.cityId)
+			this.addInfo.provinceId = value;
+                getCityList(value).then(data => {
+                	console.log(data)
+                	if(data.length > 0){
+	                    this.addInfo.cityId = data[0].cityId;
+                	}else{
+                		this.addInfo.cityId = '';
+                	}
+                    this.cityList = data;
+                })
 		},
 		cityChange: function(value) {
-			if (this.areaListCache[value]) {
-				this.areaList = this.areaListCache[value];
-				
-				this.nowAreaMap = {};
-				
-				for (var k in this.areaList) {
-					var a = this.areaList[k];
-					
-					this.nowAreaMap[a.areaId] = a.areaName;
-				}
-				
-				this.setAreaInfo(this.areaList[0]);
-			} else {
+			this.addInfo.cityId = value;
 				getAreaList(value).then(data => {
-					this.areaListCache[value] = data;
-					this.areaList = data;
-					
-					this.nowAreaMap = {};
-					
-					for (var k in this.areaList) {
-						var a = this.areaList[k];
-						
-						this.nowAreaMap[a.areaId] = a.areaName;
+					if(data.length > 0){
+	                    this.addInfo.areaId = data[0].areaId;
+					}else{
+						this.addInfo.areaId = '';
 					}
-					
-					this.setAreaInfo(data[0]);
+					this.areaList = data;
 				})
-			}
-		},
-		setAreaInfo: function(area) {
-			this.addInfo.areaId = area.areaId;
-			this.addInfo.areaName = area.areaName;
 		},
 		areaChange: function(value) {
 			this.addInfo.areaId = value;
-			this.addInfo.areaName = this.nowAreaMap[value];
 		},
 		addAgentFn: function() {
-			var data = {};
-			this.addInfo = {
+			var addInfo = {
 				provinceId: this.addInfo.provinceId,
 				provinceName: this.$refs.province.query,
 				cityId: this.addInfo.cityId,
@@ -206,14 +154,13 @@ export default {
 				areaId: this.addInfo.areaId,
 				areaName: this.$refs.area.query
 			}
-			// console.log(this.addInfo)
-			// return
-			for (var key in this.addInfo) {
-				data[key] = this.addInfo[key];
-			}
-			
-			if (this.check(data)) {
-				this.regions.push(data)
+			// console.log(addInfo)
+			var isCopy = this.regions.some(function(item,index){
+				return (item.provinceId == addInfo.provinceId && item.cityId == addInfo.cityId && item.areaId == addInfo.areaId);
+			})
+			// console.log(isCopy)
+			if(!isCopy){
+				this.regions.push(addInfo)
 			}else{
 				this.$message({
 					message: '添加失败，该区域代理已存在！',
@@ -230,22 +177,6 @@ export default {
 		},
 		deleteRow : function(index, row) {
 			this.regions.splice(index, 1)
-		},
-		check: function(r){
-			if (!this.cache[r.provinceId]){
-				this.cache[r.provinceId] = {};
-			}
-			
-			if (!this.cache[r.provinceId][r.cityId]){
-				this.cache[r.provinceId][r.cityId] = {};
-			}
-			
-			if (this.cache[r.provinceId][r.cityId][r.areaId]){
-				return false;
-			}
-			
-			this.cache[r.provinceId][r.cityId][r.areaId] = r;
-			return true;
 		},
 		saveRegion: function() {
 			updateAgentRegion(this.agentId, this.regions).then(res => {
