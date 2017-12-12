@@ -30,6 +30,10 @@
 					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
 					</el-select>
 		        </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="searchShop">查询</el-button>
+                    <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
+                </el-form-item>
             </el-form>
         </el-row>
         <el-row>
@@ -140,24 +144,26 @@ export default {
     },
     methods: {
 		provinceChange: function(value) {
-			this.params.provinceId = value;
+            if(value){
+    			this.params.provinceId = value;
                 getCityList(value).then(data => {
-                    this.params.cityId = data[0].cityId;
+                    // this.params.cityId = data[0].cityId;
                     this.cityList = data;
-                    this.getAuditLists();
                 })
+            }
 		},
 		cityChange: function(value) {
-			this.params.cityId = value;
+            if(value){
+    			this.params.cityId = value;
 				getAreaList(value).then(data => {
-                    this.params.areaId = data[0].areaId;
+                    // this.params.areaId = data[0].areaId;
 					this.areaList = data;
-        			this.getAuditLists();
 				})
+            }
 		},
 		areaChange: function(value) {
 			this.params.areaId = value;
-        	this.getAuditLists();
+        	// this.getAuditLists();
 		},
         getAuditLists: function() {
             getShopAuditList({ params: this.params }).then(data => {
@@ -210,6 +216,18 @@ export default {
         currentChange: function(val) {
             this.$router.push('?page=' + val)
             this.params.pageId = val;
+            this.getAuditLists()
+        },
+        resetSearch: function(){
+            this.params = {
+                shopNameLike: '',
+                phoneNum: '',
+                provinceId: '',
+                cityId: '',
+                areaId: '',
+                pageId: 1,
+                pageSize: 20
+            }
             this.getAuditLists()
         }
     }
