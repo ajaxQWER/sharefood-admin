@@ -418,6 +418,11 @@ export const getAuditLogList = params => {
     return ajax.get('admin/auditLogging', params);
 };
 
+//取消订单
+export const cancelOrderBySystem = params => {
+    return ajax.put('admin/order/orderCancel', params);
+};
+
 
 
 //文件上传 前台文件需要设置一个path属性

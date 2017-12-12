@@ -41,6 +41,7 @@
 		        </el-form-item>
 		        <el-form-item label="">
 			        <el-button type="primary" @click="searchShop">搜索</el-button>
+                    <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
 		        </el-form-item>
             </el-form>
         </el-row>
@@ -147,8 +148,6 @@ export default {
             provinceList: [],
 			cityList: [],
 			areaList: [],
-			cityListCache: {},
-			areaListCache: {},
             addLoading: false,
             addToperPopup: false,
             counts: 0,
@@ -162,46 +161,24 @@ export default {
     },
     created: function() {
 		getProvinceList().then(data => {
-			this.provinceList = [{
-				provinceName: '不限',
-				provinceId: null
-			}]
-			this.provinceList = this.provinceList.concat(data)
+			this.provinceList = data
 		})
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getShopLists();
     },
     methods: {
 		provinceChange: function(value) {
-			this.params.provinceId = value;
-			if (this.cityListCache[value]) {
-				this.cityList = this.cityListCache[value];
-			} else {
+			if (value) {
 				getCityList(value).then(data => {
-					var temp = [{
-						cityName: '不限',
-						cityId: null
-					}]
-					data = temp.concat(data)
-				
-					this.cityListCache[value] = data;
+					this.params.cityId = data[0].cityId;
 					this.cityList = data;
 				})
 			}
 		},
 		cityChange: function(value) {
-			this.params.cityId = value;
-			if (this.areaListCache[value]) {
-				this.areaList = this.areaListCache[value];
-			} else {
+			if (value) {
 				getAreaList(value).then(data => {
-					var temp = [{
-						areaName: '不限',
-						areaId: null
-					}]
-					data = temp.concat(data)
-					
-					this.areaListCache[value] = data;
+					this.params.areaId = data[0].areaId;
 					this.areaList = data;
 				})
 			}
@@ -349,6 +326,21 @@ export default {
         	}
         	
         	return classNames;
+        },
+        resetSearch: function(){
+            this.params = {
+                shopNameLike: null,
+                audit: null,
+                deliveryAuditStatus: null,
+                shelves: null,
+                operatingState: null,
+                provinceId: null,
+                cityId: null,
+                areaId: null,
+                pageId: 1,
+                pageSize: 20,
+            }
+            this.getShopLists()
         }
     }
 }

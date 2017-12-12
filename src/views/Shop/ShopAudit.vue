@@ -54,25 +54,25 @@
                         <el-table-column label="基本资料" align="center" width="150px">
                             <template slot-scope="scope">
                                 {{formatAuditStatus(scope.row.shopAuditInformation.base)}}
-                                <el-button v-if="scope.row.shopAuditInformation.base == 'UN_AUDIT'" class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
+                                <el-button class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
                             </template>
                         </el-table-column>
                         <el-table-column label="配送信息" align="center" width="150px">
                             <template slot-scope="scope">
                                 {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
-                                <el-button v-if="scope.row.shopAuditInformation.delivery == 'UN_AUDIT'" class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
+                                <el-button class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
                             </template>
                         </el-table-column>
                         <el-table-column label="资质信息" align="center" width="150px">
                             <template slot-scope="scope">
                                 {{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}
-                                <el-button v-if="scope.row.shopAuditInformation.qualification == 'UN_AUDIT'" class="audit-btn" size="small" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
+                                <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
                             </template>
                         </el-table-column>
                         <el-table-column label="结算信息" align="center" width="150px">
                             <template slot-scope="scope">
                                 {{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}
-                                <el-button v-if="scope.row.shopAuditInformation.settlement == 'UN_AUDIT'" class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
+                                <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
                             </template>
                         </el-table-column>
                     </el-table-column>
@@ -145,18 +145,18 @@ export default {
     methods: {
 		provinceChange: function(value) {
             if(value){
-    			this.params.provinceId = value;
+    			// this.params.provinceId = value;
                 getCityList(value).then(data => {
-                    // this.params.cityId = data[0].cityId;
+                    this.params.cityId = data[0].cityId;
                     this.cityList = data;
                 })
             }
 		},
 		cityChange: function(value) {
             if(value){
-    			this.params.cityId = value;
+    			// this.params.cityId = value;
 				getAreaList(value).then(data => {
-                    // this.params.areaId = data[0].areaId;
+                    this.params.areaId = data[0].areaId;
 					this.areaList = data;
 				})
             }

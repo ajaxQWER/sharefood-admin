@@ -104,10 +104,11 @@
                     <el-table-column label="店铺名称" width="240px" align="center">
                         <template slot-scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="操作" width="160px" align="center">
+                    <el-table-column label="操作" width="200px" align="center">
                         <template slot-scope="scope">
                             <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">详情</el-button>
                             <el-button size="small" type="success" @click="printerOrder(scope.$index, scope.row)">补打</el-button>
+                            <el-button size="small" type="danger" @click="cancelOrder(scope.$index, scope.row)">取消</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -126,7 +127,8 @@
 import {
     orderList,
     findOrderById,
-    printerLogsById
+    printerLogsById,
+    cancelOrderBySystem
 } from '@/api/api'
 export default {
     data: function() {
@@ -327,6 +329,24 @@ export default {
             }).then(() => {
                 console.log(row.orderId)
                 printerLogsById(row.orderId).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                })
+            }).catch(() => {});
+        },
+        cancelOrder: function(index, row){
+            this.$confirm('确定取消该订单', '取消订单', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                var pramas = {
+                    cancelContent: '系统取消',
+                    orderId: row.orderId
+                }
+                cancelOrderBySystem(pramas).then(() => {
                     this.$message({
                         type: 'success',
                         message: '操作成功!'
