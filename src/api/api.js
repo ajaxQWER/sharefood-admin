@@ -250,10 +250,10 @@ export const rejectShopAudit = (type,params) => {
 
 //地区
 export const getProvinceById = provinceId => {
-    return ajax.get('commons/region/area/province/' + provinceId);
+    return ajax.get('commons/region/info/province/' + provinceId);
 };
 export const getCityById = cityId => {
-    return ajax.get('commons/region/area/city/' + cityId);
+    return ajax.get('commons/region/info/city/' + cityId);
 };
 export const getProvinceList = () => {
     return ajax.get('commons/region/province');

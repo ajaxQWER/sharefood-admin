@@ -25,17 +25,17 @@
                     </el-select>
                 </el-form-item>
 		        <el-form-item label="地区">
-		            <el-select v-model.number="params.provinceId" placeholder="不限" @change="provinceChange">
+		            <el-select v-model.number="params.provinceId" placeholder="不限" filterable>
 					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="">
-		            <el-select v-model.number="params.cityId" placeholder="不限" @change="cityChange">
+		            <el-select v-model.number="params.cityId" placeholder="不限" filterable>
 					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="">
-		            <el-select v-model.number="params.areaId" placeholder="不限" @change="areaChange">
+		            <el-select v-model.number="params.areaId" placeholder="不限" @change="areaChange" filterable>
 					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
 					</el-select>
 		        </el-form-item>
@@ -161,28 +161,64 @@ export default {
     },
     created: function() {
 		getProvinceList().then(data => {
-			this.provinceList = data
+            var list = [];
+            list.push({
+                provinceId: null,
+                provinceName: "不限"
+            })
+
+			this.provinceList = [].concat(list, data);
 		})
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getShopLists();
     },
+    watch: {
+        'params.provinceId': function(newVal, oldVal){
+            if (newVal == oldVal) {
+                return;
+            }
+
+            this.params.cityId = null;
+            this.params.areaId = null;
+
+            this.cityList = [];
+            this.areaList = [];
+
+            if (newVal){
+                getCityList(newVal).then(data => {
+                    var list = [];
+                    list.push({
+                        cityId: null,
+                        cityName: "不限"
+                    })
+
+                    this.cityList = [].concat(list, data);
+                })
+            }
+        },
+        'params.cityId': function(newVal, oldVal){
+            if (newVal == oldVal) {
+                return;
+            }
+
+            this.params.areaId = null;
+
+            this.areaList = [];
+
+            if (newVal){
+               getAreaList(newVal).then(data => {
+                    var list = [];
+                    list.push({
+                        areaId: null,
+                        areaName: "不限"
+                    })
+
+                    this.areaList = [].concat(list, data);
+                })
+            }
+        }
+    },
     methods: {
-		provinceChange: function(value) {
-			if (value) {
-				getCityList(value).then(data => {
-					this.params.cityId = data[0].cityId;
-					this.cityList = data;
-				})
-			}
-		},
-		cityChange: function(value) {
-			if (value) {
-				getAreaList(value).then(data => {
-					this.params.areaId = data[0].areaId;
-					this.areaList = data;
-				})
-			}
-		},
 		areaChange: function(value) {
 			this.params.areaId = value;
 		},
