@@ -121,6 +121,17 @@
                 </el-pagination>
             </el-col>
         </el-row>
+        <el-dialog title="取消订单" :visible.sync="cancelOrderDialog" size="tiny" @close="closeCancelOrder" class="dialog">
+                <el-form label-width="120px">
+                    <el-form-item label="取消原因">
+                        <el-input type="textarea" v-model="cancelContent" auto-complete="off" placeholder="取消原因"></el-input>
+                    </el-form-item>
+                </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="closeCancelOrder">取 消</el-button>
+                <el-button type="primary" @click="cancelOrderBtn">确 定</el-button>
+            </div>
+        </el-dialog>
     </el-row>
 </template>
 <script>
@@ -134,6 +145,7 @@ export default {
     data: function() {
         var _this = this;
         return {
+            orderId: 0,
             orderNum: '',
             pageId: 1,
             pageSize: 20,
@@ -199,7 +211,9 @@ export default {
             }, {
                 key: '配送拒绝',
                 value: 'DELIVERY_REJECT'
-            }]
+            }],
+            cancelContent: '',
+            cancelOrderDialog: false
         }
     },
     created: function() {
@@ -337,22 +351,35 @@ export default {
             }).catch(() => {});
         },
         cancelOrder: function(index, row){
-            this.$confirm('确定取消该订单', '取消订单', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                var pramas = {
-                    cancelContent: '系统取消',
-                    orderId: row.orderId
-                }
-                cancelOrderBySystem(pramas).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '操作成功!'
-                    });
-                })
-            }).catch(() => {});
+            this.orderId = row.orderId;
+            this.cancelOrderDialog = true;
+        },
+        closeCancelOrder: function(){
+            this.cancelOrderDialog = false;
+            this.cancelContent = '';
+            this.orderId = 0;
+        },
+        cancelOrderBtn: function(){
+            if(this.cancelContent == ''){
+                this.$message({
+                    type: 'error',
+                    message: '请输入订单取消原因'
+                });
+                return;
+            }
+            var pramas = {
+                cancelContent: this.cancelContent,
+                orderId: this.orderId
+            }
+            cancelOrderBySystem(pramas).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '操作成功!'
+                });
+                this.closeCancelOrder()
+            }).catch(() => {
+                this.closeCancelOrder()
+            })
         }
     }
 }

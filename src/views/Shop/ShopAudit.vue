@@ -37,47 +37,45 @@
             </el-form>
         </el-row>
         <el-row>
-            <el-col>
-                <el-table :data="shopAuditLists" border>
-                    <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
-                    <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="300px"></el-table-column>
-                    <el-table-column label="店铺行政区" align="center">
-                        <el-table-column label="省" align="center" prop="detail.provinceName"></el-table-column>
-                        <el-table-column label="市" align="center" prop="detail.cityName"></el-table-column>
-                        <el-table-column label="区" align="center" prop="detail.areaName"></el-table-column>
+            <el-table :data="shopAuditLists" border>
+                <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
+                <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="300px"></el-table-column>
+                <el-table-column label="店铺行政区" align="center">
+                    <el-table-column label="省" align="center" prop="detail.provinceName"></el-table-column>
+                    <el-table-column label="市" align="center" prop="detail.cityName"></el-table-column>
+                    <el-table-column label="区" align="center" prop="detail.areaName"></el-table-column>
+                </el-table-column>
+                <el-table-column prop="detail.phoneNum" label="注册手机号" align="center" width="140px"></el-table-column>
+                <el-table-column label="店铺类型" align="center" width="120px">
+                    <template slot-scope="scope">{{formatShopType(scope.row.detail.shopType)}}</template>
+                </el-table-column>
+                <el-table-column label="审核状态" align="center">
+                    <el-table-column label="基本资料" align="center" width="150px">
+                        <template slot-scope="scope">
+                            {{formatAuditStatus(scope.row.shopAuditInformation.base)}}
+                            <el-button class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="detail.phoneNum" label="注册手机号" align="center" width="140px"></el-table-column>
-                    <el-table-column label="店铺类型" align="center" width="120px">
-                        <template slot-scope="scope">{{formatShopType(scope.row.detail.shopType)}}</template>
+                    <el-table-column label="配送信息" align="center" width="150px">
+                        <template slot-scope="scope">
+                            {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
+                            <el-button class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
+                        </template>
                     </el-table-column>
-                    <el-table-column label="审核状态" align="center">
-                        <el-table-column label="基本资料" align="center" width="150px">
-                            <template slot-scope="scope">
-                                {{formatAuditStatus(scope.row.shopAuditInformation.base)}}
-                                <el-button class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="配送信息" align="center" width="150px">
-                            <template slot-scope="scope">
-                                {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
-                                <el-button class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="资质信息" align="center" width="150px">
-                            <template slot-scope="scope">
-                                {{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}
-                                <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="结算信息" align="center" width="150px">
-                            <template slot-scope="scope">
-                                {{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}
-                                <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
-                            </template>
-                        </el-table-column>
+                    <el-table-column label="资质信息" align="center" width="150px">
+                        <template slot-scope="scope">
+                            {{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}
+                            <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
+                        </template>
                     </el-table-column>
-                </el-table>
-            </el-col>
+                    <el-table-column label="结算信息" align="center" width="150px">
+                        <template slot-scope="scope">
+                            {{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}
+                            <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table-column>
+            </el-table>
         </el-row>
         <el-row>
             <!-- 分页 -->
