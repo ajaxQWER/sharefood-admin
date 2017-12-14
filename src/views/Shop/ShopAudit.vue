@@ -16,12 +16,12 @@
                     </el-input>
                 </el-form-item>
 		        <el-form-item label="省">
-		            <el-select v-model.number="params.provinceId" placeholder="不限" @change="provinceChange">
+		            <el-select v-model.number="params.provinceId" placeholder="不限">
 					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="市">
-		            <el-select v-model.number="params.cityId" placeholder="不限" @change="cityChange">
+		            <el-select v-model.number="params.cityId" placeholder="不限">
 					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
 					</el-select>
 		        </el-form-item>
@@ -39,16 +39,21 @@
         <el-row>
             <el-table :data="shopAuditLists" border>
                 <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
-                <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="300px"></el-table-column>
-                <el-table-column label="店铺行政区" align="center">
-                    <el-table-column label="省" align="center" prop="detail.provinceName"></el-table-column>
+                <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="200px"></el-table-column>
+                <el-table-column label="店铺位置" align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.detail.provinceName}}-{{scope.row.detail.cityName}}-{{scope.row.detail.areaName}}<br>
+                        {{scope.row.detail.address}}
+                    </template>
+                    <!-- <el-table-column label="省" align="center" prop="detail.provinceName"></el-table-column>
                     <el-table-column label="市" align="center" prop="detail.cityName"></el-table-column>
-                    <el-table-column label="区" align="center" prop="detail.areaName"></el-table-column>
+                    <el-table-column label="区" align="center" prop="detail.areaName"></el-table-column> -->
                 </el-table-column>
                 <el-table-column prop="detail.phoneNum" label="注册手机号" align="center" width="140px"></el-table-column>
                 <el-table-column label="店铺类型" align="center" width="120px">
                     <template slot-scope="scope">{{formatShopType(scope.row.detail.shopType)}}</template>
                 </el-table-column>
+                <!-- <el-table-column prop="detail.agentName" label="代理商" align="center" width="150px"></el-table-column> -->
                 <el-table-column label="审核状态" align="center">
                     <el-table-column label="基本资料" align="center" width="150px">
                         <template slot-scope="scope">
@@ -56,10 +61,11 @@
                             <el-button class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="配送信息" align="center" width="150px">
+                    <el-table-column label="配送信息" align="center" width="220px">
                         <template slot-scope="scope">
                             {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
                             <el-button class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
+                            <el-button class="audit-btn" size="small" type="success" @click="commitToDelivery(scope.row)">提交蜂鸟</el-button>
                         </template>
                     </el-table-column>
                     <el-table-column label="资质信息" align="center" width="150px">
@@ -92,7 +98,8 @@ import {
 	getProvinceList,
 	getCityList,
 	getAreaList,
-    getShopAuditList
+    getShopAuditList,
+    commitToDelivery
 } from '@/api/api'
 export default {
     data: function() {
@@ -115,7 +122,13 @@ export default {
     },
     created: function() {
 		getProvinceList().then(data => {
-			this.provinceList = data
+            var list = [];
+            list.push({
+                provinceId: null,
+                provinceName: "不限"
+            })
+
+            this.provinceList = [].concat(list, data);
 		})
         this.pageId = parseInt(this.$route.query.page) || 1;
         var shopNameLike = this.$route.query.shopNameLike || '';
@@ -140,28 +153,55 @@ export default {
         }
         this.getAuditLists();
     },
-    methods: {
-		provinceChange: function(value) {
-            if(value){
-    			// this.params.provinceId = value;
-                getCityList(value).then(data => {
-                    this.params.cityId = data[0].cityId;
-                    this.cityList = data;
+    watch: {
+        'params.provinceId': function(newVal, oldVal){
+            if (newVal == oldVal) {
+                return;
+            }
+
+            this.params.cityId = null;
+            this.params.areaId = null;
+
+            this.cityList = [];
+            this.areaList = [];
+
+            if (newVal){
+                getCityList(newVal).then(data => {
+                    var list = [];
+                    list.push({
+                        cityId: null,
+                        cityName: "不限"
+                    })
+
+                    this.cityList = [].concat(list, data);
                 })
             }
-		},
-		cityChange: function(value) {
-            if(value){
-    			// this.params.cityId = value;
-				getAreaList(value).then(data => {
-                    this.params.areaId = data[0].areaId;
-					this.areaList = data;
-				})
+        },
+        'params.cityId': function(newVal, oldVal){
+            if (newVal == oldVal) {
+                return;
             }
-		},
+
+            this.params.areaId = null;
+
+            this.areaList = [];
+
+            if (newVal){
+               getAreaList(newVal).then(data => {
+                    var list = [];
+                    list.push({
+                        areaId: null,
+                        areaName: "不限"
+                    })
+
+                    this.areaList = [].concat(list, data);
+                })
+            }
+        }
+    },
+    methods: {
 		areaChange: function(value) {
 			this.params.areaId = value;
-        	// this.getAuditLists();
 		},
         getAuditLists: function() {
             getShopAuditList({ params: this.params }).then(data => {
@@ -196,7 +236,7 @@ export default {
         },
         formatAuditStatus: function(auditType){
             switch(auditType){
-                case 'UN_COMMIT,':
+                case 'UN_COMMIT':
                     return '未提交';
                 case 'UN_AUDIT':
                     return '未审核';
@@ -227,6 +267,22 @@ export default {
                 pageSize: 20
             }
             this.getAuditLists()
+        },
+        //提交配送审核
+        commitToDelivery: function(row){
+            if(!row.shopId){
+                this.$message({
+                    message: '店铺id错误',
+                    type: 'error'
+                })
+                return;
+            }
+            commitToDelivery(row.shopId).then(() => {
+                this.$message({
+                    message: '提交成功',
+                    type: 'success'
+                })
+            })
         }
     }
 }

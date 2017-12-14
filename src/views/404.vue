@@ -1,9 +1,20 @@
 <template>
 	<div class="page-container">
-        <a href="/index" class="back-to-index"><img src="../assets/404-btn.png" alt="返回首页"></a>
+        <img @click="back" class="back-to-index" src="../assets/404-btn.png" alt="返回首页">
 	</div>
 </template>
-
+<script>
+    export default {
+        data: function(){
+            return {}
+        },
+        methods: {
+            back: function(){
+                this.$router.back()
+            }
+        }
+    }
+</script>
 <style lang="scss" scoped>
     .page-container {
         width: 100%;
@@ -20,6 +31,7 @@
             top: 50%;
             left: 50%;
             margin-left: -64px;
+            cursor: pointer;
         }
     }
 </style>

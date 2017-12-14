@@ -247,6 +247,10 @@ export const findShopAuditById = (type, shopId) => {
 export const rejectShopAudit = (type,params) => {
     return ajax.post('admin/shopAudit/' + type + '/unpass', params);
 };
+//提交资料给蜂鸟审核
+export const commitToDelivery = shopId => {
+    return ajax.post('admin/shopAudit/distribution/commit/' + shopId);
+};
 
 //地区
 export const getProvinceById = provinceId => {
