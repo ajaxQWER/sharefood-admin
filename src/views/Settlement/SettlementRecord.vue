@@ -57,7 +57,7 @@
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="SettlementRecordList">
+                <el-table :data="SettlementRecordList" :row-style="{fontSize:'12px'}" border>
                     <el-table-column label="id" align="center" width="60px">
                         <template slot-scope="scope">{{scope.row.settlementRecordId?scope.row.settlementRecordId:'-'}}</template>
                     </el-table-column>

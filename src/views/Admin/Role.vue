@@ -15,7 +15,7 @@
 			</el-form>
 		</el-row>
 		<el-row>
-			<el-table :data="roleList">
+			<el-table :data="roleList" :row-style="{fontSize:'12px'}" border>
 				<el-table-column prop="roleId" label="角色id" align="center" width="120px"></el-table-column>
                 <el-table-column prop="roleName" label="角色名称" align="center"></el-table-column>
                 <el-table-column label="超级管理员" align="center" width="200px">

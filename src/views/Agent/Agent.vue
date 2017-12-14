@@ -15,7 +15,7 @@
 			</el-form>
 		</el-row>
 		<el-row>
-			<el-table :data="agentLists">
+			<el-table :data="agentLists" :row-style="{fontSize:'12px'}" border>
 				<el-table-column prop="agentId" label="代理商id" align="center" width="120px"></el-table-column>
                 <el-table-column prop="agentName" label="代理商名称" align="center"></el-table-column>
                 <el-table-column prop="username" label="代理商账号" align="center" width="180px"></el-table-column>

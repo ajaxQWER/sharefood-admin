@@ -29,14 +29,14 @@
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="goodsLists">
-                    <el-table-column label="商品名称" width="160px" align="center">
+                <el-table :data="goodsLists" :row-style="{fontSize:'12px'}" border>
+                    <el-table-column label="商品名称" width="180px" align="center">
                         <template slot-scope="scope">{{scope.row.goodsName?scope.row.goodsName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="商品价格" align="center">
+                    <el-table-column label="商品价格" align="center" width="100px">
                         <template slot-scope="scope">{{scope.row.goodsPrice?formatMoney(scope.row.goodsPrice)+'元':'0.00元'}}</template>
                     </el-table-column>
-                    <el-table-column label="商品图片" align="center">
+                    <el-table-column label="商品图片" align="center" width="160px">
                         <template slot-scope="scope"><img :src="UPLOADURL + scope.row.goodsImgUrl+'/goods.png'" alt="" class="goods-img"></template>
                     </el-table-column>
                     <el-table-column label="商品状态" width="100px" align="center">
@@ -48,10 +48,10 @@
                     <el-table-column label="添加时间" width="180px" align="center">
                         <template slot-scope="scope">{{moment(scope.row.goodsAddTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
-                    <el-table-column label="店铺名称" width="200px" align="center">
+                    <el-table-column label="店铺名称" align="center">
                         <template slot-scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="操作" width="160px" align="center">
+                    <el-table-column label="操作" width="100px" align="center">
                         <template slot-scope="scope">
                             <el-button size="small" type="primary" @click="putAwayGoods(scope.$index, scope.row)" v-if="scope.row.goodsStatus==='SOLD_OUT'">上架</el-button>
                             <el-button size="small" type="danger" @click="soldOutGoods(scope.$index, scope.row)" v-else>下架</el-button>

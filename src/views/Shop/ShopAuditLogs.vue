@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="auditLists">
+                <el-table :data="auditLists" :row-style="{fontSize:'12px'}" border>
                     <el-table-column label="审核人Id" width="160px" align="center" prop="adminId"></el-table-column>
                     <el-table-column label="审核人" align="center" prop="auditName"></el-table-column>
                     <el-table-column label="审核状态" align="center">
@@ -43,7 +43,7 @@
                     <el-table-column label="店铺Id" align="center" prop="shopId"></el-table-column>
                     <el-table-column label="店铺名称" align="center" prop="shopName"></el-table-column>
                     <el-table-column label="操作时间" align="center">
-                        <template slot-scope="scope">{{scope.row.auditDateTime?moment(scope.row.auditDateTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.auditTime?moment(scope.row.auditTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
                     </el-table-column>
                 </el-table>
             </el-col>

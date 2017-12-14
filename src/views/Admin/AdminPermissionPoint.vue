@@ -11,7 +11,7 @@
 			</el-form>
 		</el-row>
 		<el-row>
-			<el-table ref="pointTable" :data="points" @select="selectPoint">
+			<el-table ref="pointTable" :data="points" @select="selectPoint" :row-style="{fontSize:'12px'}" border>
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="permissionPointKey" label="权限" align="center"></el-table-column>
                 <el-table-column prop="permissionPointName" label="权限名称" align="center"></el-table-column>

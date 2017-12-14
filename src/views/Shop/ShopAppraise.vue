@@ -12,7 +12,7 @@
             </el-col>
         </el-row> -->
         <el-row>
-            <el-table :data="shopAppraise" border>
+            <el-table :data="shopAppraise" :row-style="{fontSize:'12px'}" border>
                 <el-table-column label="订单Id" align="center" width="100px">
                     <template slot-scope="scope">{{scope.row.orderId}}</template>
                 </el-table-column>

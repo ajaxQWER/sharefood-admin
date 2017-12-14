@@ -24,7 +24,7 @@
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="userLists">
+                <el-table :data="userLists" :row-style="{fontSize:'12px'}" border>
                     <el-table-column label="用户名" width="160px" align="center">
                         <template slot-scope="scope">{{scope.row.username?scope.row.username:'-'}}</template>
                     </el-table-column>

@@ -15,7 +15,7 @@
 			</el-form>
 		</el-row>
 		<el-row>
-			<el-table :data="adminList">
+			<el-table :data="adminList" :row-style="{fontSize:'12px'}" border>
 				<el-table-column prop="adminId" label="管理员id" align="center" width="120px"></el-table-column>
                 <el-table-column prop="username" label="管理员账号" align="center"></el-table-column>
                 <el-table-column label="注册时间" align="center" width="200px">

@@ -21,7 +21,7 @@
             </el-form>
         </el-row>
         <el-row>
-            <el-table :data="bannerList">
+            <el-table :data="bannerList" :row-style="{fontSize:'12px'}" border>
                 <el-table-column prop="sortOrder" label="排序值" width="120px" align="center"></el-table-column>
                 <el-table-column label="是否显示" align="center" width="100px">
                     <template slot-scope="scope">{{scope.row.show?'是':'否'}}</template>
@@ -273,7 +273,7 @@ export default {
         }
     }
     .thumb-img{
-        width: 320px;
+        width: 240px;
     }
     .banner-thumb {
         width: 100%;

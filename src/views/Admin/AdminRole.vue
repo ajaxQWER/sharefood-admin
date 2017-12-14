@@ -11,7 +11,7 @@
 			</el-form>
 		</el-row>
 		<el-row>
-			<el-table ref="roleTable" :data="roles" @select="selectRole">
+			<el-table ref="roleTable" :data="roles" @select="selectRole" :row-style="{fontSize:'12px'}" border>
                 <el-table-column type="selection"></el-table-column>
                 <el-table-column prop="roleName" label="角色名称" align="center"></el-table-column>
 			</el-table>

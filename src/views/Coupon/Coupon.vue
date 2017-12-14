@@ -19,23 +19,23 @@
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="couponLists">
+                <el-table :data="couponLists" :row-style="{fontSize:'12px'}" border>
                     <el-table-column label="名称" align="center">
                         <template slot-scope="scope">{{scope.row.couponName ? scope.row.couponName : '-'}}</template>
                     </el-table-column>
-                    <el-table-column label="金额类型" align="center" width="120px">
+                    <el-table-column label="金额类型" align="center">
                     	<template slot-scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? '固定金额' : '随机金额'}}</template>
                     </el-table-column>
-                    <el-table-column label="金额" align="center" width="160px">
+                    <el-table-column label="金额" align="center">
                     	<template slot-scope="scope">{{scope.row.couponMoneyType == 'FIXED' ? formatMoney(scope.row.money) + '元' : formatMoney(scope.row.minMoney) + '~' + formatMoney(scope.row.maxMoney) + '元'}}</template>
                     </el-table-column>
                     <el-table-column label="最低消费额度" width="120px" align="center">
                         <template slot-scope="scope">{{scope.row.minimum ? formatMoney(scope.row.minimum) + '元' : '0.00元'}}</template>
                     </el-table-column>
-                    <el-table-column label="领取方式" width="160px" align="center">
+                    <el-table-column label="领取方式" width="100px" align="center">
                         <template slot-scope="scope">{{formatPickUpType(scope.row.pickUpType)}}</template>
                     </el-table-column>
-                    <el-table-column label="使用范围" width="160px" align="center">
+                    <el-table-column label="使用范围" width="100px" align="center">
                         <template slot-scope="scope">{{formatUseSocpe(scope.row.useSocpe)}}</template>
                     </el-table-column>
                     <el-table-column label="可领取" width="80px" align="center">
@@ -50,7 +50,7 @@
                     <el-table-column label="有效期" width="200px" align="center">
                         <template slot-scope="scope">{{showTime(scope.row.startTime, scope.row.endTime)}}</template>
                     </el-table-column>
-                    <el-table-column label="操作" width="160px" align="center">
+                    <el-table-column label="操作" width="140px" align="center">
                         <template slot-scope="scope">
                             <el-button size="small" @click="updateVideoCategory(scope.$index, scope.row)">修改</el-button>
                             <el-button size="small" type="danger" @click="deleteVideoCategory(scope.$index, scope.row)">删除</el-button>

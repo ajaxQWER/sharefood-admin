@@ -4,7 +4,7 @@
             <h3>日志管理</h3>
         </el-col>
         <el-col>
-            <el-table :data="logLists">
+            <el-table :data="logLists" :row-style="{fontSize:'12px'}" border>
                 <el-table-column label="用户名" align="center" prop="username"></el-table-column>
                 <el-table-column label="日志ID" align="center" prop="adminLoggingId"></el-table-column>
                 <el-table-column label="ip" align="center" prop="ip"></el-table-column>
