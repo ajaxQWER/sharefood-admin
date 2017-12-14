@@ -73,7 +73,7 @@
                         <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="下单人" align="center" width="220px">
-                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}-{{scope.row.orderContact.contactPhone}}<br>{{scope.row.orderContact.simpleAddress}}</template>
+                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}-{{scope.row.orderContact.contactPhone}}<br>{{scope.row.orderContact.simpleAddress?scope.row.orderContact.simpleAddress:scope.row.orderContact.address}}</template>
                     </el-table-column>
                     <!-- <el-table-column label="联系人手机号" width="140px" align="center">
                         <template slot-scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
