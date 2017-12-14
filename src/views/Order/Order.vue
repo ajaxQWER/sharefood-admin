@@ -63,7 +63,7 @@
         <el-row>
             <el-col>
                 <el-table :data="orderLists" :row-style="{fontSize:'12px'}">
-                    <el-table-column label="订单id" align="center">
+                    <el-table-column label="订单id" align="center" width="90px">
                         <template slot-scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="订单号" align="center">
@@ -72,12 +72,12 @@
                     <el-table-column label="订单名称" align="center">
                         <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="下单人" align="center">
-                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}</template>
+                    <el-table-column label="下单人" align="center" width="220px">
+                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}-{{scope.row.orderContact.contactPhone}}<br>{{scope.row.orderContact.simpleAddress}}</template>
                     </el-table-column>
-                    <el-table-column label="联系人手机号" width="140px" align="center">
+                    <!-- <el-table-column label="联系人手机号" width="140px" align="center">
                         <template slot-scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column label="下单时间" align="center">
                         <template slot-scope="scope">{{moment(scope.row.addTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                     </el-table-column>
@@ -98,10 +98,10 @@
                     </el-table-column>
                     <el-table-column label="拒单原因" align="center">
                         <template slot-scope="scope">
-                            {{formatCancelType(scope.row.orderCancel.cancelType)}}
+                            {{formatCancelType(scope.row.orderCancel.cancelType)}}<br><span v-if="scope.row.orderCancel.cancelContent">({{scope.row.orderCancel.cancelContent}})</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="店铺名称" width="240px" align="center">
+                    <el-table-column label="店铺名称" align="center">
                         <template slot-scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="200px" align="center">
