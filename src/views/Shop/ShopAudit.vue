@@ -16,20 +16,40 @@
                     </el-input>
                 </el-form-item>
 		        <el-form-item label="省">
-		            <el-select v-model.number="params.provinceId" placeholder="不限">
+		            <el-select v-model.number="params.provinceId" placeholder="选择省">
 					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="市">
-		            <el-select v-model.number="params.cityId" placeholder="不限">
+		            <el-select v-model.number="params.cityId" placeholder="选择市">
 					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="区">
-		            <el-select v-model.number="params.areaId" placeholder="不限" @change="areaChange">
+		            <el-select v-model.number="params.areaId" placeholder="选择区" @change="areaChange">
 					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
 					</el-select>
 		        </el-form-item>
+                <el-form-item label="基本资料">
+                    <el-select v-model.number="params.base" placeholder="全部"  filterable>
+                        <el-option v-for="(item,index) in InfoArr" :key="index" :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="配送信息">
+                    <el-select v-model.number="params.delivery" placeholder="全部"  filterable>
+                        <el-option v-for="(item,index) in InfoArr" :key="index" :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="资质信息">
+                    <el-select v-model.number="params.qualification" placeholder="全部" filterable>
+                        <el-option v-for="(item,index) in InfoArr" :key="index" :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="结算信息">
+                    <el-select v-model.number="params.settlement" placeholder="全部" filterable>
+                        <el-option v-for="(item,index) in InfoArr" :key="index" :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="searchShop">查询</el-button>
                     <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
@@ -110,6 +130,10 @@ export default {
 				provinceId: '',
 				cityId: '',
 				areaId: '',
+                base: '',
+                qualification: '',
+                settlement: '',
+                delivery: '',
 	            pageId: 1,
 	            pageSize: 20
         	},
@@ -117,7 +141,26 @@ export default {
             shopAuditLists: null,
             provinceList: [],
 			cityList: [],
-			areaList: []
+			areaList: [],
+            InfoArr: [{
+                value: '',
+                label: '全部'
+            },{
+                value: 'UN_COMMIT',
+                label: '未提交'
+            },{
+                value: 'UN_AUDIT',
+                label: '未审核'
+            },{
+                value: 'IN_THE_REVIEW',
+                label: '审核中'
+            },{
+                value: 'ADOPT',
+                label: '已通过'
+            },{
+                value: 'UNADOPT',
+                label: '不通过'
+            }]
         }
     },
     created: function() {
@@ -133,6 +176,10 @@ export default {
         this.pageId = parseInt(this.$route.query.page) || 1;
         var shopNameLike = this.$route.query.shopNameLike || '';
         var phoneNum = this.$route.query.phoneNum || '';
+        var base = this.$route.query.base || '';
+        var qualification = this.$route.query.qualification || '';
+        var settlement = this.$route.query.settlement || '';
+        var delivery = this.$route.query.delivery || '';
         var provinceId = parseInt(this.$route.query.provinceId) || '';
         var cityId = parseInt(this.$route.query.cityId) || '';
         var areaId = parseInt(this.$route.query.areaId) || '';
@@ -141,6 +188,10 @@ export default {
         this.params.provinceId = provinceId;
         this.params.cityId = cityId;
         this.params.areaId = areaId;
+        this.params.base = base;
+        this.params.qualification = qualification;
+        this.params.settlement = settlement;
+        this.params.delivery = delivery;
         if(provinceId) {
             getCityList(provinceId).then(data => {
                 this.cityList = data;
@@ -197,6 +248,18 @@ export default {
                     this.areaList = [].concat(list, data);
                 })
             }
+        },
+        'params.base': function(newVal, oldVal){
+            this.getAuditLists()
+        },
+        'params.qualification': function(newVal, oldVal){
+            this.getAuditLists()
+        },
+        'params.settlement': function(newVal, oldVal){
+            this.getAuditLists()
+        },
+        'params.delivery': function(newVal, oldVal){
+            this.getAuditLists()
         }
     },
     methods: {
@@ -243,7 +306,7 @@ export default {
                 case 'IN_THE_REVIEW':
                     return '审核中';
                 case 'ADOPT':
-                    return '通过';
+                    return '已通过';
                 case 'UNADOPT':
                     return '不通过';
                 default:

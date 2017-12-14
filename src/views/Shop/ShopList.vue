@@ -24,21 +24,21 @@
                         <el-option label="歇业中" :value="false" />
                     </el-select>
                 </el-form-item>
-		        <el-form-item label="地区">
-		            <el-select v-model.number="params.provinceId" placeholder="不限" filterable>
+		        <el-form-item label="省">
+		            <el-select v-model.number="params.provinceId" placeholder="选择省" filterable>
 					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
 					</el-select>
 		        </el-form-item>
-		        <el-form-item label="">
-		            <el-select v-model.number="params.cityId" placeholder="不限" filterable>
+		        <el-form-item label="市">
+		            <el-select v-model.number="params.cityId" placeholder="选择市" filterable>
 					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
 					</el-select>
 		        </el-form-item>
-		        <el-form-item label="">
-		            <el-select v-model.number="params.areaId" placeholder="不限" @change="areaChange" filterable>
-					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
-					</el-select>
-		        </el-form-item>
+                <el-form-item label="区">
+                    <el-select v-model.number="params.areaId" placeholder="选择区" @change="areaChange" filterable>
+                        <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
+                    </el-select>
+                </el-form-item>
 		        <el-form-item label="">
 			        <el-button type="primary" @click="searchShop">搜索</el-button>
                     <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
