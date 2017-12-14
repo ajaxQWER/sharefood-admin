@@ -17,7 +17,9 @@
                 <li>店铺名称：{{shopDetail.shopName}}</li>
                 <li>店铺类型：{{formatShopType(shopDetail.shopType)}}</li>
                 <li>审核状态：{{formatAuditStaus(shopDetail.audit)}}</li>
-                <li>店铺地址：{{shopDetail.address}}</li>
+                <li>店铺地址：{{shopDetail.provinceName}}-{{shopDetail.cityName}}-{{shopDetail.areaName}} {{shopDetail.address}}</li>
+                <li>店铺经度：{{shopDetail.longitude}}</li>
+                <li>店铺纬度：{{shopDetail.latitude}}</li>
                 <li>营业时间：{{shopDetail.busBeginTime}}-{{shopDetail.busEndTime}}</li>
                 <li>配送费：{{shopDetail.fee}}</li>
                 <li>送餐电话：{{shopDetail.takeOutPhone}}</li>
@@ -28,6 +30,12 @@
                 <li>店铺logo：<img :src="formatImage(shopDetail.logoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.logoUrl)"></li>
                 <li>店内照：<img :src="formatImage(shopDetail.shopInnerUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.shopInnerUrl)"></li>
                 <li>店铺门脸照：<img :src="formatImage(shopDetail.shopFaceUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.shopFaceUrl)"></li>
+                <li>店铺位置图：<div class="amap-container" v-if="shopDetail">
+                        <el-amap ref="amap" vid="amapDemo" class="amap" :zoom="zoom" :center="mapCenter">
+                            <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker.position" :title="marker.title"></el-amap-marker>
+                        </el-amap>
+                    </div>
+                </li>
             </ul>
             <ul v-else>
                 <li>无</li>
@@ -140,6 +148,7 @@ import {
 } from '@/api/api'
 export default {
     data: function() {
+        var that = this;
         return {
             shopId: '',
             shopDetail: null,
@@ -154,7 +163,10 @@ export default {
             auditType: '',
             rejectDialog: false,
             unauditReason: '',
-            auditRemark: ''
+            auditRemark: '',
+            zoom: 15,
+            mapCenter: [],
+            markers: []
         }
     },
     created: function() {
@@ -190,6 +202,8 @@ export default {
             findShopAuditById(type, shopId).then(res => {
                 console.log(res)
                 this.shopDetail = res;
+                this.mapCenter = [res.longitude, res.latitude]
+                this.markers = [{position: [res.longitude, res.latitude],title: res.shopName}]
                 if(type == 'settlement'){
                     this.getProvinceName()
                     this.geCityName()
@@ -450,6 +464,10 @@ export default {
     }
     .settlement{
         margin: 15px 0;
+    }
+    .amap-container {
+        width: 600px;
+        height: 300px;
     }
 }
 </style>

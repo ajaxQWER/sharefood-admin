@@ -11,20 +11,21 @@ import moment from 'moment'
 // import 'moment/locale/zh-cn'
 // import VueLazyload from 'vue-lazyload'
 // 引入vue-amap
-// import VueAMap from 'vue-amap';
+import VueAMap from 'vue-amap';
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 // Vue.use(VueLazyload)
-// Vue.use(VueAMap);
+Vue.use(VueAMap);
 
 // 初始化vue-amap
-// VueAMap.initAMapApiLoader({
-//   // 高德的key
-//   key: 'ff339b1e4c406691fb1af1fc4fa012e5', //正式aaef257a849413a2d9329e1b2a0fbb6e
-//   // 插件集合
-//   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','AMap.Geolocation']
-// });
+VueAMap.initAMapApiLoader({
+  // 高德的key
+  // key: 'ff339b1e4c406691fb1af1fc4fa012e5', //测试
+  key: 'aaef257a849413a2d9329e1b2a0fbb6e', //正式
+  // 插件集合
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','AMap.Geolocation']
+});
 
 //金额格式化
 var toDecimal2 = function(num) {

@@ -56,6 +56,13 @@
                             </el-table-column>
                         </el-table>
                     </el-form-item>
+                    <el-form-item label="店铺位置图">
+                        <div class="amap-container" v-if="shopModel">
+                            <el-amap ref="amap" vid="amapDemo" class="amap" :zoom="mapZoom" :center="mapCenter">
+                                <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker.position" :title="marker.title"></el-amap-marker>
+                            </el-amap>
+                        </div>
+                    </el-form-item>
                 </el-form>
             </el-row>
             <el-row v-if="shopModel.document">
@@ -123,7 +130,10 @@ export default {
             showImage: false,
             bigImageUrl: '',
             rotateDeg: 0,
-            zoom: 1
+            zoom: 1,
+            mapZoom: 15,
+            mapCenter: [],
+            markers: []
         }
     },
     created: function() {
@@ -135,6 +145,8 @@ export default {
             findShopById(params).then(data => {
                 console.log(data)
                 this.shopModel = data;
+                this.mapCenter = [data.detail.longitude, data.detail.latitude]
+                this.markers = [{position: [data.detail.longitude, data.detail.latitude],title: data.detail.shopName}]
                 if(data.settlement && data.settlement.provinceId){
                     this.getProvindeName(data.settlement.provinceId)
                 }
@@ -322,6 +334,11 @@ export default {
         text-align: center;
         position: relative;
         z-index: 99999;
+    }
+    .amap-container {
+        margin: 30px 0;
+        width: 600px;
+        height: 300px;
     }
 }
 </style>
