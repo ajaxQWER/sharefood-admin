@@ -192,6 +192,10 @@ export const soldOut = params => {
 export const setToperClass = (shopId, toperClass) => {
     return ajax.post('admin/shopDetail/topper/' + shopId + '/' + toperClass);
 };
+//重新审核店铺
+export const reAdoptShopById = shopId => {
+    return ajax.post('admin/shopDetail/batchUnAdopt/' + shopId);
+};
 
 //店铺分类
 export const shopCategoryList = params => {
@@ -353,6 +357,10 @@ export const getAgentRegion = agentId => {
 };
 export const updateAgentRegion = (agentId, data) => {
     return ajax.put('admin/agentRegion/' + agentId, data);
+};
+//更换代理商
+export const changeAgent =  params => {
+    return ajax.post('admin/shopDetail/changeAgent/', params);
 };
 
 

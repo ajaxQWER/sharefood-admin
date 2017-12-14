@@ -62,7 +62,7 @@
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="orderLists" :row-style="{fontSize:'12px'}">
+                <el-table :data="orderLists" border :row-style="{fontSize:'12px'}">
                     <el-table-column label="订单id" align="center" width="90px">
                         <template slot-scope="scope">{{scope.row.orderId?scope.row.orderId:'-'}}</template>
                     </el-table-column>

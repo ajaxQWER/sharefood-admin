@@ -57,7 +57,7 @@
             </el-form>
         </el-row>
         <el-row>
-            <el-table :data="shopAuditLists" border>
+            <el-table :data="shopAuditLists" border :row-style="{fontSize:'12px'}">
                 <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
                 <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="200px"></el-table-column>
                 <el-table-column label="店铺位置" align="center">

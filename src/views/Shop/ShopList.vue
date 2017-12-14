@@ -24,49 +24,49 @@
                         <el-option label="歇业中" :value="false" />
                     </el-select>
                 </el-form-item>
-		        <el-form-item label="省">
-		            <el-select v-model.number="params.provinceId" placeholder="选择省" filterable>
-					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
-					</el-select>
-		        </el-form-item>
-		        <el-form-item label="市">
-		            <el-select v-model.number="params.cityId" placeholder="选择市" filterable>
-					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
-					</el-select>
-		        </el-form-item>
+                <el-form-item label="省">
+                    <el-select v-model.number="params.provinceId" placeholder="选择省" filterable>
+                        <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="市">
+                    <el-select v-model.number="params.cityId" placeholder="选择市" filterable>
+                        <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="区">
                     <el-select v-model.number="params.areaId" placeholder="选择区" @change="areaChange" filterable>
                         <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
                     </el-select>
                 </el-form-item>
-		        <el-form-item label="">
-			        <el-button type="primary" @click="searchShop">搜索</el-button>
+                <el-form-item label="">
+                    <el-button type="primary" @click="searchShop">搜索</el-button>
                     <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
-		        </el-form-item>
+                </el-form-item>
             </el-form>
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="shopList" :row-class-name="tableRowClassName">
+                <el-table :data="shopList" border :row-class-name="tableRowClassName" :row-style="{fontSize:'12px'}">
                     <el-table-column label="id" width="100px" align="center" prop="shopId" />
-                    <el-table-column label="名称" align="center">
+                    <el-table-column label="名称" align="center" width="240px">
                         <template slot-scope="scope">{{scope.row.shopName ? scope.row.shopName : '-'}}</template>
                     </el-table-column>
                     <el-table-column label="负责人" width="160px" align="center">
                         <template slot-scope="scope">
-                        	{{scope.row.name}}<br>
-                        	({{scope.row.phoneNum}})
+                            {{scope.row.name}}
+                            <br> ({{scope.row.phoneNum}})
                         </template>
-                    </el-table-column> 
+                    </el-table-column>
                     <!-- 
                     <el-table-column label="LOGO" align="center" width="140px">
                         <template slot-scope="scope"><img :src="UPLOADURL + scope.row.logoUrl + '/shopLogo.png'" alt="" class="logo-img"></template>
                     </el-table-column> 
                     -->
-                    <el-table-column label="地址" align="center" >
+                    <el-table-column label="地址" align="center">
                         <template slot-scope="scope">
-                        	{{scope.row.provinceName}} {{scope.row.cityName}} {{scope.row.areaName}}<br>
-                        	{{scope.row.address ? scope.row.address : '-'}}
+                            {{scope.row.provinceName}} {{scope.row.cityName}} {{scope.row.areaName}}
+                            <br> {{scope.row.address ? scope.row.address : '-'}}
                         </template>
                     </el-table-column>
                     <el-table-column label="营业时间" width="140px" align="center">
@@ -77,21 +77,23 @@
                     </el-table-column>
                     <el-table-column label="状态" width="180px" align="center">
                         <template slot-scope="scope">
-                        	<span class="operatingState">{{formatOperatingState(scope.row.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.shelves)}}</span>
+                            <span class="operatingState">{{formatOperatingState(scope.row.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.shelves)}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="topper" label="置顶值" width="80px" align="center" />
-                    <el-table-column label="操作" width="280px" align="center">
+                    <el-table-column prop="topper" label="置顶值" width="80px" align="center"></el-table-column>
+                    <el-table-column label="操作" width="260px" align="center">
                         <template slot-scope="scope">
+                            <el-button size="mini" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
                             <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
                             <el-button size="mini" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
-                            <el-button size="mini" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
                             <router-link :to="'/shopDetail?shopId='+scope.row.shopId" class="link">
                                 <el-button size="mini" type="primary">详情</el-button>
                             </router-link>
                             <router-link :to="'/shopPrint?shopId='+scope.row.shopId" class="link">
                                 <el-button size="mini">打印机列表</el-button>
                             </router-link>
+                            <el-button size="mini" type="danger" @click="reAdopt(scope.$index, scope.row)">重新审核</el-button>
+                            <el-button size="mini" type="primary" @click="showChangeAgentDialog(scope.$index, scope.row)">更换代理商</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -115,39 +117,59 @@
                 </el-pagination>
             </el-col>
         </el-row>
-
+        <el-dialog title="更换代理商" :visible.sync="changeAgentDialog" size="tiny" @close="closeChangeAgentDialog" class="dialog">
+            <el-form label-width="120px">
+                <el-form-item label="选择代理商">
+                    <el-select v-model="agentId" placeholder="请选择代理商">
+                        <el-option
+                                v-for="(item,index) in agentLists"
+                                :key="index"
+                                :label="item.agentName"
+                                :value="item.agentId">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="closeChangeAgentDialog">取 消</el-button>
+                <el-button type="primary" @click="changeAgentFn">确 定</el-button>
+            </div>
+        </el-dialog>
     </el-row>
 </template>
 <script>
 import {
-	getProvinceList,
-	getCityList,
-	getAreaList,
+    getProvinceList,
+    getCityList,
+    getAreaList,
     shopList,
     putAway,
     soldOut,
     findShopById,
-    setToperClass
+    setToperClass,
+    reAdoptShopById,
+    getAgentLists,
+    changeAgent
 } from '@/api/api'
 export default {
     data: function() {
         return {
-        	params: {
-        		shopNameLike: null,
-        		audit: null,
-            	deliveryAuditStatus: null,
-            	shelves: null,
-           		operatingState: null,
-           		provinceId: null,
-           		cityId: null,
-           		areaId: null,
-	            pageId: 1,
-	            pageSize: 20,
-        	},
+            params: {
+                shopNameLike: null,
+                audit: null,
+                deliveryAuditStatus: null,
+                shelves: null,
+                operatingState: null,
+                provinceId: null,
+                cityId: null,
+                areaId: null,
+                pageId: 1,
+                pageSize: 20,
+            },
             shopAuditLists: null,
             provinceList: [],
-			cityList: [],
-			areaList: [],
+            cityList: [],
+            areaList: [],
             addLoading: false,
             addToperPopup: false,
             counts: 0,
@@ -156,24 +178,30 @@ export default {
             shopId: 0,
             formInline: {
                 topper: 0
-            }
+            },
+            agentId: null,
+            agentLists: [],
+            changeAgentDialog: false,
         }
     },
     created: function() {
-		getProvinceList().then(data => {
+        getProvinceList().then(data => {
             var list = [];
             list.push({
                 provinceId: null,
                 provinceName: "不限"
             })
 
-			this.provinceList = [].concat(list, data);
-		})
+            this.provinceList = [].concat(list, data);
+        })
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getShopLists();
+        getAgentLists({params: {pageSize: 9999999}}).then(res => {
+            this.agentLists = res.list;
+        })
     },
     watch: {
-        'params.provinceId': function(newVal, oldVal){
+        'params.provinceId': function(newVal, oldVal) {
             if (newVal == oldVal) {
                 return;
             }
@@ -184,7 +212,7 @@ export default {
             this.cityList = [];
             this.areaList = [];
 
-            if (newVal){
+            if (newVal) {
                 getCityList(newVal).then(data => {
                     var list = [];
                     list.push({
@@ -196,7 +224,7 @@ export default {
                 })
             }
         },
-        'params.cityId': function(newVal, oldVal){
+        'params.cityId': function(newVal, oldVal) {
             if (newVal == oldVal) {
                 return;
             }
@@ -205,8 +233,8 @@ export default {
 
             this.areaList = [];
 
-            if (newVal){
-               getAreaList(newVal).then(data => {
+            if (newVal) {
+                getAreaList(newVal).then(data => {
                     var list = [];
                     list.push({
                         areaId: null,
@@ -219,9 +247,9 @@ export default {
         }
     },
     methods: {
-		areaChange: function(value) {
-			this.params.areaId = value;
-		},
+        areaChange: function(value) {
+            this.params.areaId = value;
+        },
         //获取列表
         getShopLists: function() {
             shopList({ params: this.params }).then(data => {
@@ -263,8 +291,8 @@ export default {
             this.$prompt('请输入下架原因', '下架店铺', {
                 inputPattern: /\S+/,
                 inputErrorMessage: '下架原因不能为空'
-            }).then(({value}) => {
-                if(!value.trim()){
+            }).then(({ value }) => {
+                if (!value.trim()) {
                     this.$message({
                         type: 'error',
                         message: '请输入下架原因'
@@ -295,24 +323,24 @@ export default {
             this.params.pageId = val;
             this.getShopLists()
         },
-        closeaddToperPopup: function(){
+        closeaddToperPopup: function() {
             this.shopId = 0;
             this.formInline = {
                 topper: 0
             }
         },
-        cancelSetToper: function(){
+        cancelSetToper: function() {
             this.addToperPopup = false;
         },
         //设置置顶
-        openToperPopup: function(index, row){
+        openToperPopup: function(index, row) {
             this.addToperPopup = true;
             this.shopId = row.shopId;
             this.formInline = {
                 topper: row.topper
             }
         },
-        setToperClassFn: function(){
+        setToperClassFn: function() {
             setToperClass(this.shopId, this.formInline.topper).then(res => {
                 this.getShopLists();
                 this.$message({
@@ -322,14 +350,14 @@ export default {
                 this.cancelSetToper()
             })
         },
-        formatOperatingState: function(value){
-        	return value ? '营业中' : '歇业中';
+        formatOperatingState: function(value) {
+            return value ? '营业中' : '歇业中';
         },
-        formatShelves: function(value){
-        	return value ? '上架' : '下架';
+        formatShelves: function(value) {
+            return value ? '上架' : '下架';
         },
-        formatAuditStatus: function(auditType){
-            switch(auditType){
+        formatAuditStatus: function(auditType) {
+            switch (auditType) {
                 case 'UN_COMMIT':
                     return '未提交';
                 case 'UN_AUDIT':
@@ -343,27 +371,27 @@ export default {
             }
         },
         tableRowClassName: function(row, rowIndex) {
-        	var classNames = "";
-        	
-        	if (!row.operatingState) {
-        		classNames += "operatingState_Off ";
-        	}
-        	
-        	if (!row.shelves) {
-        		classNames += "shelves_Off ";
-        	}
-        	
-        	if (row.deliveryAuditStatus != 'ADOPT') {
-        		classNames += "deliveryAuditStatus_" + row.deliveryAuditStatus + " ";
-        	}
-        	
-        	if (classNames != '') {
-        		classNames += "warning-row ";
-        	}
-        	
-        	return classNames;
+            var classNames = "";
+
+            if (!row.operatingState) {
+                classNames += "operatingState_Off ";
+            }
+
+            if (!row.shelves) {
+                classNames += "shelves_Off ";
+            }
+
+            if (row.deliveryAuditStatus != 'ADOPT') {
+                classNames += "deliveryAuditStatus_" + row.deliveryAuditStatus + " ";
+            }
+
+            if (classNames != '') {
+                classNames += "warning-row ";
+            }
+
+            return classNames;
         },
-        resetSearch: function(){
+        resetSearch: function() {
             this.params = {
                 shopNameLike: null,
                 audit: null,
@@ -377,46 +405,98 @@ export default {
                 pageSize: 20,
             }
             this.getShopLists()
+        },
+        //重新审核店铺
+        reAdopt: function(index, row) {
+            this.$confirm('确定要重新审核该店铺?', '重新审核', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                reAdoptShopById(row.shopId).then(res => {
+                    this.getShopLists();
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消操作'
+                });
+            });  
+        },
+        //更换代理商
+        showChangeAgentDialog: function(index, row){
+            this.shopId = row.shopId;
+            this.agentId = row.agentId;
+            this.changeAgentDialog = true;
+        },
+        closeChangeAgentDialog: function(){
+            this.shopId = 0;
+            this.agentId = null;
+            this.changeAgentDialog = false;
+        },
+        changeAgentFn: function(){
+            if(!this.agentId){
+                this.$message({
+                    type: 'error',
+                    message: '请选择代理商'
+                });
+                return;
+            }
+            var params = {
+                agentId: this.agentId,
+                shopId: this.shopId
+            }
+            changeAgent(params).then(res => {
+                this.$message({
+                    type: 'success',
+                    message: '操作成功!'
+                });
+                this.closeChangeAgentDialog()
+            })
         }
     }
 }
 </script>
 <style scoped lang="scss">
 .lives-news {
-	.operatingState_Off{
-		.operatingState {
-    		color: gray;
-		}
-	}
-	.shelves_Off{
-		.shelves {
-    		color: red;
-		}
-	}
-	
-	.deliveryAuditStatus_UN_COMMIT {
-		.deliveryAuditStatus {
-    		color: gray;
-		}
-	}
-	.deliveryAuditStatus_UN_AUDIT {
-		.deliveryAuditStatus {
-    		color: #929227;
-		}
-	}
-	.deliveryAuditStatus_IN_THE_REVIEW {
-		.deliveryAuditStatus {
-    		color: green;
-		}
-	}
-	.deliveryAuditStatus_UNADOPT {
-		.deliveryAuditStatus {
-    		color: red;
-		}
-	}
-	.warning-row {
-    	background: oldlace;
-  	}
+    .operatingState_Off {
+        .operatingState {
+            color: gray;
+        }
+    }
+    .shelves_Off {
+        .shelves {
+            color: red;
+        }
+    }
+
+    .deliveryAuditStatus_UN_COMMIT {
+        .deliveryAuditStatus {
+            color: gray;
+        }
+    }
+    .deliveryAuditStatus_UN_AUDIT {
+        .deliveryAuditStatus {
+            color: #929227;
+        }
+    }
+    .deliveryAuditStatus_IN_THE_REVIEW {
+        .deliveryAuditStatus {
+            color: green;
+        }
+    }
+    .deliveryAuditStatus_UNADOPT {
+        .deliveryAuditStatus {
+            color: red;
+        }
+    }
+    .warning-row {
+        background: oldlace;
+    }
     .title {
         font-size: 12px;
         border-bottom: 1px solid #eaeaea;
@@ -430,15 +510,18 @@ export default {
             border-bottom: 1px solid #23b7e5;
         }
     }
-    .logo-img{
+    .logo-img {
         width: 120px;
     }
     .gray {
-    	color: gray;
+        color: gray;
     }
-    .link{
+    .el-button+.el-button {
+        margin: 5px;
+    }
+    .link {
         display: inline-block;
-        margin-left: 10px;
+        margin: 5px;
     }
 }
 </style>
