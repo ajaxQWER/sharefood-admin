@@ -12,16 +12,12 @@
                 </el-form-item>
                 <el-form-item label="店铺状态">
                     <el-select v-model="params.shelves" placeholder="请选择店铺状态">
-                        <el-option label="全部" value=" " />
-                        <el-option label="上架" :value="true" />
-                        <el-option label="下架" :value="false" />
+                        <el-option v-for="(item,index) in shelvesObj" :key="index" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
                 <el-form-item label="营业状态">
                     <el-select v-model="params.operatingState" placeholder="请选择营业状态">
-                        <el-option label="全部" value=" " />
-                        <el-option label="营业中" :value="true" />
-                        <el-option label="歇业中" :value="false" />
+                        <el-option v-for="(item,index) in operatingStateObj" :key="index" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
                 <el-form-item label="省">
@@ -182,9 +178,41 @@ export default {
             agentId: null,
             agentLists: [],
             changeAgentDialog: false,
+            shelvesObj: [{
+                value: '',
+                label: '全部'
+            },{
+                value: 'true',
+                label: '上架'
+            },{
+                value: 'false',
+                label: '下架'
+            }],
+            operatingStateObj: [{
+                value: '',
+                label: '全部'
+            },{
+                value: 'true',
+                label: '营业中'
+            },{
+                value: 'false',
+                label: '歇业中'
+            }]
         }
     },
     created: function() {
+        var shopNameLike = this.$route.query.shopNameLike || '';
+        var shelves = this.$route.query.shelves || '';
+        var operatingState = this.$route.query.operatingState || '';
+        var provinceId = parseInt(this.$route.query.provinceId) || '';
+        var cityId = parseInt(this.$route.query.cityId) || '';
+        var areaId = parseInt(this.$route.query.areaId) || '';
+        this.params.shopNameLike = shopNameLike;
+        this.params.shelves = shelves;
+        this.params.operatingState = operatingState;
+        this.params.provinceId = provinceId;
+        this.params.cityId = cityId;
+        this.params.areaId = areaId;
         getProvinceList().then(data => {
             var list = [];
             list.push({
@@ -202,15 +230,13 @@ export default {
     },
     watch: {
         'params.provinceId': function(newVal, oldVal) {
-            if (newVal == oldVal) {
-                return;
+            if(oldVal){
+                this.params.cityId = null;
+                this.params.areaId = null;
+
+                this.cityList = [];
+                this.areaList = [];
             }
-
-            this.params.cityId = null;
-            this.params.areaId = null;
-
-            this.cityList = [];
-            this.areaList = [];
 
             if (newVal) {
                 getCityList(newVal).then(data => {
@@ -225,13 +251,11 @@ export default {
             }
         },
         'params.cityId': function(newVal, oldVal) {
-            if (newVal == oldVal) {
-                return;
+            if(oldVal){
+                this.params.areaId = null;
+
+                this.areaList = [];
             }
-
-            this.params.areaId = null;
-
-            this.areaList = [];
 
             if (newVal) {
                 getAreaList(newVal).then(data => {
@@ -253,6 +277,13 @@ export default {
         //获取列表
         getShopLists: function() {
             shopList({ params: this.params }).then(data => {
+                var str = '?';
+                for(var key in this.params){
+                    if(this.params[key]){
+                        str += key + '=' + this.params[key] + '&'
+                    }
+                }
+                this.$router.push(str)
                 this.counts = data.count;
                 this.shopList = data.list;
             })
