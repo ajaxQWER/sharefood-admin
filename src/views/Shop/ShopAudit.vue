@@ -59,7 +59,7 @@
         <el-row>
             <el-table :data="shopAuditLists" border :row-style="{fontSize:'12px'}">
                 <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
-                <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="200px"></el-table-column>
+                <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="180px"></el-table-column>
                 <el-table-column label="店铺位置" align="center">
                     <template slot-scope="scope">
                         {{scope.row.detail.provinceName}}-{{scope.row.detail.cityName}}-{{scope.row.detail.areaName}}<br>
@@ -101,6 +101,11 @@
                         </template>
                     </el-table-column>
                 </el-table-column>
+                <el-table-column label="上线推送" align="center" width="100px">
+                    <template slot-scope="scope">
+                         <el-button :disabled="!formatDisabledStatus(scope.row)" size="small" type="primary" @click="pushToAudit(scope.row)">上线</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </el-row>
         <el-row>
@@ -119,7 +124,8 @@ import {
 	getCityList,
 	getAreaList,
     getShopAuditList,
-    commitToDelivery
+    commitToDelivery,
+    auditPush
 } from '@/api/api'
 export default {
     data: function() {
@@ -342,6 +348,37 @@ export default {
                     type: 'success'
                 })
             })
+        },
+        //提前上线操作
+        formatDisabledStatus: function(row){
+            return (row.shopAuditInformation.base == 'ADOPT' && row.shopAuditInformation.delivery == 'ADOPT' && row.shopAuditInformation.qualification == 'ADOPT' && row.shopAuditInformation.settlement == 'ADOPT')
+        },
+        pushToAudit: function(row){
+            if(!row.shopId){
+                this.$message({
+                    message: '店铺ID无效',
+                    type: 'error'
+                })
+                return;
+            }
+            this.$confirm('是否上线推送该店铺?', '上线推送', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                auditPush(row.shopId).then(() => {
+                    this.$message({
+                        message: '店铺上线推送成功！',
+                        type: 'success'
+                    })
+                    this.getAuditLists();
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消操作'
+                });
+            });
         }
     }
 }

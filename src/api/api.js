@@ -255,6 +255,10 @@ export const rejectShopAudit = (type,params) => {
 export const commitToDelivery = shopId => {
     return ajax.post('admin/shopAudit/distribution/commit/' + shopId);
 };
+//店铺审核上线推送
+export const auditPush = shopId => {
+    return ajax.post('admin/shopAudit/auditPush/' + shopId);
+};
 
 //地区
 export const getProvinceById = provinceId => {
