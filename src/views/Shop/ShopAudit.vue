@@ -206,15 +206,13 @@ export default {
     },
     watch: {
         'params.provinceId': function(newVal, oldVal){
-            if (newVal == oldVal) {
-                return;
+            if (oldVal) {
+                this.params.cityId = null;
+                this.params.areaId = null;
+
+                this.cityList = [];
+                this.areaList = [];
             }
-
-            this.params.cityId = null;
-            this.params.areaId = null;
-
-            this.cityList = [];
-            this.areaList = [];
 
             if (newVal){
                 getCityList(newVal).then(data => {
@@ -229,13 +227,11 @@ export default {
             }
         },
         'params.cityId': function(newVal, oldVal){
-            if (newVal == oldVal) {
-                return;
+            if (oldVal) {
+                this.params.areaId = null;
+
+                this.areaList = [];
             }
-
-            this.params.areaId = null;
-
-            this.areaList = [];
 
             if (newVal){
                getAreaList(newVal).then(data => {
