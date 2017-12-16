@@ -203,6 +203,9 @@ export default {
                 key: '商家取消',
                 value: 'SHOP'
             }, {
+                key: '系统取消',
+                value: 'SYSTEM'
+            }, {
                 key: '支付超时',
                 value: 'WAIT_PAY_TIMEOUT'
             }, {
@@ -325,6 +328,8 @@ export default {
                     return '用户取消';
                 case 'SHOP':
                     return '商家取消';
+                case 'SYSTEM':
+                    return '系统取消';
                 case 'WAIT_PAY_TIMEOUT':
                     return '支付超时';
                 case 'RECEIVING_TIMEOUT':
