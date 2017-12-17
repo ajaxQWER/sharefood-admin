@@ -364,7 +364,7 @@ export const updateAgentRegion = (agentId, data) => {
 };
 //更换代理商
 export const changeAgent =  params => {
-    return ajax.post('admin/shopDetail/changeAgent/', params);
+    return ajax.post('admin/shopDetail/changeAgent', params);
 };
 
 

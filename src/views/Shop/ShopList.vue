@@ -44,44 +44,42 @@
         <el-row>
             <el-col>
                 <el-table :data="shopList" border :row-class-name="tableRowClassName" :row-style="{fontSize:'12px'}">
-                    <el-table-column label="id" width="100px" align="center" prop="shopId" />
-                    <el-table-column label="名称" align="center" width="240px">
-                        <template slot-scope="scope">{{scope.row.shopName ? scope.row.shopName : '-'}}</template>
+                    <el-table-column label="id" width="80px" align="center" prop="shopId" />
+                    <el-table-column label="名称" align="center" width="160px">
+                        <template slot-scope="scope">{{scope.row.detail.shopName ? scope.row.detail.shopName : '-'}}</template>
                     </el-table-column>
-                    <el-table-column label="负责人" width="160px" align="center">
+                    <el-table-column label="负责人" width="140px" align="center">
                         <template slot-scope="scope">
-                            {{scope.row.name}}
-                            <br> ({{scope.row.phoneNum}})
+                            {{scope.row.detail.name}}
+                            <br> ({{scope.row.detail.phoneNum}})
                         </template>
                     </el-table-column>
-                    <!-- 
-                    <el-table-column label="LOGO" align="center" width="140px">
-                        <template slot-scope="scope"><img :src="UPLOADURL + scope.row.logoUrl + '/shopLogo.png'" alt="" class="logo-img"></template>
-                    </el-table-column> 
-                    -->
+                    
+                    <el-table-column prop="agent.agentName" label="代理商" align="center"></el-table-column> 
+                   
                     <el-table-column label="地址" align="center">
                         <template slot-scope="scope">
-                            {{scope.row.provinceName}} {{scope.row.cityName}} {{scope.row.areaName}}
-                            <br> {{scope.row.address ? scope.row.address : '-'}}
+                            {{scope.row.detail.provinceName}} {{scope.row.detail.cityName}} {{scope.row.detail.areaName}}
+                            <br> {{scope.row.detail.address ? scope.row.detail.address : '-'}}
                         </template>
                     </el-table-column>
-                    <el-table-column label="营业时间" width="140px" align="center">
-                        <template slot-scope="scope">{{scope.row.busBeginTime ? scope.row.busBeginTime : '00:00'}} - {{scope.row.busEndTime ? scope.row.busEndTime : '00:00'}}</template>
+                    <el-table-column label="营业时间" width="150px" align="center">
+                        <template slot-scope="scope">{{scope.row.detail.busBeginTime ? scope.row.detail.busBeginTime : '00:00'}} - {{scope.row.detail.busEndTime ? scope.row.detail.busEndTime : '00:00'}}</template>
                     </el-table-column>
-                    <el-table-column label="联系电话" width="140px" align="center">
-                        <template slot-scope="scope">{{scope.row.takeOutPhone ? scope.row.takeOutPhone : '-'}}</template>
+                    <el-table-column label="联系电话" width="120px" align="center">
+                        <template slot-scope="scope">{{scope.row.detail.takeOutPhone ? scope.row.detail.takeOutPhone : '-'}}</template>
                     </el-table-column>
-                    <el-table-column label="状态" width="180px" align="center">
+                    <el-table-column label="状态" width="120px" align="center">
                         <template slot-scope="scope">
-                            <span class="operatingState">{{formatOperatingState(scope.row.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.shelves)}}</span>
+                            <span class="operatingState">{{formatOperatingState(scope.row.detail.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.detail.shelves)}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="topper" label="置顶值" width="80px" align="center"></el-table-column>
-                    <el-table-column label="操作" width="260px" align="center">
+                    <el-table-column prop="detail.topper" label="置顶值" width="80px" align="center"></el-table-column>
+                    <el-table-column label="操作" width="180px" align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
-                            <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
-                            <el-button size="mini" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
+                            <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row.detail)" v-if="!scope.row.detail.shelves">上架</el-button>
+                            <el-button size="mini" type="danger" @click="soldOutShop(scope.$index, scope.row.detail)" v-else>下架</el-button>
                             <router-link :to="'/shopDetail?shopId='+scope.row.shopId" class="link">
                                 <el-button size="mini" type="primary">详情</el-button>
                             </router-link>
@@ -222,7 +220,7 @@ export default {
 
             this.provinceList = [].concat(list, data);
         })
-        this.pageId = parseInt(this.$route.query.page) || 1;
+        this.params.pageId = parseInt(this.$route.query.pageId) || 1;
         this.getShopLists();
         getAgentLists({params: {pageSize: 9999999}}).then(res => {
             this.agentLists = res.list;
@@ -350,7 +348,7 @@ export default {
         },
         //分页
         currentChange: function(val) {
-            this.$router.push('?page=' + val)
+            this.$router.push('?pageId=' + val)
             this.params.pageId = val;
             this.getShopLists()
         },
@@ -482,6 +480,7 @@ export default {
                 shopId: this.shopId
             }
             changeAgent(params).then(res => {
+                this.getShopLists();
                 this.$message({
                     type: 'success',
                     message: '操作成功!'

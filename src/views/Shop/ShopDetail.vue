@@ -22,14 +22,14 @@
                     <el-form-item label="店铺类型" class="label">{{formatShopType(shopModel.detail.shopType)}}</el-form-item>
                     <el-form-item label="是否支持开票" class="label">{{shopModel.detail.canDrawInvoice?'是':'否'}}</el-form-item>
                     <el-form-item label="营业时间" class="label">{{shopModel.detail.busBeginTime}}-{{shopModel.detail.busEndTime}}</el-form-item>
-                    <el-form-item label="冻结金额" class="label">{{fmoney(shopModel.shopFunds.accountFrozen) + '元'}}</el-form-item>
-                    <el-form-item label="可提现金额" class="label">{{fmoney(shopModel.shopFunds.amountWithdrawal) + '元'}}</el-form-item>
-                    <el-form-item label="可用余额" class="label">{{fmoney(shopModel.shopFunds.availableBalance) + '元'}}</el-form-item>
+                    <el-form-item label="冻结金额" class="label">{{shopModel.shopFunds.accountFrozen || 0}}元</el-form-item>
+                    <el-form-item label="可提现金额" class="label">{{shopModel.shopFunds.amountWithdrawal || 0}}元</el-form-item>
+                    <el-form-item label="可用余额" class="label">{{shopModel.shopFunds.availableBalance || 0}}元</el-form-item>
                     <el-form-item label="店铺分类" class="label">{{shopModel.detail.shopCategoryName}}</el-form-item>
                     <el-form-item label="店铺上架状态" class="label">{{shopModel.detail.shelves ? '上架' : '下架'}}</el-form-item>
                     <el-form-item label="店铺营业状态" class="label">{{shopModel.detail.operatingState ? '营业' : '歇业'}}</el-form-item>
-                    <el-form-item label="最低配送金额" class="label">{{fmoney(shopModel.detail.minDeliveryPrice) + '元'}}</el-form-item>
-                    <el-form-item label="人均消费" class="label">{{fmoney(shopModel.detail.preConsumption) + '元'}}</el-form-item>
+                    <el-form-item label="最低配送金额" class="label">{{shopModel.detail.minDeliveryPrice || 0}}元</el-form-item>
+                    <el-form-item label="人均消费" class="label">{{shopModel.detail.preConsumption || 0}}元</el-form-item>
                     <el-form-item label="活动列表" class="label">
                         <el-table :data="shopModel.detail.shopActive" style="width: 800px;">
                             <el-table-column width="80px" property="activityId" label="活动ID" align="center"></el-table-column>

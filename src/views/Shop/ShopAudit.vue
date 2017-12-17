@@ -58,9 +58,9 @@
         </el-row>
         <el-row>
             <el-table :data="shopAuditLists" border :row-style="{fontSize:'12px'}">
-                <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="100px"></el-table-column>
-                <el-table-column prop="detail.shopName" label="店铺名称" align="center" width="180px"></el-table-column>
-                <el-table-column label="店铺位置" align="center">
+                <el-table-column prop="detail.shopId" label="店铺ID" align="center" width="90px"></el-table-column>
+                <el-table-column prop="detail.shopName" label="店铺名称" align="center"></el-table-column>
+                <el-table-column label="店铺位置" align="center" width="180px">
                     <template slot-scope="scope">
                         {{scope.row.detail.provinceName}}-{{scope.row.detail.cityName}}-{{scope.row.detail.areaName}}<br>
                         {{scope.row.detail.address}}
@@ -73,28 +73,28 @@
                 <el-table-column label="店铺类型" align="center" width="120px">
                     <template slot-scope="scope">{{formatShopType(scope.row.detail.shopType)}}</template>
                 </el-table-column>
-                <!-- <el-table-column prop="detail.agentName" label="代理商" align="center" width="150px"></el-table-column> -->
+                <el-table-column prop="agent.agentName" label="代理商" align="center" width="140px"></el-table-column>
                 <el-table-column label="审核状态" align="center">
-                    <el-table-column label="基本资料" align="center" width="150px">
+                    <el-table-column label="基本资料" align="center" width="100px">
                         <template slot-scope="scope">
                             {{formatAuditStatus(scope.row.shopAuditInformation.base)}}
                             <el-button class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="配送信息" align="center" width="220px">
+                    <el-table-column label="配送信息" align="center" width="120px">
                         <template slot-scope="scope">
                             {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
                             <el-button class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
                             <el-button class="audit-btn" size="small" type="success" @click="commitToDelivery(scope.row)">提交蜂鸟</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="资质信息" align="center" width="150px">
+                    <el-table-column label="资质信息" align="center" width="100px">
                         <template slot-scope="scope">
                             {{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}
                             <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="结算信息" align="center" width="150px">
+                    <el-table-column label="结算信息" align="center" width="100px">
                         <template slot-scope="scope">
                             {{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}
                             <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
@@ -179,7 +179,7 @@ export default {
 
             this.provinceList = [].concat(list, data);
 		})
-        this.pageId = parseInt(this.$route.query.page) || 1;
+        this.params.pageId = parseInt(this.$route.query.page) || 1;
         var shopNameLike = this.$route.query.shopNameLike || '';
         var phoneNum = this.$route.query.phoneNum || '';
         var base = this.$route.query.base || '';
@@ -317,7 +317,7 @@ export default {
         },
         //分页
         currentChange: function(val) {
-            this.$router.push('?page=' + val)
+            this.$router.push('?pageId=' + val)
             this.params.pageId = val;
             this.getAuditLists()
         },
