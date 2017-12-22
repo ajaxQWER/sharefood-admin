@@ -315,7 +315,13 @@ export const updateArticleById = params => {
 };
 
 //结算模板
-export const getSettlementTemplateLists = params => {
+export const getShopSettlementTemplateLists = () => {
+    return ajax.get('admin/shopAudit/SettlementTemplate');
+};
+export const getAgentSettlementTemplateLists = () => {
+    return ajax.get('admin/agent/SettlementTemplate');
+};
+export const getAllSettlementTemplateLists = params => {
     return ajax.get('admin/settlementTemplate', params);
 };
 export const addSettlementTemplate = params => {

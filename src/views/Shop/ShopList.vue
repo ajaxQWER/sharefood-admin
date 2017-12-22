@@ -114,7 +114,7 @@
         <el-dialog title="更换代理商" :visible.sync="changeAgentDialog" size="tiny" @close="closeChangeAgentDialog" class="dialog">
             <el-form label-width="120px">
                 <el-form-item label="选择代理商">
-                    <el-select v-model="agentId" placeholder="请选择代理商">
+                    <el-select v-model="agentId" placeholder="请选择代理商" filterable>
                         <el-option
                                 v-for="(item,index) in agentLists"
                                 :key="index"
@@ -275,6 +275,7 @@ export default {
         //获取列表
         getShopLists: function() {
             shopList({ params: this.params }).then(data => {
+                console.log(data)
                 var str = '?';
                 for(var key in this.params){
                     if(this.params[key]){

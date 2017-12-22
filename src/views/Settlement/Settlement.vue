@@ -29,6 +29,12 @@
                     <el-table-column label="结算百分比" align="center">
                         <template slot-scope="scope">{{scope.row.percentageOfSettle?scope.row.percentageOfSettle:'-'}}</template>
                     </el-table-column>
+                    <el-table-column label="结算周期" align="center">
+                        <template slot-scope="scope">{{scope.row.percentageDays}}天</template>
+                    </el-table-column>
+                    <el-table-column label="结算模板类型" align="center">
+                        <template slot-scope="scope">{{formatSettlementType(scope.row.type)}}</template>
+                    </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
                         <template slot-scope="scope">
                             <el-button size="small" @click="updateSettlement(scope.$index, scope.row)">修改</el-button>
@@ -40,10 +46,23 @@
             <el-dialog :title="isAdd?'新增结算模板':'修改结算模板'" :visible.sync="addDialog" size="tiny" @close="closeaddDialog" class="dialog">
                 <el-form :model="formInline" label-width="120px">
                     <el-form-item label="结算模板名称">
-                        <el-input type="text" v-model="formInline.settlementTemplateName" auto-complete="off" placeholder="结算模板名称"></el-input>
+                        <el-input type="text" v-model="formInline.settlementTemplateName" auto-complete="off" placeholder="请输入结算模板名称"></el-input>
                     </el-form-item>
                     <el-form-item label="结算比例">
-                        <el-input type="number" v-model.number="formInline.percentageOfSettle" auto-complete="off" :max="1" :min="0" :step="0.001"></el-input>
+                        <el-input type="number" v-model.number="formInline.percentageOfSettle" auto-complete="off" :max="1" :min="0" :step="0.001" placeholder="请输入结算比例"></el-input>
+                    </el-form-item>
+                    <el-form-item label="结算周期">
+                        <el-input type="number" v-model.number="formInline.percentageDays" auto-complete="off" :min="0" placeholder="单位：天"></el-input>
+                    </el-form-item>
+                    <el-form-item label="结算模板类型">
+                        <el-select v-model="formInline.type" filterable placeholder="请选择结算模板类型">
+                        <el-option
+                          v-for="(item,index) in settlementType"
+                          :key="index"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
                     </el-form-item>
                     <el-form-item label="提示">
                         <span class="tips">结算比例范围0-1，保留三位小数</span>
@@ -66,7 +85,7 @@
 </template>
 <script>
 import {
-    getSettlementTemplateLists,
+    getAllSettlementTemplateLists,
     addSettlementTemplate,
     deleteSettlementTemplateById,
     updateSettlementTemplateId
@@ -77,16 +96,24 @@ export default {
             addLoading: false,
             addDialog: false,
             formInline: {
-                settlementTemplateId: 0,
                 settlementTemplateName: "",
-                percentageOfSettle: 0
+                percentageOfSettle: '',
+                type: '',
+                percentageDays: ''
             },
             searchContent: '',
             pageId: 1,
             pageSize: 10,
             counts: 0,
             isAdd: true,
-            settlementData: null
+            settlementData: null,
+            settlementType: [{
+                label: '门店',
+                value: 'SHOP'
+            },{
+                label: '代理商',
+                value: 'AGENT'
+            }]
         }
     },
     created: function() {
@@ -94,9 +121,9 @@ export default {
         this.getSettlementTemplateList();
     },
     methods: {
-        //获取视频分类列表
+        //获取结算模板列表
         getSettlementTemplateList: function() {
-            getSettlementTemplateLists({ params: { pageId: this.pageId, pageSize: this.pageSize, settlementTemplateName: this.searchContent } }).then(data => {
+            getAllSettlementTemplateLists({ params: { pageId: this.pageId, pageSize: this.pageSize, settlementTemplateName: this.searchContent } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.settlementData = data.list;
@@ -114,9 +141,10 @@ export default {
         closeaddDialog: function() {
             this.isAdd = true;
             this.formInline = {
-                settlementTemplateId: 0,
                 settlementTemplateName: "",
-                percentageOfSettle: 0
+                percentageOfSettle: '',
+                type: '',
+                percentageDays: ''
             }
         },
         //添加分类
@@ -149,6 +177,21 @@ export default {
                 })
                 return;
             }
+            if(this.formInline.percentageDays === ''){
+                this.$message({
+                    message: '请输入结算周期',
+                    type: 'error'
+                })
+                return;
+            }
+            if(this.formInline.type === ''){
+                this.$message({
+                    message: '请选择结算模板类型',
+                    type: 'error'
+                })
+                return;
+            }
+
             if (this.isAdd) {
                 addSettlementTemplate(this.formInline).then(data => {
                     this.getSettlementTemplateList();
@@ -182,7 +225,9 @@ export default {
             this.formInline = {
                 settlementTemplateId: row.settlementTemplateId,
                 settlementTemplateName: row.settlementTemplateName,
-                percentageOfSettle: row.percentageOfSettle
+                percentageOfSettle: row.percentageOfSettle,
+                type: row.type,
+                percentageDays: row.percentageDays
             }
         },
         //通过id删除分类
@@ -205,6 +250,14 @@ export default {
                     message: '已取消删除'
                 });
             });
+        },
+        formatSettlementType: function(type){
+            switch(type){
+                case 'SHOP':
+                    return '门店';
+                case 'AGENT':
+                    return '代理商';
+            }
         },
         //分页
         currentChange: function(val) {

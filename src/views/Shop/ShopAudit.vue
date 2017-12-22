@@ -12,7 +12,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="注册手机号">
-                    <el-input placeholder="请输入店铺名称" v-model="params.phoneNum" @blur="searchShop" @keyup.enter.native="searchShop">
+                    <el-input placeholder="请输入手机号" v-model="params.phoneNum" @blur="searchShop" @keyup.enter.native="searchShop">
                     </el-input>
                 </el-form-item>
 		        <el-form-item label="省">
@@ -85,7 +85,7 @@
                         <template slot-scope="scope">
                             {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
                             <el-button class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
-                            <el-button class="audit-btn" size="small" type="success" @click="commitToDelivery(scope.row)">提交蜂鸟</el-button>
+                            <el-button class="audit-btn" size="small" type="success" @click="commitToDeliveryBtn(scope.row)">提交蜂鸟</el-button>
                         </template>
                     </el-table-column>
                     <el-table-column label="资质信息" align="center" width="100px">
@@ -334,7 +334,7 @@ export default {
             this.getAuditLists()
         },
         //提交配送审核
-        commitToDelivery: function(row){
+        commitToDeliveryBtn: function(row){
             if(!row.shopId){
                 this.$message({
                     message: '店铺id错误',
@@ -342,12 +342,24 @@ export default {
                 })
                 return;
             }
-            commitToDelivery(row.shopId).then(() => {
-                this.$message({
-                    message: '提交成功',
-                    type: 'success'
+            this.$confirm('是否将该店铺提交蜂鸟审核?', '提交蜂鸟审核', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                commitToDelivery(row.shopId).then(() => {
+                    this.$message({
+                        message: '提交成功',
+                        type: 'success'
+                    })
+                    this.getAuditLists()
                 })
-            })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消操作'
+                });
+            });
         },
         //提前上线操作
         formatDisabledStatus: function(row){

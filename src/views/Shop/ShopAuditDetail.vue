@@ -144,7 +144,7 @@ import {
     rejectShopAudit,
     getProvinceById,
     getCityById,
-    getSettlementTemplateLists
+    getShopSettlementTemplateLists
 } from '@/api/api'
 export default {
     data: function() {
@@ -216,9 +216,9 @@ export default {
             })
         },
         getSettlementList: function(){
-            getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
+            getShopSettlementTemplateLists().then(res => {
                 console.log(res)
-                this.settlementTemplateList = res.list;
+                this.settlementTemplateList = res;
             })
         },
         back: function(){

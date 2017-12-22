@@ -89,7 +89,7 @@ import {
 	addAgent,
 	updateAgentPassword,
 	updateAgentById,
-	getSettlementTemplateLists
+	getAgentSettlementTemplateLists
 } from '@/api/api'
 export default {
 	data: function(){
@@ -123,9 +123,9 @@ export default {
 		var agentNameLike = this.$route.query.agentNameLike || '';
 		this.params.agentNameLike = agentNameLike;
 		this.getAgentList();
-		getSettlementTemplateLists({params: {pageSize: 9999}}).then(res => {
-			console.log(res)
-			this.settlementTemplate = res.list;
+		getAgentSettlementTemplateLists().then(res => {
+		    console.log(res)
+		    this.settlementTemplate = res;
 		})
 	},
 	methods: {

@@ -8,7 +8,10 @@
         <el-row>
             <el-form class="inline-form" :inline="true" @sublimt.navite.prevent>
                 <el-form-item label="搜索审核人">
-                    <el-input placeholder="请输入审核人" icon="search" v-model="auditName" :on-icon-click="getAuditLogs"></el-input>
+                    <el-input placeholder="请输入审核人" icon="search" v-model="operatorNameLike" :on-icon-click="getAuditLogs"></el-input>
+                </el-form-item>
+                <el-form-item label="搜索店铺ID">
+                    <el-input placeholder="请输入店铺ID" icon="search" v-model="shopId" :on-icon-click="getAuditLogs"></el-input>
                 </el-form-item>
                 <el-form-item label="审核起始时间">
                     <el-date-picker
@@ -20,10 +23,20 @@
                           @change="selectDateRange">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="审核状态">
-                    <el-select v-model="audit" placeholder="请选择" @change="getAuditLogs">
+                <el-form-item label="审核类型">
+                    <el-select v-model="auditType" placeholder="请选择审核类型" @change="getAuditLogs">
                         <el-option
                           v-for="(item,index) in auditStatusType"
+                          :key="index"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                </el-form-item>
+                <el-form-item label="是否通过">
+                    <el-select v-model="passed" placeholder="是否通过" @change="getAuditLogs">
+                        <el-option
+                          v-for="(item,index) in passedType"
                           :key="index"
                           :label="item.label"
                           :value="item.value">
@@ -35,13 +48,20 @@
         <el-row>
             <el-col>
                 <el-table :data="auditLists" :row-style="{fontSize:'12px'}" border>
-                    <el-table-column label="审核人Id" width="160px" align="center" prop="adminId"></el-table-column>
-                    <el-table-column label="审核人" align="center" prop="auditName"></el-table-column>
-                    <el-table-column label="审核状态" align="center">
-                        <template slot-scope="scope">{{formatAudit(scope.row.audit)}}</template>
+                    <el-table-column label="Id" width="100px" align="center" prop="auditLoggingId"></el-table-column>
+                    <el-table-column label="操作人Id" width="100px" align="center" prop="operatorId"></el-table-column>
+                    <el-table-column label="操作人" align="center" prop="operatorName" width="120px"></el-table-column>
+                    <el-table-column label="操作人类型" align="center" width="140px">
+                        <template slot-scope="scope">{{formatOperatorType(scope.row.operatorType)}}</template>
                     </el-table-column>
-                    <el-table-column label="店铺Id" align="center" prop="shopId"></el-table-column>
-                    <el-table-column label="店铺名称" align="center" prop="shopName"></el-table-column>
+                    <el-table-column label="店铺Id" align="center" prop="shopId" width="100px"></el-table-column>
+                    <el-table-column label="审核类型" align="center">
+                        <template slot-scope="scope">{{formatAudit(scope.row.auditType)}}</template>
+                    </el-table-column>
+                    <el-table-column label="是否通过" align="center">
+                        <template slot-scope="scope"><span :class="[!scope.row.passed?'unpass':'']">{{scope.row.passed?'通过':'不通过'}}</span><span v-if="!scope.row.passed"><br>({{scope.row.unauditReason}})</span></template>
+                    </el-table-column>
+                    <el-table-column label="审核备注" align="center" prop="auditRemark"></el-table-column>
                     <el-table-column label="操作时间" align="center">
                         <template slot-scope="scope">{{scope.row.auditTime?moment(scope.row.auditTime).format('YYYY-MM-DD HH:mm:ss'):'-'}}</template>
                     </el-table-column>
@@ -67,8 +87,9 @@ import {
 export default {
     data: function() {
         return {
-            auditName: '',
-            audit: '',
+            operatorNameLike: '',
+            shopId: '',
+            auditType: '',
             pageId: 1,
             pageSize: 20,
             counts: 0,
@@ -78,17 +99,40 @@ export default {
             auditLists: null,
             auditStatusType: [{
                 label: '全部',
-                value: ' '
+                value: ''
             },{
-                label: '等待审核',
-                value: 'WAIT_AUDIT'
+                label: '基本资料',
+                value: 'BASE'
             },{
-                label: '审核通过',
-                value: 'AUDIT_ADOPT'
+                label: '资质信息',
+                value: 'QUALIFICATION'
             },{
-                label: '审核未通过',
-                value: 'AUDIT_UNADOPT'
-            },]
+                label: '结算信息',
+                value: 'SETTLEMENT'
+            },{
+                label: '配送信息',
+                value: 'DISTRIBUTION'
+            },{
+                label: '基本资料修改',
+                value: 'BASE_CHANGE'
+            },{
+                label: '资质信息修改',
+                value: 'QUALIFICATION_CHANGE'
+            },{
+                label: '结算信息修改',
+                value: 'SETTLEMENT_CHANGE'
+            }],
+            passed: '',
+            passedType: [{
+                label: '全部',
+                value: ''
+            },{
+                label: '通过',
+                value: 'true'
+            },{
+                label: '不通过',
+                value: 'false'
+            }]
         }
     },
     created: function() {
@@ -98,20 +142,38 @@ export default {
     methods: {
         //获取视频分类列表
         getAuditLogs: function() {
-            getAuditLogList({ params: { pageId: this.pageId, pageSize: this.pageSize, auditName: this.auditName, beginTime: this.beginTime, endTime: this.endTime, audit: this.audit } }).then(data => {
+            getAuditLogList({ params: { pageId: this.pageId, pageSize: this.pageSize, operatorNameLike: this.operatorNameLike, beginTime: this.beginTime, endTime: this.endTime, auditType: this.auditType, shopId: this.shopId, passed: this.passed } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.auditLists = data.list;
             })
         },
+        formatOperatorType: function(type){
+            switch(type){
+                case 'AGENT':
+                    return '代理商';
+                case 'ADMIN':
+                    return '管理员';
+                case 'SYSTEM':
+                    return '系统';
+            }
+        },
         formatAudit: function(type){
             switch(type){
-                case 'WAIT_AUDIT':
-                    return '等待审核';
-                case 'AUDIT_ADOPT':
-                    return '审核通过';
-                case 'AUDIT_UNADOPT':
-                    return '审核未通过';
+                case 'BASE':
+                    return '基本资料';
+                case 'QUALIFICATION':
+                    return '资质信息';
+                case 'SETTLEMENT':
+                    return '结算信息';
+                case 'DISTRIBUTION':
+                    return '配送信息';
+                case 'BASE_CHANGE':
+                    return '基本资料修改';
+                case 'QUALIFICATION_CHANGE':
+                    return '资质信息修改';
+                case 'SETTLEMENT_CHANGE':
+                    return '结算信息修改';
             }
         },
         //分页
@@ -149,6 +211,9 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    }
+    .unpass{
+        color: #ff0000;
     }
 }
 </style>
