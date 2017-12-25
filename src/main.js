@@ -71,6 +71,7 @@ router.beforeEach((to, from, next) => {
         next({ path: '/login' })
     } else {
         next()
+        document.querySelector('#container').scrollTop = 0;
     }
 })
 
