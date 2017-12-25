@@ -15,7 +15,7 @@
                     <el-input placeholder="请输入店铺名称" icon="search" v-model="orderShopNameLike" :on-icon-click="searchOrder">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="下单人">
+                <el-form-item label="收货人">
                     <el-input placeholder="请输入下单人名称" icon="search" v-model="orderContactNameLike" :on-icon-click="searchOrder">
                     </el-input>
                 </el-form-item>
@@ -72,8 +72,9 @@
                     <el-table-column label="订单名称" align="center">
                         <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="下单人" align="center" width="220px">
-                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}-{{scope.row.orderContact.contactPhone}}<br>{{scope.row.orderContact.simpleAddress?scope.row.orderContact.simpleAddress:scope.row.orderContact.address}}</template>
+                    <el-table-column label="收货人" align="center" width="220px">
+                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}-{{scope.row.orderContact.contactPhone}}
+                            <br>{{scope.row.orderContact.simpleAddress?scope.row.orderContact.simpleAddress:scope.row.orderContact.address}}</template>
                     </el-table-column>
                     <!-- <el-table-column label="联系人手机号" width="140px" align="center">
                         <template slot-scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
@@ -98,7 +99,8 @@
                     </el-table-column>
                     <el-table-column label="拒单原因" align="center">
                         <template slot-scope="scope">
-                            {{formatCancelType(scope.row.orderCancel.cancelType)}}<br><span v-if="scope.row.orderCancel.cancelContent">({{scope.row.orderCancel.cancelContent}})</span>
+                            {{formatCancelType(scope.row.orderCancel.cancelType)}}
+                            <br><span v-if="scope.row.orderCancel.cancelContent">({{scope.row.orderCancel.cancelContent}})</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="店铺名称" align="center">
@@ -122,11 +124,11 @@
             </el-col>
         </el-row>
         <el-dialog title="取消订单" :visible.sync="cancelOrderDialog" size="tiny" @close="closeCancelOrder" class="dialog">
-                <el-form label-width="120px">
-                    <el-form-item label="取消原因">
-                        <el-input type="textarea" v-model="cancelContent" auto-complete="off" placeholder="取消原因"></el-input>
-                    </el-form-item>
-                </el-form>
+            <el-form label-width="120px">
+                <el-form-item label="取消原因">
+                    <el-input type="textarea" v-model="cancelContent" auto-complete="off" placeholder="取消原因"></el-input>
+                </el-form-item>
+            </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="closeCancelOrder">取 消</el-button>
                 <el-button type="primary" @click="cancelOrderBtn">确 定</el-button>
@@ -221,6 +223,21 @@ export default {
     },
     created: function() {
         this.pageId = parseInt(this.$route.query.page) || 1;
+        this.orderNum = this.$route.query.orderNum || '';
+        this.orderShopNameLike = this.$route.query.orderShopNameLike || '';
+        this.orderContactNameLike = this.$route.query.orderContactNameLike || '';
+        this.orderPhoneLike = this.$route.query.orderPhoneLike || '';
+        this.orderStatus = this.$route.query.orderStatus || '';
+        this.cancelType = this.$route.query.cancelType || '';
+        this.payment = this.$route.query.payment || '';
+        this.orderTimeBeginTime = this.$route.query.orderTimeBeginTime || '';
+        this.orderTimeEndTime = this.$route.query.orderTimeEndTime || '';
+
+        if(this.orderTimeBeginTime && this.orderTimeEndTime){
+            this.dateRange = [this.orderTimeBeginTime, this.orderTimeEndTime]
+            console.log(this.dateRange)
+        }
+        
         this.getOrderLists();
     },
     watch: {
@@ -242,8 +259,28 @@ export default {
     methods: {
         //获取视频分类列表
         getOrderLists: function() {
-            orderList({ params: { pageId: this.pageId, pageSize: this.pageSize, orderNum: this.orderNum, orderStatus: this.orderStatus, orderShopNameLike: this.orderShopNameLike, orderTimeBeginTime: this.orderTimeBeginTime, orderTimeEndTime: this.orderTimeEndTime, orderContactNameLike: this.orderContactNameLike, orderPhoneLike: this.orderPhoneLike, payment: this.payment, cancelType: this.cancelType } }).then(data => {
+            var params = {
+                pageId: this.pageId,
+                pageSize: this.pageSize,
+                orderNum: this.orderNum,
+                orderStatus: this.orderStatus,
+                orderShopNameLike: this.orderShopNameLike,
+                orderPhoneLike: this.orderPhoneLike,
+                orderTimeBeginTime: this.orderTimeBeginTime,
+                orderTimeEndTime: this.orderTimeEndTime,
+                orderContactNameLike: this.orderContactNameLike,
+                payment: this.payment,
+                cancelType: this.cancelType
+            }
+            orderList({ params: params }).then(data => {
                 console.log(data)
+                var str = '?';
+                for (var key in params) {
+                    if (params[key]) {
+                        str += key + '=' + params[key] + '&'
+                    }
+                }
+                this.$router.push(str);
                 this.counts = data.count;
                 this.orderLists = data.list;
             })
@@ -355,17 +392,17 @@ export default {
                 })
             }).catch(() => {});
         },
-        cancelOrder: function(index, row){
+        cancelOrder: function(index, row) {
             this.orderId = row.orderId;
             this.cancelOrderDialog = true;
         },
-        closeCancelOrder: function(){
+        closeCancelOrder: function() {
             this.cancelOrderDialog = false;
             this.cancelContent = '';
             this.orderId = 0;
         },
-        cancelOrderBtn: function(){
-            if(this.cancelContent == ''){
+        cancelOrderBtn: function() {
+            if (this.cancelContent == '') {
                 this.$message({
                     type: 'error',
                     message: '请输入订单取消原因'
