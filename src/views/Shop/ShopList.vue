@@ -55,7 +55,7 @@
                         </template>
                     </el-table-column>
                     
-                    <el-table-column prop="agent.agentName" label="代理商" align="center"></el-table-column> 
+                    <el-table-column prop="agent.agentName" label="代理商" align="center" width="200px" /> 
                    
                     <el-table-column label="地址" align="center">
                         <template slot-scope="scope">
@@ -75,7 +75,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="detail.topper" label="置顶值" width="80px" align="center"></el-table-column>
-                    <el-table-column label="操作" width="180px" align="center">
+                    <el-table-column label="操作" width="400px" align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
                             <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row.detail)" v-if="!scope.row.detail.shelves">上架</el-button>
@@ -88,6 +88,9 @@
                             </router-link>
                             <el-button size="mini" type="danger" @click="reAdopt(scope.$index, scope.row)">重新审核</el-button>
                             <el-button size="mini" type="primary" @click="showChangeAgentDialog(scope.$index, scope.row)">更换代理商</el-button>
+                            <router-link :to="'/seller?shopId='+scope.row.shopId" class="link">
+                                <el-button size="mini">账号列表</el-button>
+                            </router-link>
                         </template>
                     </el-table-column>
                 </el-table>

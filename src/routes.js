@@ -31,6 +31,7 @@ import Admin from './views/Admin/Admin.vue'
 import AdminRole from './views/Admin/AdminRole.vue'
 import Role from './views/Admin/Role.vue'
 import AdminPermissionPoint from './views/Admin/AdminPermissionPoint.vue'
+import SELLER_LIST from './views/Shop/SellerList.vue'
 
 let routes = [{
     path: '/login',
@@ -139,6 +140,10 @@ let routes = [{
         component: ShopAppraiseDetail,
         name: '店铺评价详情',
         hidden: true
+    }, {
+    	path: '/seller',
+    	component: SELLER_LIST,
+        name: '卖家账号'
     }]
 }, {
     path: '/',
