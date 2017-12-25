@@ -17,17 +17,21 @@
 		<el-row>
 			<el-table :data="adminList" :row-style="{fontSize:'12px'}" border>
 				<el-table-column prop="adminId" label="管理员id" align="center" width="120px"></el-table-column>
-                <el-table-column prop="username" label="管理员账号" align="center"></el-table-column>
+                <el-table-column prop="admin.username" label="管理员账号" align="center"></el-table-column>
+                <el-table-column label="角色" align="center">
+                    <template slot-scope="scope">{{scope.row.roleNameList ? scope.row.roleNameList.join(",") : ''}}</template>
+                </el-table-column>
                 <el-table-column label="注册时间" align="center" width="200px">
-                    <template slot-scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.admin.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="上次登录时间" align="center" width="200px">
-                    <template slot-scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.admin.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button size="small" @click="updateAdminRole(scope.$index, scope.row)">角色管理</el-button>
                         <el-button size="small" type="primary" @click="showUpdatePwdPopup(scope.$index, scope.row)">修改密码</el-button>
+                        <el-button size="small" type="danger" @click="deleteAdmin(scope.$index, scope.row)">删除账号</el-button>
                     </template>
                 </el-table-column>
 			</el-table>
@@ -78,9 +82,9 @@ export default {
 	data: function(){
 		return {
 			params: {
-				usernameLike: '',
+				usernameLike: null,
 				pageId: 1,
-				pageSize: 20,
+				pageSize: 10,
 			},
 			counts: 0,
 			addDialog: false,
@@ -88,12 +92,12 @@ export default {
 			updatePwdDialog: false,
 			adminList: null,
 			newAdmin: {
-				secretkey: "",
-				username: ""
+				secretkey: null,
+				username: null
 			},
 			password: {
 				adminId: 0,
-				newSecretkey: ""
+				newSecretkey: null
 			},
 			adminId: 0
 		}
@@ -106,7 +110,14 @@ export default {
 	},
 	methods: {
 		changeRouterPushValue: function() {
-            this.$router.push('?pageId=' + this.params.pageId + '&usernameLike=' + this.params.usernameLike)
+			var p = {};
+			if (this.params.usernameLike){
+				p.usernameLike = this.params.usernameLike;
+			}
+			if (this.params.pageId != 1){
+				p.pageId = this.params.pageId;
+			}
+            this.$router.push({query: p});
 		},
 		currentChange: function(val) {
             this.params.pageId = val;
@@ -126,8 +137,8 @@ export default {
 			this.addDialog = false;
 			this.newAdmin = {
 				adminId: 0,
-				secretkey: "",
-				username: ""
+				secretkey: null,
+				username: null
 			}
 		},
 		addAdminFn: function(){
@@ -151,11 +162,33 @@ export default {
         		query: queryParams
         	})
 		},
+		deleteAdmin: function(index, row){
+            this.$confirm('是否删除该管理员账号?', '删除管理员账号', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'danger'
+            }).then(() => {
+				deleteAdmin(row.adminId).then(res => {
+					this.getAdminList();
+					this.$message({
+						type: 'success',
+						message: '删除成功'
+					})
+					this.addDialog = false;
+				})
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+            
+		},
 		closeUpdatePwdDialog: function(){
 			this.updatePwdDialog = false;
 			this.adminId = 0;
 			this.password = {
-				newSecretkey: ""
+				newSecretkey: null
 			}
 		},
 		cancelUpdatePwd: function(){
