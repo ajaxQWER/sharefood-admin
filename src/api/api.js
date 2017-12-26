@@ -177,25 +177,40 @@ export const findGoodsById = params => {
 
 //店铺
 export const shopList = params => {
-    return ajax.get('admin/shopDetail', params);
+    return ajax.get('admin/shop', params);
 };
 export const findShopById = params => {
-    return ajax.get('admin/shopDetail/' + params.shopId, params);
+    return ajax.get('admin/shop/' + params.shopId, params);
 };
 export const putAway = params => {
-    return ajax.post('admin/shopDetail/onShelves', params);
+    return ajax.post('admin/shop/onShelves', params);
 };
 export const soldOut = params => {
-    return ajax.post('admin/shopDetail/offShelves', params);
+    return ajax.post('admin/shop/offShelves', params);
 };
 //设置店铺置顶
 export const setToperClass = (shopId, toperClass) => {
-    return ajax.post('admin/shopDetail/topper/' + shopId + '/' + toperClass);
+    return ajax.post('admin/shop/topper/' + shopId + '/' + toperClass);
 };
 //重新审核店铺
 export const reAdoptShopById = shopId => {
-    return ajax.post('admin/shopDetail/batchUnAdopt/' + shopId);
+    return ajax.post('admin/shop/batchUnAdopt/' + shopId);
 };
+
+
+export const sellerList = params => {
+    return ajax.get('admin/seller', params);
+};
+export const findSellerById = sellerId => {
+    return ajax.get('admin/seller/' + sellerId);
+};
+export const updateSecretkey = params => {
+    return ajax.post('admin/seller/updateSecretkey', params);
+};
+export const updateSellerName = params => {
+    return ajax.post('admin/seller/updateSellerName', params);
+};
+
 
 //店铺分类
 export const shopCategoryList = params => {
