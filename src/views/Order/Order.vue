@@ -100,7 +100,7 @@
                     <el-table-column label="拒单原因" align="center">
                         <template slot-scope="scope">
                             {{formatCancelType(scope.row.orderCancel.cancelType)}}
-                            <br><span v-if="scope.row.orderCancel.cancelContent">({{scope.row.orderCancel.cancelContent}})</span>
+                            <span v-if="scope.row.orderCancel.cancelType == 'USER'"><br>{{formatCancelReason(scope.row.orderCancel.orderCancelReason)}}</span><span v-if="scope.row.orderCancel.cancelContent"><br>({{scope.row.orderCancel.cancelContent}})</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="店铺名称" align="center">
@@ -373,6 +373,22 @@ export default {
                     return '接单超时';
                 case 'DELIVERY_REJECT':
                     return '配送拒绝';
+                default:
+                    return '-'
+            }
+        },
+        formatCancelReason: function(type){
+            switch (type) {
+                case 'TEMPORARY_EMERGENCY':
+                    return '临时有事,我不想要了';
+                case 'WRONG_INFORMATION':
+                    return '信息错误,我想重新点';
+                case 'PAYMENT_PROBLEMS':
+                    return '支付遇到问题';
+                case 'CLICK_ERRORLY':
+                    return '点错了,我想重新点';
+                case 'OTHER':
+                    return '其他原因';
                 default:
                     return '-'
             }
