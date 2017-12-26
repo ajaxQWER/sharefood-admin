@@ -29,8 +29,8 @@
 	                </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="showUpdateSecretkey(scope.$index, scope.row)">修改密码</el-button>
-                            <el-button size="mini" @click="showUpdateSellerName(scope.$index, scope.row)">修改用户名</el-button>
+                            <el-button type="primary" size="small" @click="showUpdateSecretkey(scope.$index, scope.row)">修改密码</el-button>
+                            <el-button type="success" size="small" @click="showUpdateSellerName(scope.$index, scope.row)">修改账号</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -43,7 +43,7 @@
                 </el-pagination>
             </el-col>
         </el-row>
-		<el-dialog title="修改用户名" :visible.sync="updateSellerNameDialog" size="tiny" @close="closeSellerNameDialog" class="dialog">
+		<el-dialog title="修改账号" :visible.sync="updateSellerNameDialog" size="tiny" @close="closeSellerNameDialog" class="dialog">
 		    <el-form :model="updateSellerNameInfo" label-width="120px">
 		        <el-form-item label="卖家账号">
 		            <el-input type="text" v-model="updateSellerNameInfo.sellerName" auto-complete="off" placeholder="卖家账号"></el-input>

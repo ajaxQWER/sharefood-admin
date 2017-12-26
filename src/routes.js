@@ -31,7 +31,7 @@ import Admin from './views/Admin/Admin.vue'
 import AdminRole from './views/Admin/AdminRole.vue'
 import Role from './views/Admin/Role.vue'
 import AdminPermissionPoint from './views/Admin/AdminPermissionPoint.vue'
-import SELLER_LIST from './views/Shop/SellerList.vue'
+import SellerList from './views/Shop/SellerList.vue'
 
 let routes = [{
     path: '/login',
@@ -142,7 +142,7 @@ let routes = [{
         hidden: true
     }, {
     	path: '/seller',
-    	component: SELLER_LIST,
+    	component: SellerList,
         name: '卖家账号'
     }]
 }, {
