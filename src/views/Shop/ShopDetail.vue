@@ -17,6 +17,7 @@
                     <el-form-item label="店铺名称" class="label">{{shopModel.detail.shopName}}</el-form-item>
                     <el-form-item label="负责人" class="label">{{shopModel.detail.name}}</el-form-item>
                     <el-form-item label="注册账号" class="label">{{shopModel.detail.phoneNum}}</el-form-item>
+                    <el-form-item label="配送类型" class="label">{{formatDistributionType(shopModel.detail.distributionType)}}</el-form-item>
                     <el-form-item label="配送电话" class="label">{{shopModel.detail.takeOutPhone}}</el-form-item>
                     <el-form-item label="地址" class="label">{{shopModel.detail.address}}</el-form-item>
                     <el-form-item label="店铺类型" class="label">{{formatShopType(shopModel.detail.shopType)}}</el-form-item>
@@ -246,6 +247,16 @@ export default {
                     return '折扣商品';
                 case 'SPECIFIC':
                     return '其他';
+            }
+        },
+        formatDistributionType: function(type){
+            switch (type) {
+                case 'SELF_DELIVERY_BY_MERCHANTS':
+                    return '商家自送';
+                case 'ANUBIS':
+                    return '蜂鸟配送';
+                case 'ARES':
+                    return '共享点餐送';
             }
         },
         getProvindeName: function(provinceId){

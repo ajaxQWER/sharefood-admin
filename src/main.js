@@ -73,9 +73,7 @@ router.beforeEach((to, from, next) => {
         next();
         try{
             document.querySelector('#container').scrollTop = 0;
-        }catch(e){
-
-        }
+        }catch(e){}
     }
 })
 
