@@ -101,13 +101,32 @@
                         </template>
                     </el-table-column>
                 </el-table-column>
-                <el-table-column label="上线推送" align="center" width="100px">
+                <el-table-column label="操作" align="center" width="130px">
                     <template slot-scope="scope">
-                         <el-button :disabled="!formatDisabledStatus(scope.row)" size="small" type="primary" @click="pushToAudit(scope.row)">上线</el-button>
+                         <el-button class="audit-btn" :disabled="!formatDisabledStatus(scope.row)" size="mini" type="primary" @click="pushToAudit(scope.row)">上线推送</el-button>
+                         <el-button class="audit-btn" size="mini" type="primary" @click="showChangeAgentDialog(scope.row)">更换代理商</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </el-row>
+        <el-dialog title="更换代理商" :visible.sync="changeAgentDialog" size="tiny" @close="closeChangeAgentDialog" class="dialog">
+            <el-form label-width="120px">
+                <el-form-item label="选择代理商">
+                    <el-select v-model="agentId" placeholder="请选择代理商" filterable>
+                        <el-option
+                                v-for="(item,index) in agentLists"
+                                :key="index"
+                                :label="item.agentName"
+                                :value="item.agentId">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="closeChangeAgentDialog">取 消</el-button>
+                <el-button type="primary" @click="changeAgentFn">确 定</el-button>
+            </div>
+        </el-dialog>
         <el-row>
             <!-- 分页 -->
             <el-col class="pagination">
@@ -115,7 +134,6 @@
                 </el-pagination>
             </el-col>
         </el-row>
-
     </el-row>
 </template>
 <script>
@@ -125,7 +143,9 @@ import {
 	getAreaList,
     getShopAuditList,
     commitToDelivery,
-    auditPush
+    auditPush,
+    getAgentLists,
+    changeAgent
 } from '@/api/api'
 export default {
     data: function() {
@@ -143,11 +163,15 @@ export default {
 	            pageId: 1,
 	            pageSize: 20
         	},
+            shopId: 0,
+            agentId: null,
             counts: 0,
             shopAuditLists: null,
             provinceList: [],
 			cityList: [],
 			areaList: [],
+            agentLists: [],
+            changeAgentDialog: false,
             InfoArr: [{
                 value: '',
                 label: '全部'
@@ -391,6 +415,41 @@ export default {
                     message: '已取消操作'
                 });
             });
+        },
+        //更换代理商
+        showChangeAgentDialog: function(row){
+            getAgentLists({params: {pageSize: 9999999}}).then(res => {
+                this.agentLists = res.list;
+                this.shopId = row.shopId;
+                this.agentId = row.agentId;
+                this.changeAgentDialog = true;
+            })
+        },
+        closeChangeAgentDialog: function(){
+            this.shopId = 0;
+            this.agentId = null;
+            this.changeAgentDialog = false;
+        },
+        changeAgentFn: function(){
+            if(!this.agentId){
+                this.$message({
+                    type: 'error',
+                    message: '请选择代理商'
+                });
+                return;
+            }
+            var params = {
+                agentId: this.agentId,
+                shopId: this.shopId
+            }
+            changeAgent(params).then(res => {
+                this.getAuditLists();
+                this.$message({
+                    type: 'success',
+                    message: '操作成功!'
+                });
+                this.closeChangeAgentDialog()
+            })
         }
     }
 }
