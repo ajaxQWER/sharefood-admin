@@ -10,8 +10,8 @@
                 <el-form-item label="搜索审核人">
                     <el-input placeholder="请输入审核人" icon="search" v-model="operatorNameLike" :on-icon-click="getAuditLogs"></el-input>
                 </el-form-item>
-                <el-form-item label="搜索店铺ID">
-                    <el-input placeholder="请输入店铺ID" icon="search" v-model="shopId" :on-icon-click="getAuditLogs"></el-input>
+                <el-form-item label="搜索店铺名称">
+                    <el-input placeholder="请输入店铺ID" icon="search" v-model="shopNameLike" :on-icon-click="getAuditLogs"></el-input>
                 </el-form-item>
                 <el-form-item label="审核起始时间">
                     <el-date-picker
@@ -43,6 +43,9 @@
                         </el-option>
                       </el-select>
                 </el-form-item>
+                <el-form-item>
+                    <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
+                </el-form-item>
             </el-form>
         </el-row>
         <el-row>
@@ -55,6 +58,7 @@
                         <template slot-scope="scope">{{formatOperatorType(scope.row.operatorType)}}</template>
                     </el-table-column>
                     <el-table-column label="店铺Id" align="center" prop="shopId" width="100px"></el-table-column>
+                    <el-table-column label="店铺名称" align="center" prop="shopName" width="100px"></el-table-column>
                     <el-table-column label="审核类型" align="center">
                         <template slot-scope="scope">{{formatAudit(scope.row.auditType)}}</template>
                     </el-table-column>
@@ -88,7 +92,7 @@ export default {
     data: function() {
         return {
             operatorNameLike: '',
-            shopId: '',
+            shopNameLike: '',
             auditType: '',
             pageId: 1,
             pageSize: 20,
@@ -142,7 +146,7 @@ export default {
     methods: {
         //获取视频分类列表
         getAuditLogs: function() {
-            getAuditLogList({ params: { pageId: this.pageId, pageSize: this.pageSize, operatorNameLike: this.operatorNameLike, beginTime: this.beginTime, endTime: this.endTime, auditType: this.auditType, shopId: this.shopId, passed: this.passed } }).then(data => {
+            getAuditLogList({ params: { pageId: this.pageId, pageSize: this.pageSize, operatorNameLike: this.operatorNameLike, beginTime: this.beginTime, endTime: this.endTime, auditType: this.auditType, shopNameLike: this.shopNameLike, passed: this.passed } }).then(data => {
                 console.log(data)
                 this.counts = data.count;
                 this.auditLists = data.list;
@@ -193,6 +197,13 @@ export default {
             this.beginTime = dateRange[0];
             this.endTime = dateRange[1];
             this.getAuditLogs();
+        },
+        resetSearch: function(){
+            this.operatorNameLike = '';
+            this.auditType = '';
+            this.shopNameLike = '';
+            this.passed = '';
+            this.dateRange = '';
         }
     }
 }
