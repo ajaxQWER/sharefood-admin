@@ -454,6 +454,10 @@ export const updateDeliveryAppraiseTagById = params => {
 export const getAuditLogList = params => {
     return ajax.get('admin/auditLogging', params);
 };
+//审核记录详情
+export const getAuditLogDetail = id => {
+    return ajax.get('admin/auditLogging/' + id);
+};
 
 //取消订单
 export const cancelOrderBySystem = params => {

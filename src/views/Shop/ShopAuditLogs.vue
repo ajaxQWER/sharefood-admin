@@ -11,7 +11,7 @@
                     <el-input placeholder="请输入审核人" icon="search" v-model="operatorNameLike" :on-icon-click="getAuditLogs"></el-input>
                 </el-form-item>
                 <el-form-item label="搜索店铺名称">
-                    <el-input placeholder="请输入店铺ID" icon="search" v-model="shopNameLike" :on-icon-click="getAuditLogs"></el-input>
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="shopNameLike" :on-icon-click="getAuditLogs"></el-input>
                 </el-form-item>
                 <el-form-item label="审核起始时间">
                     <el-date-picker

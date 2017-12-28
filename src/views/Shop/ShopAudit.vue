@@ -75,29 +75,29 @@
                 </el-table-column>
                 <el-table-column prop="agent.agentName" label="代理商" align="center" width="140px"></el-table-column>
                 <el-table-column label="审核状态" align="center">
-                    <el-table-column label="基本资料" align="center" width="100px">
+                    <el-table-column label="基本资料" align="center" width="120px">
                         <template slot-scope="scope">
-                            {{formatAuditStatus(scope.row.shopAuditInformation.base)}}
-                            <el-button class="audit-btn" size="small"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
+                            {{formatAuditStatus(scope.row.shopAuditInformation.base)}} <span v-if="scope.row.shopAuditInformation.base == 'UNADOPT' && scope.row.shopAuditInformation.baseId" class="reason" @click="showUnadoptReason(scope.row.shopAuditInformation.baseId)">原因</span>
+                            <el-button class="audit-btn" size="mini"type="primary" @click="getAuditbyId('base', scope.row)">审核</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="配送信息" align="center" width="120px">
+                    <el-table-column label="配送信息" align="center" width="140px">
                         <template slot-scope="scope">
-                            {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}}
-                            <el-button class="audit-btn" size="small" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
-                            <el-button class="audit-btn" size="small" type="success" @click="commitToDeliveryBtn(scope.row)">提交蜂鸟</el-button>
+                            {{formatAuditStatus(scope.row.shopAuditInformation.delivery)}} <span v-if="scope.row.shopAuditInformation.delivery == 'UNADOPT' && scope.row.shopAuditInformation.deliveryId" class="reason" @click="showUnadoptReason(scope.row.shopAuditInformation.deliveryId)">原因</span><br>
+                            <el-button class="audit-btn" size="mini" type="primary" disabled @click="getAuditbyId('distribution', scope.row)">审核</el-button>
+                            <el-button class="audit-btn" size="mini" type="primary" @click="commitToDeliveryBtn(scope.row)">提交配送审核</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="资质信息" align="center" width="100px">
+                    <el-table-column label="资质信息" align="center" width="120px">
                         <template slot-scope="scope">
-                            {{formatAuditStatus(scope.row.shopAuditInformation.qualification)}}
-                            <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
+                            {{formatAuditStatus(scope.row.shopAuditInformation.qualification)}} <span v-if="scope.row.shopAuditInformation.qualification == 'UNADOPT' && scope.row.shopAuditInformation.qualificationId" class="reason" @click="showUnadoptReason(scope.row.shopAuditInformation.qualificationId)">原因</span>
+                            <el-button class="audit-btn" size="mini" type="primary" @click="getAuditbyId('qualification', scope.row)">审核</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="结算信息" align="center" width="100px">
+                    <el-table-column label="结算信息" align="center" width="120px">
                         <template slot-scope="scope">
-                            {{formatAuditStatus(scope.row.shopAuditInformation.settlement)}}
-                            <el-button class="audit-btn" size="small" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
+                            {{formatAuditStatus(scope.row.shopAuditInformation.settlement)}} <span v-if="scope.row.shopAuditInformation.settlement == 'UNADOPT' && scope.row.shopAuditInformation.settlementId" class="reason" @click="showUnadoptReason(scope.row.shopAuditInformation.settlementId)">原因</span>
+                            <el-button class="audit-btn" size="mini" type="primary" @click="getAuditbyId('settlement', scope.row)">审核</el-button>
                         </template>
                     </el-table-column>
                 </el-table-column>
@@ -109,15 +109,22 @@
                 </el-table-column>
             </el-table>
         </el-row>
+        <el-row>
+            <!-- 分页 -->
+            <el-col class="pagination">
+                <el-pagination @current-change="currentChange" :current-page="params.pageId" :page-size="params.pageSize" layout="total, prev, pager, next" :total="counts">
+                </el-pagination>
+            </el-col>
+        </el-row>
         <el-dialog title="更换代理商" :visible.sync="changeAgentDialog" size="tiny" @close="closeChangeAgentDialog" class="dialog">
             <el-form label-width="120px">
                 <el-form-item label="选择代理商">
                     <el-select v-model="agentId" placeholder="请选择代理商" filterable>
                         <el-option
-                                v-for="(item,index) in agentLists"
-                                :key="index"
-                                :label="item.agentName"
-                                :value="item.agentId">
+                            v-for="(item,index) in agentLists"
+                            :key="index"
+                            :label="item.agentName"
+                            :value="item.agentId">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -127,13 +134,28 @@
                 <el-button type="primary" @click="changeAgentFn">确 定</el-button>
             </div>
         </el-dialog>
-        <el-row>
-            <!-- 分页 -->
-            <el-col class="pagination">
-                <el-pagination @current-change="currentChange" :current-page="params.pageId" :page-size="params.pageSize" layout="total, prev, pager, next" :total="counts">
-                </el-pagination>
-            </el-col>
-        </el-row>
+        <el-dialog title="审核不通过原因" :visible.sync="auditDetail" size="tiny" @close="closeAuditDetail" class="dialog">
+            <el-form label-width="120px" v-if="unadoptReason" class="reason-form">
+                <el-form-item label="店铺名称:">
+                    <span class="unadopt-text">{{unadoptReason.shopName}}</span>
+                </el-form-item>
+                <el-form-item label="审核类型:">
+                    <span class="unadopt-text">{{formatAuditType(unadoptReason.auditType)}}</span>
+                </el-form-item>
+                <el-form-item label="审核人:">
+                    <span class="unadopt-text">{{unadoptReason.operatorName}}({{formatAduitorType(unadoptReason.operatorType)}})</span>
+                </el-form-item>
+                <el-form-item label="审核时间:">
+                    <span class="unadopt-text">{{moment(unadoptReason.auditTime).format('YYYY-MM-DD HH:mm:ss')}}</span>
+                </el-form-item>
+                <el-form-item label="原因:">
+                    <span class="unadopt-text">{{unadoptReason.unauditReason?unadoptReason.unauditReason:'未填写'}}</span>
+                </el-form-item>
+                <el-form-item label="备注:">
+                    <span class="unadopt-text">{{unadoptReason.auditRemark?unadoptReason.auditRemark:'无'}}</span>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </el-row>
 </template>
 <script>
@@ -145,7 +167,8 @@ import {
     commitToDelivery,
     auditPush,
     getAgentLists,
-    changeAgent
+    changeAgent,
+    getAuditLogDetail
 } from '@/api/api'
 export default {
     data: function() {
@@ -190,7 +213,9 @@ export default {
             },{
                 value: 'UNADOPT',
                 label: '不通过'
-            }]
+            }],
+            unadoptReason: null,
+            auditDetail: false
         }
     },
     created: function() {
@@ -450,6 +475,45 @@ export default {
                 });
                 this.closeChangeAgentDialog()
             })
+        },
+        showUnadoptReason: function(id){
+            getAuditLogDetail(id).then(res => {
+                console.log(res)
+                this.unadoptReason = res;
+                this.auditDetail = true;
+            })
+        },
+        closeAuditDetail: function(){
+            this.unadoptReason = null;
+            this.auditDetail = false;
+        },
+        formatAduitorType: function(type){
+            switch(type){
+                case 'AGENT':
+                    return '代理商';
+                case 'ADMIN':
+                    return '管理员';
+                case 'SYSTEM':
+                    return '系统';
+            }
+        },
+        formatAuditType: function(type){
+            switch(type){
+                case 'BASE':
+                    return '基本资料';
+                case 'QUALIFICATION':
+                    return '资质信息';
+                case 'SETTLEMENT':
+                    return '结算信息';
+                case 'DISTRIBUTION':
+                    return '配送信息';
+                case 'BASE_CHANGE':
+                    return '基本资料修改';
+                case 'QUALIFICATION_CHANGE':
+                    return '资质信息修改';
+                case 'SETTLEMENT_CHANGE':
+                    return '结算信息修改';
+            }
         }
     }
 }
@@ -474,6 +538,20 @@ export default {
     }
     .audit-btn{
         margin: 5px;
+    }
+    .reason{
+        color: #ff0000;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .reason-form .el-form-item .el-form-item__label{
+        font-weight: bold;
+    }
+    .reason-form .el-form-item{
+        margin-bottom: 0;
+    }
+    .unadopt-text{
+        color: #000;
     }
 }
 </style>
