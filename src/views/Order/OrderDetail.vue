@@ -48,7 +48,13 @@
                         配送时间：{{moment(orderLists.orderTakeout.deliveryTime).format('YYYY-MM-DD HH:mm:ss')}}<br>
                         配送方式：{{formatDeliveryType(orderLists.orderTakeout.distributionType)}}<br>
                         餐盒费：{{formatMoney(orderLists.orderTakeout.mealFee)}}元<br>
-                        配送费：{{formatMoney(orderLists.orderTakeout.shippingFee)}}元</p>
+                        配送费：{{formatMoney(orderLists.orderTakeout.shippingFee)}}元<br>
+                        原运费：{{formatMoney(orderLists.orderTakeout.originalFreight)}}元<br>
+                        基本运费：{{formatMoney(orderLists.orderTakeout.baseFreight)}}元<br>
+                        距离加价：{{formatMoney(orderLists.orderTakeout.distancePremium)}}元<br>
+                        运费折扣比例：{{orderLists.orderTakeout.freightDiscount*100}}%<br>
+                        时间加价：{{formatMoney(orderLists.orderTakeout.timePremium)}}元
+                    </p>
                     </div>
                 </li>
                 <li v-if="orderLists.orderContact">
@@ -61,7 +67,7 @@
                         详细地址：{{orderLists.orderContact.detailAddress?orderLists.orderContact.detailAddress:'-'}}<br>
                         经度：{{orderLists.orderContact.longitude?orderLists.orderContact.longitude:'-'}}<br>
                         纬度：{{orderLists.orderContact.latitude?orderLists.orderContact.latitude:'-'}}<br>
-                        门牌号：{{orderLists.orderContact.houseNumber?orderLists.orderContact.houseNumber:'-'}}<br>
+                        门牌号：{{orderLists.orderContact.houseNumber?orderLists.orderContact.houseNumber:'-'}}
                     </p>
                     </div>
                 </li>
@@ -256,6 +262,8 @@ export default {
                     return '商家自送';
                 case 'ANUBIS':
                     return '蜂鸟';
+                case 'ARES':
+                    return '共享点餐平台配送';
                 default:
                     return '-'
             }
