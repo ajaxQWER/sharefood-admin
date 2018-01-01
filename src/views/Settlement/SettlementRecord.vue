@@ -38,7 +38,7 @@
                         <el-option
                             v-for="(item,index) in shopLists"
                             :key="index"
-                            :label="item.shopName"
+                            :label="item.detail.shopName"
                             :value="item.shopId">
                         </el-option>
                     </el-select>
@@ -159,10 +159,10 @@ export default {
     },
     created: function() {
         this.pageId = parseInt(this.$route.query.page) || 1;
-        this.getSettlementRecordLists();
         shopList({params: {pageSize: 99999}}).then(res => {
             console.log(res)
             this.shopLists = res.list;
+            this.getSettlementRecordLists();
         })
     },
     methods: {

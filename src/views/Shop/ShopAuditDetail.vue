@@ -202,8 +202,8 @@ export default {
             findShopAuditById(type, shopId).then(res => {
                 console.log(res)
                 this.shopDetail = res;
-                this.mapCenter = [res.longitude, res.latitude]
-                this.markers = [{position: [res.longitude, res.latitude],title: res.shopName}]
+                this.mapCenter = [res.detail.longitude, res.detail.latitude]
+                this.markers = [{position: [res.detail.longitude, res.detail.latitude], title: res.shopName}]
                 if(type == 'settlement'){
                     this.getProvinceName()
                     this.geCityName()
