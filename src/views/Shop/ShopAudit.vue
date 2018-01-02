@@ -219,6 +219,7 @@ export default {
         }
     },
     created: function() {
+        this.getAuditLists();
 		getProvinceList().then(data => {
             var list = [];
             list.push({
@@ -228,7 +229,7 @@ export default {
 
             this.provinceList = [].concat(list, data);
 		})
-        this.params.pageId = parseInt(this.$route.query.page) || 1;
+        this.params.pageId = parseInt(this.$route.query.pageId) || 1;
         var shopNameLike = this.$route.query.shopNameLike || '';
         var phoneNum = this.$route.query.phoneNum || '';
         var base = this.$route.query.base || '';
@@ -257,7 +258,6 @@ export default {
                 this.areaList = data;
             })
         }
-        this.getAuditLists();
     },
     watch: {
         'params.provinceId': function(newVal, oldVal){

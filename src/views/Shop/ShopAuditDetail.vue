@@ -173,7 +173,6 @@ export default {
         var shopId = parseInt(this.$route.query.shopId);
         this.shopId = shopId;
         var type = this.$route.query.type;
-        this.getSettlementList()
         if (!shopId) {
             this.$message({
                 type: 'error',
@@ -202,17 +201,15 @@ export default {
             findShopAuditById(type, shopId).then(res => {
                 console.log(res)
                 this.shopDetail = res;
-                this.mapCenter = [res.detail.longitude, res.detail.latitude]
-                this.markers = [{position: [res.detail.longitude, res.detail.latitude], title: res.shopName}]
+                if(type == 'base'){
+                    this.mapCenter = [res.detail.longitude, res.detail.latitude]
+                    this.markers = [{position: [res.detail.longitude, res.detail.latitude], title: res.shopName}]
+                }
                 if(type == 'settlement'){
+                    this.getSettlementList()
                     this.getProvinceName()
                     this.geCityName()
                 }
-            }).catch(err => {
-                console.log(err)
-                setTimeout(() => {
-                    this.$router.back()
-                }, 2500)
             })
         },
         getSettlementList: function(){
@@ -304,9 +301,8 @@ export default {
         getProvinceName: function(){
             try{
                 getProvinceById(this.shopDetail.provinceId).then(res=>{
+                    console.log(res)
                     this.provinceName = res.provinceName;
-                }).catch(err=>{
-                    console.log(err)
                 })
             } catch(e) {
                 console.log(e)
@@ -315,16 +311,14 @@ export default {
         geCityName: function(){
             try{
                 getCityById(this.shopDetail.cityId).then(res=>{
+                    console.log(res)
                     this.cityName = res.cityName;
-                }).catch(err=>{
-                    console.log(err)
                 })
             } catch(e) {
                 console.log(e)
             }
         },
         pass: function(){
-            console.log(this.auditType == 'settlement', this.settlementTemplateId == '')
             if(this.auditType == 'settlement' && this.settlementTemplateId == ''){
                 this.$message({
                     type: 'error',
