@@ -13,24 +13,24 @@
         <el-row v-if="auditType=='base'" class="shop-detail">
             <h3>店铺基本信息</h3>
             <ul v-if="shopDetail">
-                <li>店铺ID：{{shopDetail.shopId}}</li>
-                <li>店铺名称：{{shopDetail.shopName}}</li>
-                <li>店铺类型：{{formatShopType(shopDetail.shopType)}}</li>
-                <li>审核状态：{{formatAuditStaus(shopDetail.audit)}}</li>
-                <li>店铺地址：{{shopDetail.provinceName}}-{{shopDetail.cityName}}-{{shopDetail.areaName}} {{shopDetail.address}}</li>
-                <li>店铺经度：{{shopDetail.longitude}}</li>
-                <li>店铺纬度：{{shopDetail.latitude}}</li>
-                <li>营业时间：{{shopDetail.busBeginTime}}-{{shopDetail.busEndTime}}</li>
-                <li>配送费：{{shopDetail.fee}}</li>
-                <li>送餐电话：{{shopDetail.takeOutPhone}}</li>
-                <li>店铺上架状态：{{shopDetail.shelves?'上架':'下架'}}</li>
-                <li>店铺注册手机号：{{shopDetail.phoneNum}}</li>
-                <li>店铺联系人：{{shopDetail.name}}</li>
-                <li>店铺分类：{{shopDetail.shopCategoryName}}</li>
-                <li>店铺logo：<img :src="formatImage(shopDetail.logoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.logoUrl)"></li>
-                <li>店内照：<img :src="formatImage(shopDetail.shopInnerUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.shopInnerUrl)"></li>
-                <li>店铺门脸照：<img :src="formatImage(shopDetail.shopFaceUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.shopFaceUrl)"></li>
-                <li>店铺位置图：<div class="amap-container" v-if="shopDetail">
+                <li>店铺ID：{{shopDetail.detail.shopId}}</li>
+                <li>店铺名称：{{shopDetail.detail.shopName}}</li>
+                <li>店铺类型：{{formatShopType(shopDetail.detail.shopType)}}</li>
+                <li>审核状态：{{formatAuditStaus(shopDetail.detail.audit)}}</li>
+                <li>店铺地址：{{shopDetail.detail.provinceName}}-{{shopDetail.detail.cityName}}-{{shopDetail.detail.areaName}} {{shopDetail.detail.address}}</li>
+                <li>店铺经度：{{shopDetail.detail.longitude}}</li>
+                <li>店铺纬度：{{shopDetail.detail.latitude}}</li>
+                <li>营业时间：{{shopDetail.detail.busBeginTime}}-{{shopDetail.detail.busEndTime}}</li>
+                <li>配送费：{{shopDetail.detail.fee}}元</li>
+                <li>送餐电话：{{shopDetail.detail.takeOutPhone}}</li>
+                <li>店铺上架状态：{{shopDetail.detail.shelves?'上架':'下架'}}</li>
+                <li>店铺注册手机号：{{shopDetail.detail.phoneNum}}</li>
+                <li>店铺联系人：{{shopDetail.detail.name}}</li>
+                <li>店铺分类：{{shopDetail.detail.shopCategoryName}}</li>
+                <li>店铺logo：<img :src="formatImage(shopDetail.detail.logoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.logoUrl)"></li>
+                <li>店内照：<img :src="formatImage(shopDetail.detail.shopInnerUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopInnerUrl)"></li>
+                <li>店铺门脸照：<img :src="formatImage(shopDetail.detail.shopFaceUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.detail.shopFaceUrl)"></li>
+                <li>店铺位置图：<div class="amap-container" v-if="shopDetail.detail">
                         <el-amap ref="amap" vid="amapDemo" class="amap" :zoom="zoom" :center="mapCenter">
                             <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker.position" :title="marker.title"></el-amap-marker>
                         </el-amap>
@@ -299,23 +299,27 @@ export default {
             }
         },
         getProvinceName: function(){
-            try{
-                getProvinceById(this.shopDetail.provinceId).then(res=>{
-                    console.log(res)
-                    this.provinceName = res.provinceName;
-                })
-            } catch(e) {
-                console.log(e)
+            if(this.shopDetail.provinceId){
+                try{
+                    getProvinceById(this.shopDetail.provinceId).then(res=>{
+                        console.log(res)
+                        this.provinceName = res.provinceName;
+                    })
+                } catch(e) {
+                    console.log(e)
+                }
             }
         },
         geCityName: function(){
-            try{
-                getCityById(this.shopDetail.cityId).then(res=>{
-                    console.log(res)
-                    this.cityName = res.cityName;
-                })
-            } catch(e) {
-                console.log(e)
+            if(this.shopDetail.cityId){
+                try{
+                    getCityById(this.shopDetail.cityId).then(res=>{
+                        console.log(res)
+                        this.cityName = res.cityName;
+                    })
+                } catch(e) {
+                    console.log(e)
+                }
             }
         },
         pass: function(){
