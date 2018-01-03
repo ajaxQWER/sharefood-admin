@@ -72,9 +72,8 @@
                     <el-table-column label="订单名称" align="center">
                         <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="收货人" align="center" width="220px">
-                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'-'}}-{{scope.row.orderContact.contactPhone}}
-                            <br>{{scope.row.orderContact.simpleAddress?scope.row.orderContact.simpleAddress:scope.row.orderContact.address}}</template>
+                    <el-table-column label="收货人" align="center" width="200px">
+                        <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'未填写'}}-{{scope.row.orderContact.contactPhone}}<br>{{scope.row.orderContact.simpleAddress?scope.row.orderContact.simpleAddress:scope.row.orderContact.address}}</template>
                     </el-table-column>
                     <!-- <el-table-column label="联系人手机号" width="140px" align="center">
                         <template slot-scope="scope">{{scope.row.orderContact.contactPhone?scope.row.orderContact.contactPhone:'-'}}</template>
@@ -85,16 +84,16 @@
                     <el-table-column label="订单价格" align="center">
                         <template slot-scope="scope">{{scope.row.orderPrice?formatMoney(scope.row.orderPrice)+'元':'0.00元'}}</template>
                     </el-table-column>
-                    <el-table-column label="支付方式" align="center">
+                    <el-table-column label="支付方式" align="center" width="100px">
                         <template slot-scope="scope">{{formatPayment(scope.row.payment)}}</template>
                     </el-table-column>
-                    <el-table-column label="支付完成" align="center">
+                    <el-table-column label="支付状态" align="center" width="100px">
                         <template slot-scope="scope">{{scope.row.isFinishPay?'已支付':'未支付'}}</template>
                     </el-table-column>
                     <el-table-column label="订单状态" align="center">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.orderStatus=='CANCELLATION'" style="color:red;">{{formatOrderStatus(scope.row.orderStatus)}}</span>
-                            <span v-else>{{formatOrderStatus(scope.row.orderStatus)}}</span>
+                            <span :class="scope.row.orderStatus=='CANCELLATION'?'color-red':''">{{formatOrderStatus(scope.row.orderStatus)}}</span>
+                            <span v-if="scope.row.orderStatus=='CANCELLATION'"><br>{{moment(scope.row.cancelTime).format('YYYY-MM-DD HH:mm:ss')}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="拒单原因" align="center">
@@ -106,11 +105,11 @@
                     <el-table-column label="店铺名称" align="center">
                         <template slot-scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="操作" width="200px" align="center">
+                    <el-table-column label="操作" width="170px" align="center">
                         <template slot-scope="scope">
-                            <el-button size="small" type="primary" @click="showOrderInfo(scope.$index, scope.row)">详情</el-button>
-                            <el-button size="small" type="success" @click="printerOrder(scope.$index, scope.row)">补打</el-button>
-                            <el-button size="small" type="danger" @click="cancelOrder(scope.$index, scope.row)">取消</el-button>
+                            <el-button size="mini" type="primary" @click="showOrderInfo(scope.$index, scope.row)">详情</el-button>
+                            <el-button size="mini" type="success" @click="printerOrder(scope.$index, scope.row)">补打</el-button>
+                            <el-button size="mini" type="danger" @click="cancelOrder(scope.$index, scope.row)">取消</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -456,6 +455,9 @@ export default {
             color: #23b7e5;
             border-bottom: 1px solid #23b7e5;
         }
+    },
+    .color-red{
+        color: #ff0000;
     }
 }
 </style>
