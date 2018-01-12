@@ -35,6 +35,9 @@
                         <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
                     </el-select>
                 </el-form-item>
+                <el-form-item label="搜索代理商">
+                    <el-input placeholder="请输入代理商" v-model="params.agentNameLike" />
+                </el-form-item>
                 <el-form-item label="">
                     <el-button type="primary" @click="searchShop">搜索</el-button>
                     <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
@@ -43,9 +46,9 @@
         </el-row>
         <el-row>
             <el-col>
-                <el-table :data="shopList" border :row-class-name="tableRowClassName" :row-style="{fontSize:'12px'}">
+                <el-table :data="shopList" border :row-class-name="tableRowClassName" :row-style="{fontSize:'12px'}" max-height="600">
                     <el-table-column label="id" width="80px" align="center" prop="shopId" />
-                    <el-table-column label="名称" align="center" width="160px">
+                    <el-table-column label="名称" align="center">
                         <template slot-scope="scope">{{scope.row.detail.shopName ? scope.row.detail.shopName : '-'}}</template>
                     </el-table-column>
                     <el-table-column label="负责人" width="140px" align="center">
@@ -53,11 +56,11 @@
                             {{scope.row.detail.name}}
                             <br> ({{scope.row.detail.phoneNum}})
                         </template>
-                    </el-table-column>
+                    </el-table-column> 
                     
                     <el-table-column prop="agent.agentName" label="代理商" align="center" width="200px" /> 
                    
-                    <el-table-column label="地址" align="center">
+                    <el-table-column label="地址" align="center" width="300px">
                         <template slot-scope="scope">
                             {{scope.row.detail.provinceName}} {{scope.row.detail.cityName}} {{scope.row.detail.areaName}}
                             <br> {{scope.row.detail.address ? scope.row.detail.address : '-'}}
@@ -75,7 +78,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="detail.topper" label="置顶值" width="80px" align="center"></el-table-column>
-                    <el-table-column label="操作" width="260px" align="center">
+                    <el-table-column label="操作" width="260px" align="center" fixed="right">
                         <template slot-scope="scope">
                             <el-button size="mini" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
                             <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row.detail)" v-if="!scope.row.detail.shelves">上架</el-button>
@@ -162,6 +165,7 @@ export default {
                 areaId: null,
                 pageId: 1,
                 pageSize: 20,
+                agentNameLike: null
             },
             shopAuditLists: null,
             provinceList: [],
@@ -205,6 +209,7 @@ export default {
         var shopNameLike = this.$route.query.shopNameLike || '';
         var shelves = this.$route.query.shelves || '';
         var operatingState = this.$route.query.operatingState || '';
+        var agentNameLike = this.$route.query.agentNameLike || '';
         var provinceId = parseInt(this.$route.query.provinceId) || '';
         var cityId = parseInt(this.$route.query.cityId) || '';
         var areaId = parseInt(this.$route.query.areaId) || '';
@@ -214,6 +219,7 @@ export default {
         this.params.provinceId = provinceId;
         this.params.cityId = cityId;
         this.params.areaId = areaId;
+        this.params.agentNameLike = agentNameLike;
         getProvinceList().then(data => {
             var list = [];
             list.push({
@@ -352,7 +358,7 @@ export default {
         },
         //分页
         currentChange: function(val) {
-            this.$router.push('?pageId=' + val)
+            // this.$router.push('?pageId=' + val)
             this.params.pageId = val;
             this.getShopLists()
         },

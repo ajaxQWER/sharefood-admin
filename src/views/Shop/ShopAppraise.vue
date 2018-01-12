@@ -1,15 +1,18 @@
 <template>
     <el-row class="lives-news">
-        <el-row>
-            <el-col class="title">
-                <h3>店铺评价</h3>
-            </el-col>
+        <el-row class="title">
+            <h3>店铺评价</h3>
         </el-row>
-       <!--  <el-row class="search-row">
-            <el-col :span="4">
-                <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById">
-                </el-input>
-            </el-col>
+        <!-- <el-row>
+            <el-form class="inline-form" :inline="true">
+                <el-form-item label="搜索店铺">
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById"></el-input>
+                </el-form-item>
+            </el-form>
+                <el-form-item label="搜索店铺">
+                    <el-input placeholder="请输入店铺名称" icon="search" v-model="searchContent" :on-icon-click="searchCouponById"></el-input>
+                </el-form-item>
+            </el-form>
         </el-row> -->
         <el-row>
             <el-table :data="shopAppraise" :row-style="{fontSize:'12px'}" border>
