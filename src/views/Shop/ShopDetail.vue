@@ -75,6 +75,7 @@
                     <el-form-item label="手持证件正面照"><img :src="UPLOADURL + shopModel.document.handFullFacePhotoUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.document.handFullFacePhotoUrl)"></el-form-item>
                     <el-form-item label="正面照"><img :src="UPLOADURL + shopModel.document.fullFacePhotoUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.document.fullFacePhotoUrl)"></el-form-item>
                     <el-form-item label="反面照"><img :src="UPLOADURL + shopModel.document.reverseSideAsUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.document.reverseSideAsUrl)"></el-form-item>
+                    <el-form-item label="附件"><img :src="UPLOADURL + shopModel.document.attachmentUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.document.attachmentUrl)"></el-form-item>
                 </el-form>
             </el-row>
             <el-row v-if="shopModel.subject">
@@ -86,6 +87,7 @@
                     <el-form-item label="注册地址" class="label">{{shopModel.subject.regAddress}}</el-form-item>
                     <el-form-item label="资质编号" class="label">{{shopModel.subject.regNumber}}</el-form-item>
                     <el-form-item label="照片"><img :src="UPLOADURL + shopModel.subject.businessUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.subject.businessUrl)"></el-form-item>
+                    <el-form-item label="附件"><img :src="UPLOADURL + shopModel.subject.attachmentUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.subject.attachmentUrl)"></el-form-item>
                 </el-form>
             </el-row>
             <el-row v-if="shopModel.industry">
@@ -97,6 +99,7 @@
                     <el-form-item label="注册地址" class="label">{{shopModel.industry.licenseAddress}}</el-form-item>
                     <el-form-item label="资质编号" class="label">{{shopModel.industry.licenseNumber}}</el-form-item>
                     <el-form-item label="照片"><img :src="UPLOADURL + shopModel.industry.foodUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.industry.foodUrl)"></el-form-item>
+                    <el-form-item label="附件"><img :src="UPLOADURL + shopModel.industry.attachmentUrl + '/goods.png'" alt="" @click="showBigImage(UPLOADURL + shopModel.industry.attachmentUrl)"></el-form-item>
                 </el-form>
             </el-row>
             <el-row v-if="shopModel.settlement">

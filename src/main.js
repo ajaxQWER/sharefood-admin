@@ -46,11 +46,7 @@ var toDecimal2 = function(num) {
     return floatString;
 }
 
-//正常
-// Object.defineProperty(Vue.prototype, 'UPLOADURL', {value: 'http://uploads.gongxiangdiancan.com'});
-// Object.defineProperty(Vue.prototype, 'BASEURL', {value: 'http://api.gongxiangdiancan.com'});
 
-//测试
 Object.defineProperty(Vue.prototype, 'UPLOADURL', {value: process.env.UPLOAD_URL});
 Object.defineProperty(Vue.prototype, 'BASEURL', {value: process.env.BASE_URL});
 Object.defineProperty(Vue.prototype, 'moment', {value: moment});
