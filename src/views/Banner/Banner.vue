@@ -303,7 +303,7 @@ export default {
                 shopId: row.shopId,
                 show: row.show,
                 sortOrder: row.sortOrder,
-                bannerAddresss: row.bannerAddresss
+                bannerAddresss: row.bannerAddresss || []
             }
         },
         //通过id删除banner
@@ -406,6 +406,7 @@ export default {
             this.cityTempArr.push(this.addressObject.cityId)
             this.areaTempArr.push(this.addressObject.areaId)
             //添加到数组
+            console.log()
             this.formInline.bannerAddresss.push({
                 provinceId: this.addressObject.provinceId,
                 cityId: this.addressObject.cityId,

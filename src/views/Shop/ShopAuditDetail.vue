@@ -51,6 +51,7 @@
                     <li>证件正面照：<img :src="formatImage(shopDetail.document.fullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.fullFacePhotoUrl)"></li>
                     <li>证件手持正面照：<img :src="formatImage(shopDetail.document.handFullFacePhotoUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.handFullFacePhotoUrl)"></li>
                     <li>证件反面照：<img :src="formatImage(shopDetail.document.reverseSideAsUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.reverseSideAsUrl)"></li>
+                    <li>附件：<img :src="formatImage(shopDetail.document.attachmentUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.document.attachmentUrl)"></li>
                 </ul>
                 <ul v-else>
                     <li>无</li>
@@ -66,6 +67,7 @@
                     <li>注册地址：{{shopDetail.subject.regAddress}}</li>
                     <li>注册号：{{shopDetail.subject.regNumber}}</li>
                     <li>单位名称：{{shopDetail.subject.unitName}}</li>
+                    <li>附件：<img :src="formatImage(shopDetail.subject.attachmentUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.subject.attachmentUrl)"></li>
                 </ul>
                 <ul v-else>
                     <li>无</li>
@@ -81,6 +83,7 @@
                     <li>许可证地址：{{shopDetail.industry.licenseAddress}}</li>
                     <li>许可证编号：{{shopDetail.industry.licenseNumber}}</li>
                     <li>证件单位名称：{{shopDetail.industry.unitName}}</li>
+                    <li>附件：<img :src="formatImage(shopDetail.industry.attachmentUrl)" alt="" @click="showBigImage(UPLOADURL + shopDetail.industry.attachmentUrl)"></li>
                 </ul>
                 <ul v-else>
                     <li>无</li>
@@ -159,7 +162,7 @@ export default {
             showImage: false,
             bigImageUrl: '',
             rotateDeg: 0,
-            zoom: 1,
+            picZoom: 1,
             auditType: '',
             rejectDialog: false,
             unauditReason: '',
@@ -391,7 +394,7 @@ export default {
             this.showImage = false;
             this.bigImageUrl = '';
             this.rotateDeg = 0;
-            this.zoom = 1;
+            this.picZoom = 1;
             var img = this.$refs.bigImg;
             img.style.transform = 'rotate(0) scale(1)';
         },
@@ -402,23 +405,23 @@ export default {
         rotate: function(){
             var img = this.$refs.bigImg;
             this.rotateDeg += 90;
-            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.picZoom+')';
         },
         zoomIn: function(){
             var img = this.$refs.bigImg;
-            if(this.zoom > 1.5){
+            if(this.picZoom > 1.5){
                 return;
             }
-            this.zoom += 0.1;
-            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
+            this.picZoom += 0.1;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.picZoom+')';
         },
         zoomOut: function(){
             var img = this.$refs.bigImg;
-            if(this.zoom < 0.5){
+            if(this.picZoom < 0.5){
                 return;
             }
-            this.zoom -= 0.1;
-            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.zoom+')';
+            this.picZoom -= 0.1;
+            img.style.transform = 'rotate('+this.rotateDeg+'deg) scale('+this.picZoom+')';
         }
     }
 }
