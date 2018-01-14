@@ -160,9 +160,6 @@
 </template>
 <script>
 import {
-	getProvinceList,
-	getCityList,
-	getAreaList,
     getShopAuditList,
     commitToDelivery,
     auditPush,
@@ -170,6 +167,7 @@ import {
     changeAgent,
     getAuditLogDetail
 } from '@/api/api'
+import Region from 'xygx-region'
 export default {
     data: function() {
         return {
@@ -220,7 +218,7 @@ export default {
     },
     created: function() {
         this.getAuditLists();
-		getProvinceList().then(data => {
+		Region.province.list().then(data => {
             var list = [];
             list.push({
                 provinceId: null,
@@ -249,12 +247,12 @@ export default {
         this.params.settlement = settlement;
         this.params.delivery = delivery;
         if(provinceId) {
-            getCityList(provinceId).then(data => {
+            Region.city.list(provinceId).then(data => {
                 this.cityList = data;
             })
         }
         if(cityId){
-            getAreaList(cityId).then(data => {
+            Region.area.list(cityId).then(data => {
                 this.areaList = data;
             })
         }
@@ -270,7 +268,7 @@ export default {
             }
 
             if (newVal){
-                getCityList(newVal).then(data => {
+                Region.city.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         cityId: null,
@@ -289,7 +287,7 @@ export default {
             }
 
             if (newVal){
-               getAreaList(newVal).then(data => {
+               Region.area.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         areaId: null,

@@ -120,11 +120,9 @@ import {
     deleteBannerById,
     updateBannerById,
     uploadFiles,
-    shopList,
-    getProvinceList,
-    getCityList,
-    getAreaList
+    shopList
 } from '@/api/api'
+import Region from 'xygx-region'
 export default {
     data: function() {
         return {
@@ -190,7 +188,7 @@ export default {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getBannerLists();
         this.getShopLists();
-        getProvinceList().then(data => {
+        Region.province.list().then(data => {
             this.provinceList = data;
         })
     },
@@ -205,7 +203,7 @@ export default {
             }
 
             if (newVal){
-                getCityList(newVal).then(data => {
+                Region.city.list(newVal).then(data => {
 
                     this.cityList = data;
                 })
@@ -219,7 +217,7 @@ export default {
             }
 
             if (newVal){
-               getAreaList(newVal).then(data => {
+               Region.area.list(newVal).then(data => {
                     this.areaList = data;
                 })
             }
