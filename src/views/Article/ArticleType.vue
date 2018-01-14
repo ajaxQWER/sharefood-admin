@@ -19,19 +19,19 @@
             <el-col>
                 <el-table :data="ArticleType">
                     <el-table-column label="分类ID" width="160px" align="center">
-                        <template scope="scope">{{scope.row.articleCategoryId?scope.row.articleCategoryId:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.articleCategoryId?scope.row.articleCategoryId:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="分类名称" align="center">
-                        <template scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.articleCategoryName?scope.row.articleCategoryName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="上级分类ID" align="center">
-                        <template scope="scope">{{scope.row.parentId}}</template>
+                        <template slot-scope="scope">{{scope.row.parentId}}</template>
                     </el-table-column>
                     <el-table-column label="排序值" align="center">
-                        <template scope="scope">{{scope.row.sortOrder}}</template>
+                        <template slot-scope="scope">{{scope.row.sortOrder}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" @click="updateArticleCategory(scope.$index, scope.row)">修改</el-button>
                             <el-button size="small" type="danger" @click="deleteArticleCategory(scope.$index, scope.row)">删除</el-button>
                         </template>

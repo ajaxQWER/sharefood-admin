@@ -69,38 +69,38 @@
             <el-col>
                 <el-table :data="shopList">
                     <el-table-column label="名称" width="240px" align="center">
-                        <template scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.shopName?scope.row.shopName:'-'}}</template>
                     </el-table-column>
                     <el-table-column prop="name" label="负责人" align="center"></el-table-column>
                     <el-table-column label="LOGO" align="center" width="140px">
-                        <template scope="scope"><img :src="UPLOADURL + scope.row.logoUrl + '/shopLogo.png'" alt="" class="logo-img"></template>
+                        <template slot-scope="scope"><img :src="UPLOADURL + scope.row.logoUrl + '/shopLogo.png'" alt="" class="logo-img"></template>
                     </el-table-column>
                     <el-table-column label="地址" width="280px" align="center">
-                        <template scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.address?scope.row.address:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="营业时间" width="180px" align="center">
-                        <template scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00:00'}}</template>
+                        <template slot-scope="scope">{{scope.row.busBeginTime?scope.row.busBeginTime:'00:00:00'}} - {{scope.row.busEndTime?scope.row.busEndTime:'00:00:00'}}</template>
                     </el-table-column>
                     <el-table-column label="注册账号" width="160px" align="center">
-                        <template scope="scope">{{scope.row.phoneNum?scope.row.phoneNum:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.phoneNum?scope.row.phoneNum:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="联系电话" width="160px" align="center">
-                        <template scope="scope">{{scope.row.takeOutPhone?scope.row.takeOutPhone:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.takeOutPhone?scope.row.takeOutPhone:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="营业状态" align="center">
-                        <template scope="scope">{{scope.row.operatingState?'营业中':'歇业中'}}</template>
+                        <template slot-scope="scope">{{scope.row.operatingState?'营业中':'歇业中'}}</template>
                     </el-table-column>
                     <el-table-column label="状态" align="center">
-                        <template scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
+                        <template slot-scope="scope">{{scope.row.shelves?'上架':'下架'}}</template>
                     </el-table-column>
                     <el-table-column label="配送状态" align="center">
-                        <template scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
+                        <template slot-scope="scope">{{formatAuditStatus(scope.row.deliveryAuditStatus)}}</template>
                     </el-table-column>
                     <el-table-column label="置顶值" align="center">
-                        <template scope="scope">{{scope.row.topper}}</template>
+                        <template slot-scope="scope">{{scope.row.topper}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" type="primary" @click="putAwayShop(scope.$index, scope.row)" v-if="!scope.row.shelves">上架</el-button>
                             <el-button size="small" type="danger" @click="soldOutShop(scope.$index, scope.row)" v-else>下架</el-button>
                             <el-button size="small" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>

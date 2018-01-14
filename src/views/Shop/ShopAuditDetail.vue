@@ -88,10 +88,9 @@ import {
     passShopAudit,
     findShopAuditById,
     rejectShopAudit,
-    getProvinceById,
-    getCityById,
     getSettlementTemplateLists
 } from '@/api/api'
+import Region from 'xygx-region';
 export default {
     data: function() {
         return {
@@ -219,7 +218,7 @@ export default {
         },
         getProvinceName: function(){
             try{
-                getProvinceById(this.shopDetail.settlement.provinceId).then(res=>{
+                Region.province.info(this.shopDetail.settlement.provinceId).then(res=>{
                     this.provinceName = res.provinceName;
                 }).catch(err=>{
                     console.log(err)
@@ -230,7 +229,7 @@ export default {
         },
         geCityName: function(){
             try{
-                getCityById(this.shopDetail.settlement.cityId).then(res=>{
+            	Region.city.info(this.shopDetail.settlement.cityId).then(res=>{
                     this.cityName = res.cityName;
                 }).catch(err=>{
                     console.log(err)

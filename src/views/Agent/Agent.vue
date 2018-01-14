@@ -21,13 +21,13 @@
                 <el-table-column prop="username" label="代理商账号" align="center" width="180px"></el-table-column>
                 <el-table-column prop="settlementTemplateId" label="结算模板id" align="center" width="160px"></el-table-column>
                 <el-table-column label="注册时间" align="center" width="200px">
-                    <template scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.registrationTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="上次登录时间" align="center" width="200px">
-                    <template scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="160px" align="center">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <el-button size="small" @click="updateAgent(scope.$index, scope.row)">修改</el-button>
                         <el-button size="small" type="danger" @click="deleteAgent(scope.$index, scope.row)">删除</el-button>
                     </template>

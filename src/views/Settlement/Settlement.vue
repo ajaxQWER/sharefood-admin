@@ -21,16 +21,16 @@
             <el-col>
                 <el-table :data="settlementData">
                     <el-table-column label="结算模板ID" width="160px" align="center">
-                        <template scope="scope">{{scope.row.settlementTemplateId?scope.row.settlementTemplateId:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.settlementTemplateId?scope.row.settlementTemplateId:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="结算模板名称" align="center">
-                        <template scope="scope">{{scope.row.settlementTemplateName?scope.row.settlementTemplateName:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.settlementTemplateName?scope.row.settlementTemplateName:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="结算百分比" align="center">
-                        <template scope="scope">{{scope.row.percentageOfSettle?scope.row.percentageOfSettle:'-'}}</template>
+                        <template slot-scope="scope">{{scope.row.percentageOfSettle?scope.row.percentageOfSettle:'-'}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" @click="updateSettlement(scope.$index, scope.row)">修改</el-button>
                             <el-button size="small" type="danger" @click="deleteSettlement(scope.$index, scope.row)">删除</el-button>
                         </template>

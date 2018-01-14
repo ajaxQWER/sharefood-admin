@@ -23,12 +23,12 @@
                     <el-table-column prop="shopCategoryName" label="分类名称" align="center"></el-table-column>
                     <el-table-column prop="sortOrder" label="排序值" align="center"></el-table-column>
                     <el-table-column label="图标" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <img :src="UPLOADURL + scope.row.icon" :alt="scope.row.shopCategoryName" class="icon-img">
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" width="160px" align="center">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button size="small" @click="updateShopCategory(scope.$index, scope.row)">修改</el-button>
                             <el-button size="small" type="danger" @click="deleteShopCategory(scope.$index, scope.row)">删除</el-button>
                         </template>

@@ -12,7 +12,7 @@
                 <el-table-column label="请求方法" align="center" prop="method"></el-table-column>
                 <el-table-column label="请求地址" align="center" prop="uri"></el-table-column>
                 <el-table-column label="操作时间" align="center">
-                    <template scope="scope">{{moment(scope.row.time).format('YYYY-MM-DD HH:mm:ss')}}</template>
+                    <template slot-scope="scope">{{moment(scope.row.time).format('YYYY-MM-DD HH:mm:ss')}}</template>
                 </el-table-column>
             </el-table>
         </el-col>

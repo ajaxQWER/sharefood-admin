@@ -187,14 +187,6 @@ export const rejectShopAudit = params => {
     return ajax.delete('admin/shopAudit/' + params.shopId + '/' + params.unauditReason);
 };
 
-//地区
-export const getProvinceById = provinceId => {
-    return ajax.get('commons/region/area/province/' + provinceId);
-};
-export const getCityById = cityId => {
-    return ajax.get('commons/region/area/city/' + cityId);
-};
-
 //文章管理
 //文章分类
 export const getArticleCategoryList = parms => {
