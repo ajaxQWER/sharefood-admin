@@ -71,13 +71,11 @@
 </template>
 <script>
 import {
-	getProvinceList,
-	getCityList,
-	getAreaList,
 	findAgentById,
 	getAgentRegion,
 	updateAgentRegion
 } from '@/api/api'
+import Region from 'xygx-region'
 export default {
 	data: function(){
 		return {
@@ -103,7 +101,7 @@ export default {
 		}
 	},
 	created: function(){
-		getProvinceList().then(data => {
+		Region.province.list().then(data => {
 			this.provinceList = data;
 		})
 		this.provinceChange(this.addInfo.provinceId)
@@ -121,19 +119,19 @@ export default {
 	methods: {
 		provinceChange: function(value) {
 			this.addInfo.provinceId = value;
-                getCityList(value).then(data => {
-                	console.log(data)
-                	if(data.length > 0){
-	                    this.addInfo.cityId = data[0].cityId;
-                	}else{
-                		this.addInfo.cityId = '';
-                	}
-                    this.cityList = data;
-                })
+			Region.city.list(value).then(data => {
+            	console.log(data)
+            	if(data.length > 0){
+                    this.addInfo.cityId = data[0].cityId;
+            	}else{
+            		this.addInfo.cityId = '';
+            	}
+                this.cityList = data;
+            })
 		},
 		cityChange: function(value) {
 			this.addInfo.cityId = value;
-				getAreaList(value).then(data => {
+				Region.area.list(value).then(data => {
 					if(data.length > 0){
 	                    this.addInfo.areaId = data[0].areaId;
 					}else{

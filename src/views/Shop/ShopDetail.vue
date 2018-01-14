@@ -124,7 +124,10 @@
     </el-row>
 </template>
 <script>
-import { findShopById,getProvinceById,getCityById } from '@/api/api'
+import { 
+	findShopById
+} from '@/api/api'
+import Region from 'xygx-region'
 export default {
     data: function() {
         return {
@@ -263,12 +266,12 @@ export default {
             }
         },
         getProvindeName: function(provinceId){
-            getProvinceById(provinceId).then(res => {
+            Region.province.info(provinceId).then(res => {
                 this.provinceName = res.provinceName;
             })
         },
         getCityName: function(cityId){
-            getCityById(cityId).then(res => {
+            Region.city.info(cityId).then(res => {
                 this.cityName = res.cityName;
             })
         },

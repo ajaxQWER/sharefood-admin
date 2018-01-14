@@ -135,9 +135,6 @@
 </template>
 <script>
 import {
-    getProvinceList,
-    getCityList,
-    getAreaList,
     shopList,
     putAway,
     soldOut,
@@ -147,6 +144,7 @@ import {
     getAgentLists,
     changeAgent
 } from '@/api/api'
+import Region from 'xygx-region'
 export default {
     data: function() {
         return {
@@ -216,7 +214,7 @@ export default {
         this.params.cityId = cityId;
         this.params.areaId = areaId;
         this.params.agentNameLike = agentNameLike;
-        getProvinceList().then(data => {
+        Region.province.list().then(data => {
             var list = [];
             list.push({
                 provinceId: null,
@@ -242,7 +240,7 @@ export default {
             }
 
             if (newVal) {
-                getCityList(newVal).then(data => {
+                Region.city.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         cityId: null,
@@ -261,7 +259,7 @@ export default {
             }
 
             if (newVal) {
-                getAreaList(newVal).then(data => {
+                Region.area.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         areaId: null,
