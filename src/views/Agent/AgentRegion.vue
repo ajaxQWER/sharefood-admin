@@ -71,13 +71,15 @@
 </template>
 <script>
 import {
-	getProvinceList,
-	getCityList,
-	getAreaList,
 	findAgentById,
 	getAgentRegion,
 	updateAgentRegion
 } from '@/api/api'
+import {
+	getProvinceList,
+	getCityList,
+	getAreaList
+} from '@/api/region'
 export default {
 	data: function(){
 		return {

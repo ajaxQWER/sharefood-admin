@@ -275,23 +275,6 @@ export const auditPush = shopId => {
     return ajax.post('admin/shopAudit/auditPush/' + shopId);
 };
 
-//地区
-export const getProvinceById = provinceId => {
-    return ajax.get('commons/region/info/province/' + provinceId);
-};
-export const getCityById = cityId => {
-    return ajax.get('commons/region/info/city/' + cityId);
-};
-export const getProvinceList = () => {
-    return ajax.get('commons/region/province');
-};
-export const getCityList = provinceId => {
-    return ajax.get('commons/region/city/' + provinceId);
-};
-export const getAreaList = cityId => {
-    return ajax.get('commons/region/area/' + cityId);
-};
-
 //文章管理
 //文章分类
 export const getArticleCategoryList = parms => {

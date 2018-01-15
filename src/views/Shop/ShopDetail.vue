@@ -124,7 +124,8 @@
     </el-row>
 </template>
 <script>
-import { findShopById,getProvinceById,getCityById } from '@/api/api'
+import { findShopById } from '@/api/api'
+import { getProvinceById,getCityById } from '@/api/region'
 export default {
     data: function() {
         return {

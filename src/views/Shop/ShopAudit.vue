@@ -160,9 +160,6 @@
 </template>
 <script>
 import {
-	getProvinceList,
-	getCityList,
-	getAreaList,
     getShopAuditList,
     commitToDelivery,
     auditPush,
@@ -170,6 +167,11 @@ import {
     changeAgent,
     getAuditLogDetail
 } from '@/api/api'
+import {
+	getProvinceList,
+	getCityList,
+	getAreaList
+} from '@/api/region'
 export default {
     data: function() {
         return {

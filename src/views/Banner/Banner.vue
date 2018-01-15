@@ -120,11 +120,13 @@ import {
     deleteBannerById,
     updateBannerById,
     uploadFiles,
-    shopList,
+    shopList
+} from '@/api/api'
+import {
     getProvinceList,
     getCityList,
     getAreaList
-} from '@/api/api'
+} from '@/api/region'
 export default {
     data: function() {
         return {

@@ -145,10 +145,12 @@ import {
     passShopAudit,
     findShopAuditById,
     rejectShopAudit,
-    getProvinceById,
-    getCityById,
     getShopSettlementTemplateLists
 } from '@/api/api'
+import {
+    getProvinceById,
+    getCityById
+} from '@/api/region'
 export default {
     data: function() {
         var that = this;

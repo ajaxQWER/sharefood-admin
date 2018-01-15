@@ -136,9 +136,6 @@
 </template>
 <script>
 import {
-    getProvinceList,
-    getCityList,
-    getAreaList,
     shopList,
     putAway,
     soldOut,
@@ -148,6 +145,11 @@ import {
     getAgentLists,
     changeAgent
 } from '@/api/api'
+import {
+    getProvinceList,
+    getCityList,
+    getAreaList
+} from '@/api/region'
 export default {
     data: function() {
         return {
