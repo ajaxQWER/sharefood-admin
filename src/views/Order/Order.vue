@@ -72,7 +72,7 @@
                     <el-table-column label="订单名称" align="center">
                         <template slot-scope="scope">{{scope.row.orderName?scope.row.orderName:'-'}}</template>
                     </el-table-column>
-                    <el-table-column label="收货人" align="center" width="200px">
+                    <el-table-column label="收货人" align="center" width="150px">
                         <template slot-scope="scope">{{scope.row.orderContact.contactName?scope.row.orderContact.contactName:'未填写'}}-{{scope.row.orderContact.contactPhone}}<br>{{scope.row.orderContact.simpleAddress?scope.row.orderContact.simpleAddress:scope.row.orderContact.address}}</template>
                     </el-table-column>
                     <!-- <el-table-column label="联系人手机号" width="140px" align="center">

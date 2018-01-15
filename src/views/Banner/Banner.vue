@@ -192,7 +192,7 @@ export default {
         this.pageId = parseInt(this.$route.query.page) || 1;
         this.getBannerLists();
         this.getShopLists();
-        Region.province.list().then(data => {
+        getProvinceList().then(data => {
             this.provinceList = data;
         })
     },
@@ -207,7 +207,7 @@ export default {
             }
 
             if (newVal){
-                Region.city.list(newVal).then(data => {
+                getCityList(newVal).then(data => {
 
                     this.cityList = data;
                 })
@@ -221,7 +221,7 @@ export default {
             }
 
             if (newVal){
-               Region.area.list(newVal).then(data => {
+               getAreaList(newVal).then(data => {
                     this.areaList = data;
                 })
             }
@@ -260,6 +260,11 @@ export default {
                 show: true,
                 sortOrder: 0,
                 bannerAddresss: []
+            }
+            this.addressObject = {
+                provinceId: null,
+                cityId: null,
+                areaId: null
             }
         },
         //添加banner
