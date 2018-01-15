@@ -21,7 +21,8 @@
     "vue-lazyload": "^1.0.5",
     "vue-quill-editor": "^2.3.3",
     "vue-router": "^2.3.0",
-    "vuex": "^2.0.0-rc.6"
+    "vuex": "^2.0.0-rc.6",
+    "xygx-region": "^0.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

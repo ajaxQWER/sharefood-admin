@@ -1,9 +1,7 @@
 <template>
     <el-row class="lives-news">
-        <el-row>
-            <el-col class="title">
-                <h3>店铺管理</h3>
-            </el-col>
+        <el-row class="title">
+            <h3>店铺管理</h3>
         </el-row>
         <el-row class="search-row">
             <el-form class="inline-form" :inline="true">
@@ -35,6 +33,9 @@
                         <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
                     </el-select>
                 </el-form-item>
+                <el-form-item label="搜索代理商">
+                    <el-input placeholder="请输入代理商" v-model="params.agentNameLike" />
+                </el-form-item>
                 <el-form-item label="">
                     <el-button type="primary" @click="searchShop">搜索</el-button>
                     <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
@@ -42,70 +43,57 @@
             </el-form>
         </el-row>
         <el-row>
-            <el-col>
-                <el-table :data="shopList" border :row-class-name="tableRowClassName" :row-style="{fontSize:'12px'}">
-                    <el-table-column label="id" width="80px" align="center" prop="shopId" />
-                    <el-table-column label="名称" align="center" width="160px">
-                        <template slot-scope="scope">{{scope.row.detail.shopName ? scope.row.detail.shopName : '-'}}</template>
-                    </el-table-column>
-                    <el-table-column label="负责人" width="140px" align="center">
-                        <template slot-scope="scope">
-                            {{scope.row.detail.name}}
-                            <br> ({{scope.row.detail.phoneNum}})
-                        </template>
-                    </el-table-column>
-                    
-                    <el-table-column prop="agent.agentName" label="代理商" align="center" width="200px" /> 
-                   
-                    <el-table-column label="地址" align="center">
-                        <template slot-scope="scope">
-                            {{scope.row.detail.provinceName}} {{scope.row.detail.cityName}} {{scope.row.detail.areaName}}
-                            <br> {{scope.row.detail.address ? scope.row.detail.address : '-'}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="营业时间" width="150px" align="center">
-                        <template slot-scope="scope">{{scope.row.detail.busBeginTime ? scope.row.detail.busBeginTime : '00:00'}} - {{scope.row.detail.busEndTime ? scope.row.detail.busEndTime : '00:00'}}</template>
-                    </el-table-column>
-                    <el-table-column label="联系电话" width="120px" align="center">
-                        <template slot-scope="scope">{{scope.row.detail.takeOutPhone ? scope.row.detail.takeOutPhone : '-'}}</template>
-                    </el-table-column>
-                    <el-table-column label="状态" width="120px" align="center">
-                        <template slot-scope="scope">
-                            <span class="operatingState">{{formatOperatingState(scope.row.detail.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.detail.shelves)}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="detail.topper" label="置顶值" width="80px" align="center"></el-table-column>
-                    <el-table-column label="操作" width="260px" align="center">
-                        <template slot-scope="scope">
-                            <el-button size="mini" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
-                            <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row.detail)" v-if="!scope.row.detail.shelves">上架</el-button>
-                            <el-button size="mini" type="danger" @click="soldOutShop(scope.$index, scope.row.detail)" v-else>下架</el-button>
-                            <router-link :to="'/shopDetail?shopId='+scope.row.shopId" class="link">
-                                <el-button size="mini" type="primary">详情</el-button>
-                            </router-link>
-                            <router-link :to="'/shopPrint?shopId='+scope.row.shopId" class="link">
-                                <el-button size="mini">打印机列表</el-button>
-                            </router-link>
-                            <el-button size="mini" type="danger" @click="reAdopt(scope.$index, scope.row)">重新审核</el-button>
-                            <el-button size="mini" type="primary" @click="showChangeAgentDialog(scope.$index, scope.row)">更换代理商</el-button>
-                            <router-link :to="'/seller?shopId='+scope.row.shopId" class="link">
-                                <el-button size="mini">账号列表</el-button>
-                            </router-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-            <el-dialog title="设置置顶值" :visible.sync="addToperPopup" size="tiny" @close="closeaddToperPopup" class="dialog">
-                <el-form :model="formInline" label-width="120px">
-                    <el-form-item label="置顶值">
-                        <el-input-number v-model.number="formInline.topper" :min="0" :step="1"></el-input-number>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancelSetToper">取 消</el-button>
-                    <el-button type="primary" @click="setToperClassFn" :loading="addLoading">确 定</el-button>
-                </div>
-            </el-dialog>
+            <el-table id="shopTable" :data="shopList" border :row-class-name="tableRowClassName" :row-style="{fontSize:'12px'}">
+                <el-table-column label="id" width="80px" align="center" prop="shopId" />
+                <el-table-column label="名称" align="center">
+                    <template slot-scope="scope">{{scope.row.detail.shopName ? scope.row.detail.shopName : '-'}}</template>
+                </el-table-column>
+                <el-table-column label="负责人" width="140px" align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.detail.name}}
+                        <br> ({{scope.row.detail.phoneNum}})
+                    </template>
+                </el-table-column> 
+                
+                <el-table-column prop="agent.agentName" label="代理商" align="center" width="200px" /> 
+               
+                <el-table-column label="地址" align="center" width="300px">
+                    <template slot-scope="scope">
+                        {{scope.row.detail.provinceName}} {{scope.row.detail.cityName}} {{scope.row.detail.areaName}}
+                        <br> {{scope.row.detail.address ? scope.row.detail.address : '-'}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="营业时间" width="150px" align="center">
+                    <template slot-scope="scope">{{scope.row.detail.busBeginTime ? scope.row.detail.busBeginTime : '00:00'}} - {{scope.row.detail.busEndTime ? scope.row.detail.busEndTime : '00:00'}}</template>
+                </el-table-column>
+                <el-table-column label="联系电话" width="120px" align="center">
+                    <template slot-scope="scope">{{scope.row.detail.takeOutPhone ? scope.row.detail.takeOutPhone : '-'}}</template>
+                </el-table-column>
+                <el-table-column label="状态" width="120px" align="center">
+                    <template slot-scope="scope">
+                        <span class="operatingState">{{formatOperatingState(scope.row.detail.operatingState)}}</span>/<span class="shelves">{{formatShelves(scope.row.detail.shelves)}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="detail.topper" label="置顶值" width="80px" align="center"></el-table-column>
+                <el-table-column label="操作" width="260px" align="center">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="openToperPopup(scope.$index, scope.row)">置顶</el-button>
+                        <el-button size="mini" type="primary" @click="putAwayShop(scope.$index, scope.row.detail)" v-if="!scope.row.detail.shelves">上架</el-button>
+                        <el-button size="mini" type="danger" @click="soldOutShop(scope.$index, scope.row.detail)" v-else>下架</el-button>
+                        <router-link :to="'/shopDetail?shopId='+scope.row.shopId" class="link">
+                            <el-button size="mini" type="primary">详情</el-button>
+                        </router-link>
+                        <router-link :to="'/shopPrint?shopId='+scope.row.shopId" class="link">
+                            <el-button size="mini">打印机列表</el-button>
+                        </router-link>
+                        <el-button size="mini" type="danger" @click="reAdopt(scope.$index, scope.row)">重新审核</el-button>
+                        <el-button size="mini" type="primary" @click="showChangeAgentDialog(scope.$index, scope.row)">更换代理商</el-button>
+                        <router-link :to="'/seller?shopId='+scope.row.shopId" class="link">
+                            <el-button size="mini">账号列表</el-button>
+                        </router-link>
+                    </template>
+                </el-table-column>
+            </el-table>
         </el-row>
         <el-row>
             <!-- 分页 -->
@@ -114,6 +102,17 @@
                 </el-pagination>
             </el-col>
         </el-row>
+        <el-dialog title="设置置顶值" :visible.sync="addToperPopup" size="tiny" @close="closeaddToperPopup" class="dialog">
+            <el-form :model="formInline" label-width="120px">
+                <el-form-item label="置顶值">
+                    <el-input-number v-model.number="formInline.topper" :min="0" :step="1"></el-input-number>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancelSetToper">取 消</el-button>
+                <el-button type="primary" @click="setToperClassFn" :loading="addLoading">确 定</el-button>
+            </div>
+        </el-dialog>
         <el-dialog title="更换代理商" :visible.sync="changeAgentDialog" size="tiny" @close="closeChangeAgentDialog" class="dialog">
             <el-form label-width="120px">
                 <el-form-item label="选择代理商">
@@ -164,6 +163,7 @@ export default {
                 areaId: null,
                 pageId: 1,
                 pageSize: 20,
+                agentNameLike: null
             },
             shopAuditLists: null,
             provinceList: [],
@@ -207,6 +207,7 @@ export default {
         var shopNameLike = this.$route.query.shopNameLike || '';
         var shelves = this.$route.query.shelves || '';
         var operatingState = this.$route.query.operatingState || '';
+        var agentNameLike = this.$route.query.agentNameLike || '';
         var provinceId = parseInt(this.$route.query.provinceId) || '';
         var cityId = parseInt(this.$route.query.cityId) || '';
         var areaId = parseInt(this.$route.query.areaId) || '';
@@ -216,7 +217,8 @@ export default {
         this.params.provinceId = provinceId;
         this.params.cityId = cityId;
         this.params.areaId = areaId;
-        getProvinceList().then(data => {
+        this.params.agentNameLike = agentNameLike;
+        Region.province.list().then(data => {
             var list = [];
             list.push({
                 provinceId: null,
@@ -242,7 +244,7 @@ export default {
             }
 
             if (newVal) {
-                getCityList(newVal).then(data => {
+                Region.city.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         cityId: null,
@@ -261,7 +263,7 @@ export default {
             }
 
             if (newVal) {
-                getAreaList(newVal).then(data => {
+                Region.area.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         areaId: null,
@@ -354,7 +356,7 @@ export default {
         },
         //分页
         currentChange: function(val) {
-            this.$router.push('?pageId=' + val)
+            // this.$router.push('?pageId=' + val)
             this.params.pageId = val;
             this.getShopLists()
         },

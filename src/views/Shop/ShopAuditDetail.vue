@@ -304,27 +304,29 @@ export default {
             }
         },
         getProvinceName: function(){
-            if(this.shopDetail.provinceId){
-                try{
-                    getProvinceById(this.shopDetail.provinceId).then(res=>{
-                        console.log(res)
-                        this.provinceName = res.provinceName;
-                    })
-                } catch(e) {
-                    console.log(e)
-                }
+            if(!this.shopDetail.provinceId) {
+            	return;
+            }
+            try{
+                Region.province.info(this.shopDetail.provinceId).then(res => {
+                    console.log(res)
+                    this.provinceName = res.provinceName;
+                })
+            } catch(e) {
+                console.log(e)
             }
         },
         geCityName: function(){
-            if(this.shopDetail.cityId){
-                try{
-                    getCityById(this.shopDetail.cityId).then(res=>{
-                        console.log(res)
-                        this.cityName = res.cityName;
-                    })
-                } catch(e) {
-                    console.log(e)
-                }
+            if(this.shopDetail.cityId) {
+            	return;
+            }
+            try{
+                Region.city.info(this.shopDetail.cityId).then(res=>{
+                    console.log(res)
+                    this.cityName = res.cityName;
+                })
+            } catch(e) {
+                console.log(e)
             }
         },
         pass: function(){

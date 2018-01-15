@@ -264,12 +264,12 @@ export default {
             }
         },
         getProvindeName: function(provinceId){
-            getProvinceById(provinceId).then(res => {
+            Region.province.info(provinceId).then(res => {
                 this.provinceName = res.provinceName;
             })
         },
         getCityName: function(cityId){
-            getCityById(cityId).then(res => {
+            Region.city.info(cityId).then(res => {
                 this.cityName = res.cityName;
             })
         },

@@ -8,25 +8,29 @@
         <el-row>
             <el-form class="inline-form" :inline="true">
                 <el-form-item label="搜索店铺">
-                    <el-input placeholder="请输入店铺名称" v-model="params.shopNameLike" @blur="searchShop" @keyup.enter.native="searchShop">
+                    <el-input placeholder="请输入店铺名称" v-model="params.shopNameLike" @keyup.enter.native="searchShop">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="注册手机号">
-                    <el-input placeholder="请输入手机号" v-model="params.phoneNum" @blur="searchShop" @keyup.enter.native="searchShop">
+                    <el-input placeholder="请输入手机号" v-model="params.phoneNum" @keyup.enter.native="searchShop">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="搜索代理商">
+                    <el-input placeholder="请输代理商" v-model="params.agentNameLike" @keyup.enter.native="searchShop">
                     </el-input>
                 </el-form-item>
 		        <el-form-item label="省">
-		            <el-select v-model.number="params.provinceId" placeholder="选择省">
+		            <el-select v-model.number="params.provinceId" placeholder="选择省" filterable>
 					    <el-option v-for="(item,index) in provinceList" :key="index" :label="item.provinceName" :value="item.provinceId" />
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="市">
-		            <el-select v-model.number="params.cityId" placeholder="选择市">
+		            <el-select v-model.number="params.cityId" placeholder="选择市" filterable>
 					    <el-option v-for="(item,index) in cityList" :key="index" :label="item.cityName" :value="item.cityId" />
 					</el-select>
 		        </el-form-item>
 		        <el-form-item label="区">
-		            <el-select v-model.number="params.areaId" placeholder="选择区" @change="areaChange">
+		            <el-select v-model.number="params.areaId" placeholder="选择区" @change="areaChange" filterable>
 					    <el-option v-for="(item,index) in areaList" :key="index" :label="item.areaName" :value="item.areaId" />
 					</el-select>
 		        </el-form-item>
@@ -185,6 +189,7 @@ export default {
                 qualification: '',
                 settlement: '',
                 delivery: '',
+                agentNameLike: '',
 	            pageId: 1,
 	            pageSize: 20
         	},
@@ -222,7 +227,7 @@ export default {
     },
     created: function() {
         this.getAuditLists();
-		getProvinceList().then(data => {
+		Region.province.list().then(data => {
             var list = [];
             list.push({
                 provinceId: null,
@@ -238,6 +243,7 @@ export default {
         var qualification = this.$route.query.qualification || '';
         var settlement = this.$route.query.settlement || '';
         var delivery = this.$route.query.delivery || '';
+        var agentNameLike = this.$route.query.agentNameLike || '';
         var provinceId = parseInt(this.$route.query.provinceId) || '';
         var cityId = parseInt(this.$route.query.cityId) || '';
         var areaId = parseInt(this.$route.query.areaId) || '';
@@ -250,13 +256,14 @@ export default {
         this.params.qualification = qualification;
         this.params.settlement = settlement;
         this.params.delivery = delivery;
+        this.params.agentNameLike = agentNameLike;
         if(provinceId) {
-            getCityList(provinceId).then(data => {
+            Region.city.list(provinceId).then(data => {
                 this.cityList = data;
             })
         }
         if(cityId){
-            getAreaList(cityId).then(data => {
+            Region.area.list(cityId).then(data => {
                 this.areaList = data;
             })
         }
@@ -272,7 +279,7 @@ export default {
             }
 
             if (newVal){
-                getCityList(newVal).then(data => {
+                Region.city.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         cityId: null,
@@ -291,7 +298,7 @@ export default {
             }
 
             if (newVal){
-               getAreaList(newVal).then(data => {
+               Region.area.list(newVal).then(data => {
                     var list = [];
                     list.push({
                         areaId: null,
@@ -368,7 +375,7 @@ export default {
         },
         //分页
         currentChange: function(val) {
-            this.$router.push('?pageId=' + val)
+            // this.$router.push('?pageId=' + val)
             this.params.pageId = val;
             this.getAuditLists()
         },
