@@ -125,9 +125,8 @@
 		        </el-form-item>
 		    </el-form>
 		    <div slot="footer" class="dialog-footer">
-		    	<a :href="BASEURL+'/admin/reconciliation/export?settleLocalDate='+settleLocalDate+'&token='+jwt" ref="downloads" class="hidden-url"></a>
 		        <el-button @click="cancel">取消</el-button>
-		        <el-button type="primary" @click="exportExcel">导出</el-button>
+		        <el-button type="primary" @click="exportExcel" :loading="downloading">导出</el-button>
 		    </div>
 		</el-dialog>
     </el-row>
@@ -138,6 +137,7 @@ import {
     getSettlementRecordBySerialNumber,
     shopList
 } from '@/api/api'
+import {exportSettleRecord} from '@/api/exportExcel'
 export default {
     data: function() {
         return {
@@ -154,7 +154,8 @@ export default {
             settleLocalDate: '',
             SettlementRecordList: null,
             shopId: '',
-            shopLists: null
+            shopLists: null,
+            downloading: false
         }
     },
     created: function() {
@@ -209,11 +210,38 @@ export default {
 		formatSettleDate: function(value){
         	this.settleLocalDate = value;
 		},
-		exportExcel: function(){
-			var downloads = this.$refs.downloads;
-			downloads.click();
-			this.closeDialog()
-		}
+        exportExcel: function(){
+            if(this.downloading){
+                this.$message({
+                    type: 'error',
+                    message: '正在导出中!'
+                });
+                return
+            }
+            this.downloading = !this.downloading;
+            exportSettleRecord({params: {settleLocalDate: this.settleLocalDate}}).then(res => {
+                this.chunkBlob(res.data)
+            }).catch(e=>{
+                this.$message({
+                    type: 'error',
+                    message: '导出出错，请稍后再试！'
+                });
+                this.downloading = false;
+                console.log(e)
+            })
+        },
+        chunkBlob: function(data){
+            var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = this.settleLocalDate + '结算记录';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(link.href);
+            this.downloading = false;
+            this.closeDialog()
+        }
     }
 }
 </script>

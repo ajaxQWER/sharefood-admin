@@ -57,6 +57,7 @@
                 <el-form-item>
                     <el-button type="primary" @click="searchShop">查询</el-button>
                     <el-button type="danger" @click="resetSearch">重置查询条件</el-button>
+                    <el-button type="primary" @click="exportShop" :loading="downloading">店铺导出</el-button>
                 </el-form-item>
             </el-form>
         </el-row>
@@ -176,6 +177,9 @@ import {
 	getCityList,
 	getAreaList
 } from '@/api/region'
+import {
+    exportShopList
+} from '@/api/exportExcel'
 export default {
     data: function() {
         return {
@@ -222,12 +226,15 @@ export default {
                 label: '不通过'
             }],
             unadoptReason: null,
-            auditDetail: false
+            auditDetail: false,
+            jwt: sessionStorage.getItem('jwt'),
+            downloading: false,
+            EXCEL: null
         }
     },
     created: function() {
         this.getAuditLists();
-		Region.province.list().then(data => {
+		getProvinceList().then(data => {
             var list = [];
             list.push({
                 provinceId: null,
@@ -258,12 +265,12 @@ export default {
         this.params.delivery = delivery;
         this.params.agentNameLike = agentNameLike;
         if(provinceId) {
-            Region.city.list(provinceId).then(data => {
+            getCityList(provinceId).then(data => {
                 this.cityList = data;
             })
         }
         if(cityId){
-            Region.area.list(cityId).then(data => {
+            getAreaList(cityId).then(data => {
                 this.areaList = data;
             })
         }
@@ -279,7 +286,7 @@ export default {
             }
 
             if (newVal){
-                Region.city.list(newVal).then(data => {
+                getCityList(newVal).then(data => {
                     var list = [];
                     list.push({
                         cityId: null,
@@ -298,7 +305,7 @@ export default {
             }
 
             if (newVal){
-               Region.area.list(newVal).then(data => {
+               getAreaList(newVal).then(data => {
                     var list = [];
                     list.push({
                         areaId: null,
@@ -523,6 +530,42 @@ export default {
                 case 'SETTLEMENT_CHANGE':
                     return '结算信息修改';
             }
+        },
+        exportShop: function(){
+            if(this.EXCEL){
+                this.chunkBlob(this.EXCEL.data);
+                return;
+            }
+            if(this.downloading){
+                this.$message({
+                    type: 'error',
+                    message: '正在导出中!'
+                });
+                return
+            }
+            this.downloading = !this.downloading;
+            exportShopList().then(res => {
+                this.EXCEL = res;
+                this.chunkBlob(res.data)
+            }).catch(e=>{
+                this.$message({
+                    type: 'error',
+                    message: '导出出错，请稍后再试！'
+                });
+                this.downloading = false;
+                console.log(e)
+            })
+        },
+        chunkBlob: function(data){
+            var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = this.moment(new Date()).format('YYYY-MM-DD') + '店铺列表.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(link.href);
+            this.downloading = false;
         }
     }
 }

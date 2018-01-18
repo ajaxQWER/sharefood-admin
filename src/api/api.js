@@ -6,7 +6,7 @@ var ajax = axios.create({
     baseURL: process.env.BASE_URL, //测试
     // baseURL: 'http://api.gongxiangdiancan.com', //正式服
     headers: {},
-    timeout: 15000,
+    // timeout: 15000,
     withCredentials: true, //cookie
     crossDomain: true //跨域
 });
@@ -446,7 +446,6 @@ export const getAuditLogDetail = id => {
 export const cancelOrderBySystem = params => {
     return ajax.put('admin/order/orderCancel', params);
 };
-
 
 
 //文件上传 前台文件需要设置一个path属性

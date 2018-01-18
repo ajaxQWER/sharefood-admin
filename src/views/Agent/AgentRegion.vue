@@ -105,7 +105,7 @@ export default {
 		}
 	},
 	created: function(){
-		Region.province.list().then(data => {
+		getProvinceList().then(data => {
 			this.provinceList = data;
 		})
 		this.provinceChange(this.addInfo.provinceId)
@@ -123,7 +123,7 @@ export default {
 	methods: {
 		provinceChange: function(value) {
 			this.addInfo.provinceId = value;
-			Region.city.list(value).then(data => {
+			getCityList(value).then(data => {
             	console.log(data)
             	if(data.length > 0){
                     this.addInfo.cityId = data[0].cityId;
@@ -135,7 +135,7 @@ export default {
 		},
 		cityChange: function(value) {
 			this.addInfo.cityId = value;
-				Region.area.list(value).then(data => {
+				getAreaList(value).then(data => {
 					if(data.length > 0){
 	                    this.addInfo.areaId = data[0].areaId;
 					}else{

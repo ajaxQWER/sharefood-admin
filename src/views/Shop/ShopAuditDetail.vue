@@ -308,7 +308,7 @@ export default {
             	return;
             }
             try{
-                Region.province.info(this.shopDetail.provinceId).then(res => {
+                getProvinceById(this.shopDetail.provinceId).then(res => {
                     console.log(res)
                     this.provinceName = res.provinceName;
                 })
@@ -321,7 +321,7 @@ export default {
             	return;
             }
             try{
-                Region.city.info(this.shopDetail.cityId).then(res=>{
+                getCityById(this.shopDetail.cityId).then(res=>{
                     console.log(res)
                     this.cityName = res.cityName;
                 })
