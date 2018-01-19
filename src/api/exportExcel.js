@@ -45,7 +45,11 @@ export const exportSettleRecord = params => {
     return ajax.get('admin/reconciliation/export', params)
 }
 
-//店铺导出
+//店铺列表导出
 export const exportShopList = () => {
     return ajax.get('admin/shopDetail/export')
+}
+//待审核店铺导出
+export const exportAuditShopList = () => {
+    return ajax.get('admin/shopAudit/export')
 }

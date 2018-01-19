@@ -178,7 +178,7 @@ import {
 	getAreaList
 } from '@/api/region'
 import {
-    exportShopList
+    exportAuditShopList
 } from '@/api/exportExcel'
 export default {
     data: function() {
@@ -544,7 +544,7 @@ export default {
                 return
             }
             this.downloading = !this.downloading;
-            exportShopList().then(res => {
+            exportAuditShopList().then(res => {
                 this.EXCEL = res;
                 this.chunkBlob(res.data)
             }).catch(e=>{
@@ -560,7 +560,7 @@ export default {
             var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = this.moment(new Date()).format('YYYY-MM-DD') + '店铺列表.xlsx';
+            link.download = this.moment(new Date()).format('YYYY-MM-DD') + '待审核店铺列表.xlsx';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
