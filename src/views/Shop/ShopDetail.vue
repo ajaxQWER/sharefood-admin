@@ -260,7 +260,7 @@ export default {
                 case 'ANUBIS':
                     return '蜂鸟配送';
                 case 'ARES':
-                    return '共享点餐送';
+                    return '蜂鹰配送';
             }
         },
         getProvindeName: function(provinceId){
