@@ -263,7 +263,7 @@ export default {
                 case 'ANUBIS':
                     return '蜂鸟';
                 case 'ARES':
-                    return '共享点餐平台配送';
+                    return '蜂鹰配送';
                 default:
                     return '-'
             }
